@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fixture>
+	<Name>PS 1500</Name>
+	<Manufacturer>Stairville</Manufacturer>
+	<Type>Strobe</Type>
+	<Comment>Stairville - PS 1500 2016/03/31 revision</Comment>
+
+	<NbChannels>2</NbChannels>
+	
+	<ChannelType index="0" attribute="SPEED">
+		<ChannelSet name="SPEED" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+
+	<ChannelType index="1" attribute="DIMMER">
+		<ChannelSet name="DIMMER" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+</Fixture>
+

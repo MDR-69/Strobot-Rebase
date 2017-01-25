@@ -1,0 +1,13 @@
+.DS_Store
+applet
+Strobot_config.txt
+Strobot_logfile.txt
+application.linux32
+application.linux64
+application.macosx64
+application.macosx32
+application.macosx
+tmp
+build-tmp
+*.class
+

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fixture>
+ 	<Name>Alpha Spot HPE 300 (23 channels)</Name>
+ 	<Manufacturer>Clay Paky</Manufacturer>
+ 	<Type>Moving Head</Type>
+	<Comment>Clay Paky Alpha Spot HPE 300 - 23 channels 2016/04/07 revision. Configure the fixture as following: Rain:OFF </Comment>
+
+	<NbChannels>23</NbChannels>
+	
+	<ChannelType index="0" attribute="COLOR" option="CMY" option_argument="C">
+		<ChannelSet name="COLOR" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+	
+	<ChannelType index="1" attribute="COLOR" option="CMY" option_argument="M">
+		<ChannelSet name="COLOR" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+	
+	<ChannelType index="2" attribute="COLOR" option="CMY" option_argument="U">
+		<ChannelSet name="COLOR" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+	
+	<ChannelType index="3" attribute="UNIFORM_FIELD_LENS">                                                <!-- Special parameter on this fixture, allowing to switch between beam and "hot spot" lighting. Recommended value: beam -->
+		<ChannelSet name="OFF" from_dmx="0" to_dmx="127" />
+		<ChannelSet name="ON" from_dmx="128" to_dmx="255" recommended="true" />
+	</ChannelType>
+	
+	<ChannelType index="4" attribute="COLOR" option="WHEEL">
+		<ChannelSet name="WHITE" from_dmx="0" to_dmx="13"/>
+		<ChannelSet name="WHITE_RED" from_dmx="14" to_dmx="27" />
+		<ChannelSet name="RED" from_dmx="28" to_dmx="41" />
+		<ChannelSet name="RED_MAGENTA" from_dmx="42" to_dmx="55" />
+		<ChannelSet name="MAGENTA" from_dmx="56" to_dmx="69" />
+		<ChannelSet name="MAGENTA_CTO" from_dmx="70" to_dmx="83" />
+		<ChannelSet name="CTO" from_dmx="84" to_dmx="97" />
+		<ChannelSet name="CTO_YELLOW" from_dmx="98" to_dmx="111" />
+		<ChannelSet name="YELLOW" from_dmx="112" to_dmx="125" />
+		<ChannelSet name="YELLOW_GREEN" from_dmx="126" to_dmx="139" />
+		<ChannelSet name="GREEN" from_dmx="140" to_dmx="153" />
+		<ChannelSet name="GREEN_TURQUOISE" from_dmx="154" to_dmx="167" />
+		<ChannelSet name="TURQUOISE" from_dmx="168" to_dmx="181" />
+		<ChannelSet name="TURQUOISE_ORANGE" from_dmx="182" to_dmx="195" />
+		<ChannelSet name="ORANGE" from_dmx="196" to_dmx="209" />
+		<ChannelSet name="ORANGE_BLUE" from_dmx="210" to_dmx="223" />
+		<ChannelSet name="BLUE" from_dmx="224" to_dmx="237" />
+		<ChannelSet name="BLUE_WHITE" from_dmx="238" to_dmx="255" />
+	</ChannelType>
+	
+	<ChannelType index="5" attribute="SHUTTER">
+		<ChannelSet name="CLOSED" from_dmx="0" to_dmx="3"/>
+		<ChannelSet name="STROBE" from_dmx="4" to_dmx="103" proportional="increasing" />
+		<ChannelSet name="OPEN" from_dmx="104" to_dmx="107" recommended="true" />
+	</ChannelType>
+	
+	<ChannelType index="6" attribute="DIMMER">
+		<ChannelSet name="DIMMER" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+	
+	<ChannelType index="7" attribute="APERTURE">
+		<ChannelSet name="APERTURE" from_dmx="0" to_dmx="127" proportional="increasing" /> 		<!-- SMALL APERTURE/NARROW BEAM -> LARGE APERTURE/WIDE BEAM -->
+		<ChannelSet name="DEFAULT" from_dmx="128" to_dmx="131" recommended="true" />
+	</ChannelType>
+	
+	<ChannelType index="8" attribute="GOBO_WHEEL_1">
+		<ChannelSet name="WHITE" from_dmx="0" to_dmx="7" recommended="true" />
+	</ChannelType>
+	
+	<ChannelType index="9" attribute="GOBO_WHEEL_2">
+		<ChannelSet name="WHITE" from_dmx="0" to_dmx="17" recommended="true" />
+	</ChannelType>
+
+	<ChannelType index="10" attribute="GOBO_ROTATION">
+		<ChannelSet name="STOP" from_dmx="191" to_dmx="192" recommended="true"/>
+		<ChannelSet name="CLOCKWISE" from_dmx="128" to_dmx="190" proportional="decreasing"/>
+		<ChannelSet name="COUNTERCLOCKWISE" from_dmx="193" to_dmx="255" proportional="increasing"/>
+	</ChannelType>
+	
+	<ChannelType index="11" attribute="GOBO_ROTATION_FINE">
+		<ChannelSet name="GOBO_ROTATION_FINE" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+	
+	
+	<ChannelType index="12" attribute="PRISM">
+		<ChannelSet name="NONE" from_dmx="0" to_dmx="128" recommended="true"/>
+		<ChannelSet name="5_FACETS" from_dmx="129" to_dmx="255" />
+	</ChannelType>
+
+	<ChannelType index="13" attribute="PRISM_INDEXING">
+		<ChannelSet name="PRISM_INDEXING" from_dmx="0" to_dmx="127"/>
+		<ChannelSet name="STOP" from_dmx="191" to_dmx="192" recommended="true"/>
+		<ChannelSet name="CLOCKWISE" from_dmx="128" to_dmx="190" proportional="decreasing"/>
+		<ChannelSet name="COUNTERCLOCKWISE" from_dmx="193" to_dmx="255" proportional="increasing"/>
+	</ChannelType>
+
+	<ChannelType index="14" attribute="FROST">
+		<ChannelSet name="NONE" from_dmx="0" to_dmx="128" recommended="true" />
+		<ChannelSet name="FROST" from_dmx="129" to_dmx="255" />
+	</ChannelType>
+	
+	<ChannelType index="15" attribute="FOCUS">
+		<ChannelSet name="FOCUS" from_dmx="0" to_dmx="255" proportional="increasing" /> 	<!-- MAXBEAM -> MINBEAM -->
+	</ChannelType>	
+	
+	<ChannelType index="16" attribute="ZOOM">
+		<ChannelSet name="ZOOM" from_dmx="0" to_dmx="255" proportional="decreasing" /> 		<!-- WIDE -> NARROW -->
+	</ChannelType>	
+	
+	<ChannelType index="17" attribute="PAN">
+		<ChannelSet name="PAN" from_dmx="0" to_dmx="255" range="540" proportional="increasing" ch_link="18" />
+	</ChannelType>
+
+	<ChannelType index="18" attribute="PAN_FINE">
+		<ChannelSet name="PAN_FINE" from_dmx="0" to_dmx="255" />
+	</ChannelType>
+
+	<ChannelType index="19" attribute="TILT">
+		<ChannelSet name="TILT" from_dmx="0" to_dmx="255" range="270" proportional="increasing" ch_link="20" />
+	</ChannelType>
+
+	<ChannelType index="20" attribute="TILT_FINE">
+		<ChannelSet name="TILT_FINE" from_dmx="0" to_dmx="255" />
+	</ChannelType>
+	
+	<ChannelType index="21" attribute="RESET">
+	</ChannelType>
+	
+	<ChannelType index="22" attribute="LAMP">
+		<ChannelSet name="OFF" from_dmx="26" to_dmx="100" />
+		<ChannelSet name="ON" from_dmx="180" to_dmx="255" recommended="true" />
+	</ChannelType>
+	
+</Fixture>

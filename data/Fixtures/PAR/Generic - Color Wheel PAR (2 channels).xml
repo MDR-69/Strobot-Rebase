@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fixture>
+	<Name>Generic Color Wheel PAR</Name>
+	<Manufacturer>Generic</Manufacturer>
+	<Type>PAR</Type>
+	<Comment>Generic Color Wheel PAR (ref:Cameo Flat Pro Indoor PAR Can) - 2 channels - 2016/07/22 revision</Comment>
+
+	<NbChannels>2</NbChannels>
+	
+	
+	<ChannelType index="0" attribute="DIMMER">
+		<ChannelSet name="DIMMER" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+
+	<ChannelType index="1" attribute="COLORWHEEL">
+		<ChannelSet name="RED" from_dmx="0" to_dmx="16"/>
+		<ChannelSet name="GREEN" from_dmx="17" to_dmx="33"/>
+		<ChannelSet name="BLUE" from_dmx="34" to_dmx="50"/>
+		<ChannelSet name="WHITE" from_dmx="51" to_dmx="67"/>
+		<ChannelSet name="AMBER" from_dmx="68" to_dmx="84"/>
+		<ChannelSet name="YELLOW" from_dmx="85" to_dmx="101"/>
+		<ChannelSet name="CYAN" from_dmx="102" to_dmx="118"/>
+		<ChannelSet name="LAVENDER" from_dmx="119" to_dmx="135"/>
+		<ChannelSet name="PINK" from_dmx="136" to_dmx="152"/>
+		<ChannelSet name="LIGHT_GREEN" from_dmx="153" to_dmx="169"/>
+		<ChannelSet name="MAGENTA" from_dmx="170" to_dmx="186"/>
+		<ChannelSet name="TURQUOISE" from_dmx="187" to_dmx="203"/>
+		<ChannelSet name="ORANGE" from_dmx="204" to_dmx="220"/>
+		<ChannelSet name="COOL_WHITE" from_dmx="221" to_dmx="237"/>
+		<ChannelSet name="WARM_WHITE" from_dmx="238" to_dmx="255"/>
+	</ChannelType>
+
+
+</Fixture>

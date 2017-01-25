@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fixture>
+	<Name>Atomic 3000 (1 channel)</Name>
+	<Manufacturer>Martin</Manufacturer>
+	<Type>Strobe</Type>
+	<Comment>Martin Atomic 3000 - 1 channel 2016/03/30 revision</Comment>
+
+	<NbChannels>1</NbChannels>
+	
+	
+	<ChannelType index="0" attribute="DIMMER">
+		<ChannelSet name="DIMMER" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+</Fixture>
+

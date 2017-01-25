@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fixture>
+	<Name>Atomic 3000 (4 channels)</Name>
+	<Manufacturer>Martin</Manufacturer>
+	<Type>Strobe</Type>
+	<Comment>Martin Atomic 3000 - 4 channels 2016/03/30 revision</Comment>
+
+	<NbChannels>4</NbChannels>
+	
+	
+	<ChannelType index="0" attribute="DIMMER">
+		<ChannelSet name="DIMMER" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+
+	<ChannelType index="1" attribute="FLASH_DURATION">
+		<ChannelSet name="FLASH_DURATION" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+
+	<ChannelType index="2" attribute="SPEED">
+		<ChannelSet name="SPEED" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+	
+	<ChannelType index="3" attribute="EFFECTS">
+		<ChannelSet name="OFF" from_dmx="0" to_dmx="5" />
+		<ChannelSet name="RAMP_UP" from_dmx="6" to_dmx="42" />
+		<ChannelSet name="RAMP_DOWN" from_dmx="43" to_dmx="85" />
+		<ChannelSet name="RAMP_UP_DOWN" from_dmx="86" to_dmx="128" />
+		<ChannelSet name="RANDOM" from_dmx="129" to_dmx="171" />
+		<ChannelSet name="THUNDER" from_dmx="172" to_dmx="214" />
+		<ChannelSet name="SINGLE_FLASH" from_dmx="215" to_dmx="255" />
+	</ChannelType>
+</Fixture>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fixture>
+	<Name>Atomic 3000 (3 channels)</Name>
+	<Manufacturer>Martin</Manufacturer>
+	<Type>Strobe</Type>
+	<Comment>Martin Atomic 3000 - 3 channels 2016/03/30 revision</Comment>
+
+	<NbChannels>3</NbChannels>
+	
+	
+	<ChannelType index="0" attribute="DIMMER">
+		<ChannelSet name="DIMMER" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+
+	<ChannelType index="1" attribute="FLASH_DURATION">
+		<ChannelSet name="FLASH_DURATION" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+
+	<ChannelType index="2" attribute="SPEED">
+		<ChannelSet name="SPEED" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+</Fixture>
+

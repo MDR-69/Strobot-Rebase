@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fixture>
+	<Name>LED Flood Panel 150 (3 channels)</Name>
+	<Manufacturer>Stairville</Manufacturer>
+	<Type>PAR</Type>
+	<Comment>Stairville LED Flood Panel 150 - 3 channels - 2016/12/23 revision</Comment>
+
+	<NbChannels>3</NbChannels>
+	
+	
+	<ChannelType index="0" attribute="DIMMER_RED">
+		<ChannelSet name="DIMMER_RED" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+
+	<ChannelType index="1" attribute="DIMMER_GREEN">
+		<ChannelSet name="DIMMER_GREEN" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+
+	<ChannelType index="2" attribute="DIMMER_BLUE">
+		<ChannelSet name="DIMMER_BLUE" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+
+</Fixture>

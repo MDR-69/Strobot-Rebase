@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fixture>
+	<Name>Generic Single Channel PAR (R)</Name>
+	<Manufacturer>Generic</Manufacturer>
+	<Type>PAR</Type>
+	<Comment>Generic Single Channel PAR (R) - 1 channel - 2016/07/20 revision</Comment>
+
+	<NbChannels>1</NbChannels>
+	
+	
+	<ChannelType index="0" attribute="DIMMER_RED">
+		<ChannelSet name="DIMMER_RED" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+
+</Fixture>

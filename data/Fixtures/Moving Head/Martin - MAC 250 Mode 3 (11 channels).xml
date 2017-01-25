@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fixture>
+ 	<Name>MAC 250 Mode 3 (11 channels)</Name>
+ 	<Manufacturer>Martin</Manufacturer>
+ 	<Type>Moving Head</Type>
+	<Comment>Martin MAC 250 Mode 3 - 11 channels 2016/08/25 revision</Comment>
+
+	<NbChannels>11</NbChannels>
+	
+	<ChannelType index="0" attribute="SHUTTER">
+		<ChannelSet name="CLOSED" from_dmx="0" to_dmx="19" />
+		<ChannelSet name="OPEN" from_dmx="20" to_dmx="49" />
+		<ChannelSet name="STROBE" from_dmx="50" to_dmx="72" proportional="decreasing" /> 				<!-- FAST -> SLOW -->
+	</ChannelType>
+
+	<ChannelType index="1" attribute="DIMMER">
+		<ChannelSet name="DIMMER" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>	
+
+	<ChannelType index="2" attribute="COLOR" option="WHEEL">
+		<ChannelSet name="WHITE" from_dmx="0" to_dmx="11" />
+		<ChannelSet name="CTO" from_dmx="12" to_dmx="12" />
+		<ChannelSet name="YELLOW" from_dmx="24" to_dmx="35" />
+		<ChannelSet name="BLUE" from_dmx="36" to_dmx="47" />
+		<ChannelSet name="PINK" from_dmx="48" to_dmx="59" />
+		<ChannelSet name="DARK_GREEN" from_dmx="60" to_dmx="71" />
+		<ChannelSet name="DARK_BLUE" from_dmx="72" to_dmx="83" />
+		<ChannelSet name="RED" from_dmx="84" to_dmx="95" />
+		<ChannelSet name="MAGENTA" from_dmx="96" to_dmx="107" />
+		<ChannelSet name="LIGHT_BLUE" from_dmx="108" to_dmx="119" />
+		<ChannelSet name="ORANGE" from_dmx="120" to_dmx="131" />
+		<ChannelSet name="GREEN" from_dmx="132" to_dmx="143" />
+		<ChannelSet name="ULTRAVIOLET" from_dmx="144" to_dmx="155" />
+		<ChannelSet name="WHEEL_PLUS" from_dmx="208" to_dmx="226" proportional="decreasing" /> 			<!-- FAST -> SLOW -->
+		<ChannelSet name="WHEEL_MINUS" from_dmx="227" to_dmx="245" proportional="increasing" />			<!-- SLOW -> FAST -->
+		<ChannelSet name="RANDOM_FAST" from_dmx="246" to_dmx="248" />
+		<ChannelSet name="RANDOM_MEDIUM" from_dmx="249" to_dmx="251" />
+		<ChannelSet name="RANDOM_SLOW" from_dmx="252" to_dmx="255" />
+	</ChannelType>
+
+	<ChannelType index="3" attribute="GOBO">
+		<ChannelSet name="WHITE" from_dmx="0" to_dmx="11" recommended="true" />
+	</ChannelType>	
+
+	<ChannelType index="4" attribute="GOBO_ROTATION">
+		<ChannelSet name="STOP" from_dmx="0" to_dmx="2" recommended="true"/>
+		<ChannelSet name="CLOCKWISE" from_dmx="3" to_dmx="127" proportional="increasing"/>					<!-- SLOW -> FAST -->
+		<ChannelSet name="COUNTERCLOCKWISE" from_dmx="128" to_dmx="252" proportional="decreasing"/>			<!-- FAST -> SLOW -->
+	</ChannelType>
+
+	<ChannelType index="5" attribute="FOCUS">
+		<ChannelSet name="FOCUS" from_dmx="0" to_dmx="255" proportional="increasing" /> 		<!-- INFINITE -> 2 METERS -->
+	</ChannelType>	
+	
+	<ChannelType index="6" attribute="PRISM">
+		<ChannelSet name="NONE" from_dmx="0" to_dmx="19" recommended="true"/>
+		<ChannelSet name="ROTATE_CLOCKWISE" from_dmx="20" to_dmx="79" proportional="decreasing"/>
+		<ChannelSet name="ROTATE_ANTICLOCKWISE" from_dmx="90" to_dmx="149" proportional="increasing"/>
+	</ChannelType>
+
+
+	<ChannelType index="7" attribute="PAN">
+		<ChannelSet name="PAN" from_dmx="0" to_dmx="255" range="540" proportional="increasing" />
+	</ChannelType>
+
+	<ChannelType index="8" attribute="TILT">
+		<ChannelSet name="TILT" from_dmx="0" to_dmx="255" range="270" proportional="increasing" />
+	</ChannelType>
+
+	<ChannelType index="9" attribute="SPEED">
+		<ChannelSet name="STANDARD" from_dmx="0" to_dmx="0" recommended="true" />
+		<ChannelSet name="MAX_SPEED" from_dmx="1" to_dmx="2" />
+		<ChannelSet name="SPEED" from_dmx="3" to_dmx="245" proportional="decreasing" /> 		<!-- FAST -> SLOW -->
+	</ChannelType>
+
+	<ChannelType index="10" attribute="EFFECT_SPEED">
+		<ChannelSet name="MAX_SPEED" from_dmx="0" to_dmx="2" recommended="true" />
+	</ChannelType>
+
+</Fixture>

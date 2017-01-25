@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fixture>
+	<Name>Generic RGBW PAR</Name>
+	<Manufacturer>Generic</Manufacturer>
+	<Type>PAR</Type>
+	<Comment>Generic RGBW PAR - 4 channels - 2016/07/20 revision</Comment>
+
+	<NbChannels>4</NbChannels>
+	
+	
+	<ChannelType index="0" attribute="DIMMER_RED">
+		<ChannelSet name="DIMMER_RED" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+
+	<ChannelType index="1" attribute="DIMMER_GREEN">
+		<ChannelSet name="DIMMER_GREEN" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+
+	<ChannelType index="2" attribute="DIMMER_BLUE">
+		<ChannelSet name="DIMMER_BLUE" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+
+	<ChannelType index="3" attribute="DIMMER_WHITE">
+		<ChannelSet name="DIMMER_WHITE" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+
+</Fixture>

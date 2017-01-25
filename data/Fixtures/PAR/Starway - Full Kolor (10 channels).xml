@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fixture>
+	<Name>Full Kolor</Name>
+	<Manufacturer>Starway</Manufacturer>
+	<Type>PAR</Type>
+	<Comment>Starway Full Kolor - 10 channels - 2016/09/07 revision</Comment>
+
+	<NbChannels>10</NbChannels>
+	
+	<ChannelType index="0" attribute="DIMMER">
+		<ChannelSet name="DIMMER" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+	
+	<ChannelType index="1" attribute="INTENSITY_RED">
+		<ChannelSet name="INTENSITY_RED" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+
+	<ChannelType index="2" attribute="INTENSITY_GREEN">
+		<ChannelSet name="INTENSITY_GREEN" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+
+	<ChannelType index="3" attribute="INTENSITY_BLUE">
+		<ChannelSet name="INTENSITY_BLUE" from_dmx="0" to_dmx="255"/>
+	</ChannelType>
+
+	<ChannelType index="4" attribute="MACRO">
+		<ChannelSet name="MACRO" from_dmx="0" to_dmx="1" recommended="true"/>
+	</ChannelType>
+
+	<ChannelType index="5" attribute="SHUTTER">
+		<ChannelSet name="OPEN" from_dmx="0" to_dmx="10" />
+		<ChannelSet name="STROBE" from_dmx="11" to_dmx="255" />
+	</ChannelType>
+
+	<ChannelType index="6" attribute="AUTO">
+		<ChannelSet name="AUTO" from_dmx="0" to_dmx="1" recommended="true"/>
+	</ChannelType>
+
+	<ChannelType index="7" attribute="AUTO_SPEED">
+		<ChannelSet name="AUTO_SPEED" from_dmx="0" to_dmx="1" recommended="true"/>
+	</ChannelType>
+
+	<ChannelType index="8" attribute="DIMMER_SPEED">
+		<ChannelSet name="DIMMER_SPEED" from_dmx="0" to_dmx="1" recommended="true"/>
+	</ChannelType>
+
+	<ChannelType index="9" attribute="ID">
+		<ChannelSet name="ID" from_dmx="0" to_dmx="1" recommended="true"/>
+	</ChannelType>
+
+</Fixture>
