@@ -193,7 +193,7 @@ public int[] getOutputMappingValues() {
 
 public class Tpm2 extends OnePanelResolutionAwareOutput {
                         
-    private static final String VERSION = "1.1";
+    private static final String VERSION = "1.2";
 
     private Tpm2Serial tpm2;
     
@@ -225,7 +225,7 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
         } 
         catch (NoSerialPortFoundException e) {
           outputLog.println("Error !!! Failed to initialize serial port! " + e);
-        }        
+        }
         
         serialPort = getSerialPortName(serialPortName);      //Initialize it to the requested value, but double check just in case
       }
@@ -236,28 +236,30 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
     //Non Javadoc update
     //Send data to the TPM2 device
     public void update() {
-      if (initialized) {
-        byte[] rgbBuffer = convertBufferTo24bit(getTransformedBuffer(), colorFormat);
-        //outputLog.println(rgbBuffer);
-        if (rgbBuffer.length < 511) {
-            //small frame, fit in one packed
-            //this will always be the case with our 128 LED panels : a single packet can fit 512 bytes, amounting to 170 LED.
-            tpm2.sendFrame(createImagePayload(0,1,rgbBuffer));
-        } else {
-            //need to splitup buffers
-            int bytesToSend = rgbBuffer.length;
-            int currentUniverse = 0;
-            int totalUniverse = (int)((bytesToSend/510f))+1;
-            while (currentUniverse < totalUniverse) 
-            { 
-                int l = bytesToSend - 510*currentUniverse;
-                if (l>510) l=510;
-                byte[] tmp = new byte[l];
-                
-                System.arraycopy(rgbBuffer, 510*currentUniverse, tmp, 0, l);
-                tpm2.sendFrame(createImagePayload(currentUniverse, totalUniverse, tmp));
-                currentUniverse++;
-            }
+      if (panelNumber >= 0) {   // This function is to be called only for "regular" LED panels, custom equipements using TPM2 are set with panelNumber = -1
+        if (initialized) {
+          byte[] rgbBuffer = convertBufferTo24bit(getTransformedBuffer(), colorFormat);
+          //outputLog.println(rgbBuffer);
+          if (rgbBuffer.length < 511) {
+              //small frame, fit in one packed
+              //this will always be the case with our 128 LED panels : a single packet can fit 512 bytes, amounting to 170 LED.
+              tpm2.sendFrame(createImagePayload(0,1,rgbBuffer));
+          } else {
+              //need to splitup buffers
+              int bytesToSend = rgbBuffer.length;
+              int currentUniverse = 0;
+              int totalUniverse = (int)((bytesToSend/510f))+1;
+              while (currentUniverse < totalUniverse) 
+              { 
+                  int l = bytesToSend - 510*currentUniverse;
+                  if (l>510) l=510;
+                  byte[] tmp = new byte[l];
+                  
+                  System.arraycopy(rgbBuffer, 510*currentUniverse, tmp, 0, l);
+                  tpm2.sendFrame(createImagePayload(currentUniverse, totalUniverse, tmp));
+                  currentUniverse++;
+              }
+          }
         }
       }
     }
@@ -398,7 +400,22 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
       catch(Exception e) {
         println("Exception while trying to send a Stop Educ cmd to output device #" + panelNumber);
       }
-    }    
+    }
+
+    public void sendRFVideoProjCommand(byte commandNumber, byte data1, byte data2, byte data3) {
+      byte[] rfDataBuffer = new byte[4];
+      rfDataBuffer[0] = commandNumber;
+      rfDataBuffer[1] = data1;
+      rfDataBuffer[2] = data2;
+      rfDataBuffer[3] = data3;
+      
+      try {
+        tpm2.sendFrame(createCmdPayload(rfDataBuffer));
+      }
+      catch(Exception e) {
+        println("Exception while trying to send a command to the video projector microcontroller: " + e);
+      }
+    }
 }
 
 //////////////////////////////////////////////////////////////

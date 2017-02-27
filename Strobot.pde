@@ -146,15 +146,11 @@ boolean setupcomplete = false;
 //Flag to prevent listening to MIDI events before completing the first INIT routine
 boolean initComplete = false;
 
-//the maximal UDP packet size
-int MAXIMAL_UDP_PACKET_SIZE = 65507;
-
 //Instanciate MIDI control objects
 MidiBus myMainBus;
 MidiBus myControllerBus;
 MidiBus myPioneerControllerBus;      //Create a specific object for Pioneer RMX-like controllers, which have a special MIDI implementation, and as such specific processing
 MidiBus myKeyboardBus;
-MidiBus myBackupBus;
 
 //Control the brightness of the LED panels - 1 for full brightness
 float brightness = 1;
@@ -167,6 +163,8 @@ boolean debug_without_panels = false;
 //Otherwise, the DMX devices are controlled manually using each group's MIDI notes
 boolean dmxAutomaticControl        = false;
 
+// Is the video mapping RF microcontroller connected ?
+boolean enableExternalVideoMapping = true;
 
 //Variables used to select between image and animation mode, and which image/animation to draw
 int drawImage = 0;
@@ -252,10 +250,9 @@ void setup()
   transformedBuffersLEDPanels = new int[NUMBER_OF_PANELS][PANEL_RESOLUTION_X*PANEL_RESOLUTION_Y];
   outputLog.println("Frame buffers initialized. Size : " + str(PIXELS_X*PIXELS_Y));
   
-  //Detect the available Teensy microcontollers, and which ones to use (RF/USB, with a priority on USB)
+  //Detect the available Teensy microcontrollers, and which ones to use (RF/USB, with a priority on USB)
   // The detection of how many panels should be used is also automatic
   detectPanelOutputs();
-
   
   
   //Initialize the resize objects
@@ -276,8 +273,11 @@ void setup()
   //Before creating the DMX output objects, parse the fixtures requested by the user
   myDMXConfiguration = new DMXConfiguration();
 
-  //Initialize Object for Serial2CustomDevices microcontroller
+  //Initialize the object for Serial2CustomDevices microcontrollers
   myCustomDeviceController = new CustomDeviceController(this);
+
+  // Initialize the object used to send commands to an external video mapping system
+  myExtVideoMappingController = new extVideoController();
   
   //Initialize MIDI Control object
   //This allows Processing to be controlled by MIDI messages coming from external equipments or the IEC internal MIDI Bus (ie. messages from Ableton)
@@ -339,14 +339,15 @@ void draw()
   {
 
     // Uncomment this if you want to debug the physical output devices
-    // for (Tpm2 outputDevice: outputDevices) {
-    //   try {
-    //     outputDevices[0].readDebugData();
-    //   }
-    //   catch (Exception e) {
-    //     println("Exception while trying to read - " + e);
-    //   }
+
+    // try {
+    //   //outputDevices[0].readDebugData();
+    //   myExtVideoMappingController.rfVideoProjDevice.readDebugData();
     // }
+    // catch (Exception e) {
+    //   println("Exception while trying to read - " + e);
+    // }
+
     
 
     //Execute the draw function for the animation corresponding to animationnumber
@@ -387,6 +388,10 @@ void draw()
       //Sending an explicit specific DMX group message will set dmxAutomaticControl to false (ex: "front stroboscope on")
       if (dmxAutomaticControl == true || AUTOMATIC_MODE == true) {
         playDMXAnimation();
+      }
+
+      if (enableExternalVideoMapping == true) {
+        myExtVideoMappingController.performCommands();
       }
       
       //Reset the Audio flags if requested by the animation

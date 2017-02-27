@@ -12,7 +12,7 @@ final static String LED_COLOR_FORMAT = "RGB";   //LED color arrangement
 String DMX_UNIVERSE_1_MICROCONTROLLER_NAME = "/dev/tty.usbmodem12341";
 String DMX_UNIVERSE_2_MICROCONTROLLER_NAME = "/dev/tty.usbmodem1862841";
 String CUSTOMDEVICES_MICROCONTROLLER_NAME  = "/dev/tty.usbserial-A961L7NJ";
-String RF_SCANNER_MICROCONTROLLER_NAME     = "/dev/tty.usbmodem1869971";
+String PROJECTOR_MICROCONTROLLER_NAME      = "/dev/tty.usbmodem1869971";      // For reference, the microcontroller on the receiving end is /dev/tty.usbmodem1868531
 
 Hashtable RF_TX_Teensy_List;                          // The following hashtables contain the different microcontrollers used by Strobot
 Hashtable Panel_Main_Teensy_List;                     // Either the RF ones - used by default -, the main panel LED controllers, when there is a direct connection to the
@@ -20,8 +20,9 @@ Hashtable Panel_Backup_Teensy_List;                   // panel, or the backup on
 Hashtable RF_RX_Teensy_List;                          // This last one only exists for reference purpose - it is not used per se, but might as well know what are the RX Teensys
 int[]     RF_Channel_List = {104, 28, 60, 89, 119};   // This array contains the default RF channels used by the panels, updated when the configuration file is read // Do not use channel 96, as it is used by the LED tubes
 
-final int RFCHANNEL_LED_TUBES = 96;                   // Channel used by the LED tubes, hard-coded in the firmware. It is important for the panels not to use this channel
-final int RFCHANNEL_EDUCATION = 124;                  // Channel used during the panel RF education process
+final int RFCHANNEL_LED_TUBES  = 96;                  // Channel used by the LED tubes, hard-coded in the firmware. It is important for the panels not to use this channel
+final int RFCHANNEL_VIDEO_PROJ = 98;                  // Channel used by the video projector
+final int RFCHANNEL_EDUCATION  = 124;                 // Channel used during the panel RF education process
 
 // All the microcontrollers used by Strobot are recognized as usb devices - either usbmodem, or usbserial, and as such the following string can matched against their name
 final static String MICROCONTROLLER_NAME_PATTERN = "/dev/tty.usb";
@@ -82,7 +83,6 @@ void detectPanelOutputs() {
   RF_TX_Teensy_List.put(2, "/dev/tty.usbmodem1846011");
   RF_TX_Teensy_List.put(3, "/dev/tty.usbmodem1870121");
   RF_TX_Teensy_List.put(4, "/dev/tty.usbmodem1847751");
-  //RF_TX_Teensy_List.put(4, "/dev/tty.usbmodem1847750");
 
   Panel_Main_Teensy_List.put(0, "/dev/tty.usbmodem1870061");
   Panel_Main_Teensy_List.put(1, "/dev/tty.usbmodem1870171");
@@ -168,9 +168,9 @@ void detectPanelOutputs() {
     outputLog.println("--- Found no microcontroller which can be used as an output device (as defined in the configuration) ---");
   }
 
-    else {
-      outputLog.println("--- Found " + chosenMicrocontrollers.size() + " microcontrollers usable as an output device ---");
-    }
+  else {
+    outputLog.println("--- Found " + chosenMicrocontrollers.size() + " microcontrollers usable as an output device ---");
+  }
   
   
   // Finally, initialize the actual output objects with the associated output device
@@ -194,8 +194,8 @@ void detectPanelOutputs() {
   }
 
 
-  // Additional microcontroller which may be available: RF channel scanner
-  rfScanDevice = new Tpm2(0, RF_SCANNER_MICROCONTROLLER_NAME);
+  // Update: the RF Scanner microcontroller is now the first microcontroller in the list
+  rfScanDevice = outputDevices[0];
 
 }
 
@@ -283,11 +283,16 @@ void rfChannelScanFinalize() {
   rfChannels_forbiddenValues.append(8);
   rfChannels_forbiddenValues.append(9);
   rfChannels_forbiddenValues.append(10);
+  rfChannels_forbiddenValues.append(11);
+  rfChannels_forbiddenValues.append(12);
+  rfChannels_forbiddenValues.append(13);
+  rfChannels_forbiddenValues.append(14);
   rfChannels_forbiddenValues.append(RFCHANNEL_LED_TUBES - 2);  // Avoid any interference with the LED tubes
   rfChannels_forbiddenValues.append(RFCHANNEL_LED_TUBES - 1);
   rfChannels_forbiddenValues.append(RFCHANNEL_LED_TUBES);
   rfChannels_forbiddenValues.append(RFCHANNEL_LED_TUBES + 1);
-  rfChannels_forbiddenValues.append(RFCHANNEL_LED_TUBES + 2);
+  rfChannels_forbiddenValues.append(RFCHANNEL_VIDEO_PROJ);
+  rfChannels_forbiddenValues.append(RFCHANNEL_VIDEO_PROJ + 1);
   rfChannels_forbiddenValues.append(RFCHANNEL_EDUCATION - 1);  // Do not use the channel used by the education process
   rfChannels_forbiddenValues.append(RFCHANNEL_EDUCATION);
   rfChannels_forbiddenValues.append(RFCHANNEL_EDUCATION + 1);
