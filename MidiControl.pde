@@ -13,6 +13,8 @@ final int CHANNEL_MANUALMODE_1       = 3;      //MIDI Channel 4
 final int CHANNEL_MANUALMODE_2       = 4;      //MIDI Channel 5
 final int CHANNEL_MANUALMODE_3       = 5;      //MIDI Channel 6
 final int CHANNEL_MANUALMODE_4       = 6;      //MIDI Channel 7
+final int CHANNEL_EXTVIDEOPROJ_CTRL  = 7;      //MIDI Channel 8 - used by the calibration CC messages 
+final int CHANNEL_PIONEER_RMX_CTRL   = 8;      //MIDI Channel 8 - used by the Pioneer RMX500 (as routed by Ableton)
 
 //Pitches for messages coming from the keyboard
 final int PITCH_P1_LEFT              = 0;
@@ -67,6 +69,32 @@ final int PITCH_CUSTOM_DEVICE_BANK3                       = 120;
 final int PITCH_DISPLAY_EFFECT_1                          = 121;
 final int PITCH_DISPLAY_EFFECT_2                          = 96;
 
+// Ext video proj commands
+final int PITCH_EXTVIDEO_PLAYVIDEO_1                      = 30;
+final int PITCH_EXTVIDEO_PLAYVIDEO_2                      = 31;
+final int PITCH_EXTVIDEO_LOADVIDEO_1                      = 32;
+final int PITCH_EXTVIDEO_LOADVIDEO_2                      = 33;
+final int PITCH_EXTVIDEO_DISPLAYIMAGE_1                   = 34;
+final int PITCH_EXTVIDEO_DISPLAYIMAGEFX_1                 = 35;
+final int PITCH_EXTVIDEO_SETCUSTOMFX_1                    = 36;
+final int PITCH_EXTVIDEO_SAVESETTINGS                     = 37;
+final int CC_EXTVIDEO_CALIB_X1                            = 10;
+final int CC_EXTVIDEO_CALIB_X1_FINE                       = 18;
+final int CC_EXTVIDEO_CALIB_Y1                            = 11;
+final int CC_EXTVIDEO_CALIB_Y1_FINE                       = 19;
+final int CC_EXTVIDEO_CALIB_X2                            = 12;
+final int CC_EXTVIDEO_CALIB_X2_FINE                       = 20;
+final int CC_EXTVIDEO_CALIB_Y2                            = 13;
+final int CC_EXTVIDEO_CALIB_Y2_FINE                       = 21;
+final int CC_EXTVIDEO_CALIB_X3                            = 14;
+final int CC_EXTVIDEO_CALIB_X3_FINE                       = 22;
+final int CC_EXTVIDEO_CALIB_Y3                            = 15;
+final int CC_EXTVIDEO_CALIB_Y3_FINE                       = 23;
+final int CC_EXTVIDEO_CALIB_X4                            = 16;
+final int CC_EXTVIDEO_CALIB_X4_FINE                       = 24;
+final int CC_EXTVIDEO_CALIB_Y4                            = 17;
+final int CC_EXTVIDEO_CALIB_Y4_FINE                       = 25;
+final int CC_EXTVIDEO_CALIB_SAVE_MAPPING                  = 63;
 
 final int PITCH_LOAD_ANIMATION_BANK1                      = 123;
 final int PITCH_LOAD_ANIMATION_BANK2                      = 124;
@@ -242,6 +270,16 @@ void processMidiInfo_semiAutoMode(int pitch, int velocity) {
     case PITCH_LOAD_ANIMATION_BANK4:                        loadAnimation4(velocity);break;                                          // 
     case PITCH_LOAD_IMAGE_BANK1:                            loadImage1(velocity);break;                                              // 
     case PITCH_CHANGE_OUTPUTMAPPING:                        activateKeyboardLEDPanelMapping();break;                                 // Activate the remapping procedure
+
+    case PITCH_EXTVIDEO_PLAYVIDEO_1:                        myExtVideoMappingController.extVideoProj_playVideo(velocity);      break;
+    case PITCH_EXTVIDEO_PLAYVIDEO_2:                        myExtVideoMappingController.extVideoProj_playVideo2(velocity);     break;
+    case PITCH_EXTVIDEO_LOADVIDEO_1:                        myExtVideoMappingController.extVideoProj_loadVideo(velocity);      break;
+    case PITCH_EXTVIDEO_LOADVIDEO_2:                        myExtVideoMappingController.extVideoProj_loadVideo2(velocity);     break;
+    case PITCH_EXTVIDEO_DISPLAYIMAGE_1:                     myExtVideoMappingController.extVideoProj_displayImage(velocity);   break;
+    case PITCH_EXTVIDEO_DISPLAYIMAGEFX_1:                   myExtVideoMappingController.extVideoProj_displayImageFx(velocity); break;
+    case PITCH_EXTVIDEO_SETCUSTOMFX_1:                      myExtVideoMappingController.extVideoProj_setDynamicFX(velocity);   break;
+    case PITCH_EXTVIDEO_SAVESETTINGS:                       myExtVideoMappingController.extVideoProj_sendSaveSettingsMsg();    break;
+
     default: break;
   }
 }
@@ -1198,8 +1236,9 @@ final int DELTA_FILTER_MS = 40;
 long lastMillisecond_cc_in = 0;
 
 // Receive a controllerChange  
-void controllerChange(int channel, int number, int value, long timestamp, String bus_name) {
-  
+// TODO: redo this section properly, it's becoming a mess !
+void controllerChange(int channel, int number, int value, long timestamp, String bus_name) {  
+
   //Special case: a Pong game is currently going on, ignore the time filter, we need to be fast here
   //Also, do not use any effects for this animation
   if (animationnumber == 394) {
@@ -1212,18 +1251,24 @@ void controllerChange(int channel, int number, int value, long timestamp, String
       }
   } 
   
-  else if (filterTimeElapsed(lastMillisecond_cc_in) || value == 0 || value == 127) {
+  // Filter the maximum number of messages going in per second. However, always allow ext video proj related messages
+  else if (filterTimeElapsed(lastMillisecond_cc_in) || value == 0 || value == 127 || channel == CHANNEL_EXTVIDEOPROJ_CTRL) {
     
     lastMillisecond_cc_in = System.currentTimeMillis();
     
     if (bus_name == myPioneerControllerBus.getBusName()) {
       processCCInfo_RMX500(channel, number, value);
     }
-    
-    if (bus_name == myControllerBus.getBusName() || bus_name == myKeyboardBus.getBusName() || bus_name == myMainBus.getBusName()) {    //Filter the panic all-notes-off messages sent by non-related devices
+
+    else if (bus_name == myMainBus.getBusName() && channel == CHANNEL_EXTVIDEOPROJ_CTRL) {
+      myExtVideoMappingController.processCCInfo_extVideoProj(channel, number, value);
+    }
+
+    else if (bus_name == myControllerBus.getBusName() || bus_name == myKeyboardBus.getBusName() || bus_name == myMainBus.getBusName()) {    //Filter the panic all-notes-off messages sent by non-related devices
       processCCInfo_standardControllers(channel, number, value);
     }
   }
+  
 }
 
 void processCCInfo_RMX500(int channel, int number, int value) {
@@ -1240,6 +1285,7 @@ void processCCInfo_RMX500(int channel, int number, int value) {
 }
 
 void processCCInfo_standardControllers(int channel, int number, int value) {
+  // No switch here, because the pitches are not constant
   if (number == PITCH_KNOB_BRIGHTNESS)         {changeBrightness(channel, number, value);}          //Modulation wheel : change global brightness
   else if (number == PITCH_KNOB_BLACKOUT)      {setBlackOutAutoMode(channel, number, value);}       //Low-pass filter knob : blackout
   else if (number == PITCH_KNOB_WHITEOUT)      {setWhiteOutAutoMode(channel, number, value);}       //Hi-pass filter knob : whiteout
@@ -1247,6 +1293,7 @@ void processCCInfo_standardControllers(int channel, int number, int value) {
   else if (number == PITCH_KNOB_COLORCHANGE)   {setColorChangeAutoMode(channel, number, value);}    //Color change : when the phaser is set, tint the screen with a cycling color
   else if (number == PITCH_KNOB_WHITEJAMAMONO) {setWhiteJamaMonoAutoMode(channel, number, value);}  //WhiteJamaMono : when the pitch shift is set, a white rectangle enters the screen
   else if (number == PITCH_KNOB_WHITENOISE)    {setWhiteNoiseAutoMode(channel, number, value);}     //White noise : pixelize the output accordingly to the input value 
+
 }
 
 void changeBrightness(int channel, int number, int value) {

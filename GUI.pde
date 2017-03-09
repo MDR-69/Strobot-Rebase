@@ -31,7 +31,7 @@ ArrayList<RackLight> gui_rackLightList;
 ArrayList<LEDTube> gui_LEDTubeList;
 
 final int gui_width                      = 900;
-final int gui_height                     = 800;
+final int gui_height                     = 840;
 
 int gui_backgroundBrightness             = 45;
 final int gui_simulatorPosX              = 10;
@@ -47,6 +47,7 @@ final int gui_simulatorTextSubY          = 210;
 
 final int gui_audioMonitoringGroupOffsetX = (gui_simulatorPosX + gui_simulatorWidth + gui_spacing);
 final int gui_audioMonitoringGroupWidth   = gui_width - (gui_simulatorPosX + gui_simulatorWidth + 2*gui_spacing);
+final int gui_audioMonitoringGroupHeight  = 210;
 final int gui_audioMonitoringToggleWidth  = 140;
 final int gui_audioMonitoringToggleHeight = 20;    
 
@@ -254,7 +255,7 @@ final float audioMonitoring_maxSignalLevel_Guitar  = 1.2;
 final int FRAMERATE_NOSIMU = 8;
 final int FRAMERATE_SIMU   = 30;
 
-final int gui_audioMonitoringGroupBaseHeight     = 600;
+final int gui_audioMonitoringGroupPosY           = 600;
 final int gui_generalInformationsHeight          = 530;
 final int gui_ledPanelAnimationGroupPosY         = 350;
 final int gui_ledPanelAnimationGroupHeight       = 165;
@@ -332,7 +333,12 @@ public class ControlFrame extends PApplet {
   //controlP5.Button add_BackStrobo;
   controlP5.Toggle performRFChannelEducation;
   controlP5.Toggle performRFChannelScan;
- 
+  controlP5.Toggle ExtVideoProj_Video_loadAndPlayToggle;
+  controlP5.Toggle ExtVideoProj_Video_loadOnlyToggle;
+  controlP5.Toggle ExtVideoProj_Image_displayMainImagesToggle;
+  controlP5.Toggle ExtVideoProj_Image_displayEffectImagesToggle;
+  controlP5.Toggle ExtVideoProj_startCalibration;  
+
   controlP5.CheckBox LEDPanelAnimations_animationListCheckBox;
   controlP5.CheckBox CustomDeviceAnimations_animationListCheckBox;
   controlP5.CheckBox DMXStrobeAnimations_animationListCheckBox;
@@ -356,6 +362,7 @@ public class ControlFrame extends PApplet {
   controlP5.Button DMXParAnimations_Color_reinitButton;
   controlP5.Button DMXParAnimations_LightStyle_reinitButton;
   controlP5.Button DMXParAnimations_Animations_reinitButton;
+  controlP5.Button ExtVideoProj_saveCalibrationSettings;
 
   controlP5.ScrollableList LEDPanelAnimations_animationListBox;
   controlP5.ScrollableList CustomDeviceAnimations_animationListBox;
@@ -368,6 +375,11 @@ public class ControlFrame extends PApplet {
   controlP5.ScrollableList DMXParAnimations_Color_animationListBox;
   controlP5.ScrollableList DMXParAnimations_LightStyle_animationListBox;
   controlP5.ScrollableList DMXParAnimations_Animations_animationListBox;
+  controlP5.ScrollableList ExtVideoProj_playVideoListBox;
+  controlP5.ScrollableList ExtVideoProj_playImageListBox;
+  controlP5.ScrollableList ExtVideoProj_playEffectImageListBox;
+  controlP5.ScrollableList ExtVideoProj_playEffectListBox;
+
 
   controlP5.Textarea LEDPanelAnimations_currentAnimationDescription;
   controlP5.Textarea CustomDeviceAnimations_currentAnimationDescription;
@@ -380,6 +392,14 @@ public class ControlFrame extends PApplet {
   controlP5.Textarea DMXParAnimations_Color_currentAnimationDescription;
   controlP5.Textarea DMXParAnimations_LightStyle_currentAnimationDescription;
   controlP5.Textarea DMXParAnimations_Animations_currentAnimationDescription;
+  controlP5.Textarea ExtVideoProj_playVideo_currentCommandDescription;
+  controlP5.Textarea ExtVideoProj_playImage_currentCommandDescription;
+  controlP5.Textarea ExtVideoProj_playEffect_currentCommandDescription;
+
+  controlP5.Slider2D ExtVideoProj_Calibration_P1_Slider;
+  controlP5.Slider2D ExtVideoProj_Calibration_P2_Slider;
+  controlP5.Slider2D ExtVideoProj_Calibration_P3_Slider;
+  controlP5.Slider2D ExtVideoProj_Calibration_P4_Slider;
   
   ArrayList<controlP5.Textfield> gui_rfChannelPanelTextfields;
 
@@ -436,7 +456,7 @@ public class ControlFrame extends PApplet {
     }
     
     if (gui_activateAudioMonitoring) {
-      draw_audioMonitoring(gui_audioMonitoringGroupOffsetX + gui_spacing, gui_audioMonitoringGroupBaseHeight + 4*gui_spacing, 10);
+      draw_audioMonitoring(gui_audioMonitoringGroupOffsetX + gui_spacing, gui_audioMonitoringGroupPosY + 4*gui_spacing, 10);
     }
 
     if (rfChannelScan_requested) {
@@ -1480,6 +1500,7 @@ public class ControlFrame extends PApplet {
     Group DMXStrobe = createDMXStrobeAnimationListGroup();
     ArrayList<Group> DMXMovingHead = createDMXMovingHeadAnimationListGroup();
     ArrayList<Group> DMXPar = createDMXParAnimationListGroup();
+    ArrayList<Group> ExtVideoProj = createExtVideoProjAnimationListGroup();
     
     customDevicesDMXAnimationListsAccordion = cp5.addAccordion("Animation Lists")
                                                  .setPosition(accordionPosX, gui_customDevAndDMXAnimationGroupPosY)
@@ -1492,6 +1513,9 @@ public class ControlFrame extends PApplet {
     }
     for (Group parGroup: DMXPar) {
       customDevicesDMXAnimationListsAccordion.addItem(parGroup);
+    }
+    for (Group extVideoGroup: ExtVideoProj) {
+      customDevicesDMXAnimationListsAccordion.addItem(extVideoGroup);
     }
                    
         
@@ -2341,6 +2365,270 @@ public class ControlFrame extends PApplet {
     return groups;
   }
 
+
+  ////////////////////////////////////////////////////////////////
+  // Again, for the external video mapping system
+  //
+  ArrayList<Group> createExtVideoProjAnimationListGroup() {
+    int toggleWidth   = 12;
+    int toggleHeight  = 9;
+    int spacingRow    = 3;
+    int spacingColumn = 75;
+    int leftOffset    = 6;
+    
+    int groupWidth    = 576;
+    int groupHeight   = gui_dmxGroupHeight;
+
+    Group ExtVideoProjAnimations_playVideo = cp5.addGroup("External Video Mapping - Play Video Group")
+                                                    .setWidth(groupWidth)
+                                                    .activateEvent(true) 
+                                                    .setBackgroundColor(color(255,80))
+                                                    .setBackgroundHeight(groupHeight)
+                                                    .setLabel("External Video Mapping - Play Video")
+                                                    ;
+    Group ExtVideoProjAnimations_playImage = cp5.addGroup("External Video Mapping - Display Image Group")
+                                                    .setWidth(groupWidth)
+                                                    .activateEvent(true) 
+                                                    .setBackgroundColor(color(255,80))
+                                                    .setBackgroundHeight(groupHeight)
+                                                    .setLabel("External Video Mapping - Display Image")
+                                                    ;
+    Group ExtVideoProjAnimations_playEffect = cp5.addGroup("External Video Mapping - Play Effect Group")
+                                                    .setWidth(groupWidth)
+                                                    .activateEvent(true) 
+                                                    .setBackgroundColor(color(255,80))
+                                                    .setBackgroundHeight(groupHeight)
+                                                    .setLabel("External Video Mapping - Play Effect")
+                                                    ;
+    Group ExtVideoProjAnimations_calibrate = cp5.addGroup("External Video Mapping - Calibrate Display Group")
+                                                    .setWidth(groupWidth)
+                                                    .activateEvent(true) 
+                                                    .setBackgroundColor(color(255,80))
+                                                    .setBackgroundHeight(groupHeight)
+                                                    .setLabel("External Video Mapping - Calibrate Display")
+                                                    ;
+
+
+
+
+    ExtVideoProj_Video_loadAndPlayToggle = cp5.addToggle("External Video Mapping - Videos - Load and Play Toggle")
+                                                   .setValue(1)
+                                                   .setCaptionLabel("Load and Play")
+                                                   .setPosition(leftOffset, toggleHeight)
+                                                   .setSize(130, 12)
+                                                   .setColorBackground(color(110,0,0))
+                                                   .setColorForeground(color(160,0,0))
+                                                   .setColorActive(color(255,0,0))
+                                                   .setGroup(ExtVideoProjAnimations_playVideo)
+                                                   ;
+    ExtVideoProj_Video_loadAndPlayToggle.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+
+    ExtVideoProj_Video_loadOnlyToggle = cp5.addToggle("External Video Mapping - Videos - Load Only Toggle")
+                                                   .setValue(0)
+                                                   .setCaptionLabel("Load Only")
+                                                   .setPosition(leftOffset + 140, toggleHeight)
+                                                   .setSize(130, 12)
+                                                   .setColorBackground(color(110,0,0))
+                                                   .setColorForeground(color(160,0,0))
+                                                   .setColorActive(color(255,0,0))
+                                                   .setGroup(ExtVideoProjAnimations_playVideo)
+                                                   ;
+    ExtVideoProj_Video_loadOnlyToggle.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+
+    ExtVideoProj_Image_displayMainImagesToggle = cp5.addToggle("External Video Mapping - Images - Display Main Toggle")
+                                                   .setValue(1)
+                                                   .setCaptionLabel("Display Main Images")
+                                                   .setPosition(leftOffset, toggleHeight)
+                                                   .setSize(130, 12)
+                                                   .setColorBackground(color(110,0,0))
+                                                   .setColorForeground(color(160,0,0))
+                                                   .setColorActive(color(255,0,0))
+                                                   .setGroup(ExtVideoProjAnimations_playImage)
+                                                   ;
+    ExtVideoProj_Image_displayMainImagesToggle.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+
+    ExtVideoProj_Image_displayEffectImagesToggle = cp5.addToggle("External Video Mapping - Images - Display Effects Toggle")
+                                                   .setValue(0)
+                                                   .setCaptionLabel("Display Effect Images")
+                                                   .setPosition(leftOffset + 140, toggleHeight)
+                                                   .setSize(130, 12)
+                                                   .setColorBackground(color(110,0,0))
+                                                   .setColorForeground(color(160,0,0))
+                                                   .setColorActive(color(255,0,0))
+                                                   .setGroup(ExtVideoProjAnimations_playImage)
+                                                   ;
+    ExtVideoProj_Image_displayEffectImagesToggle.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+
+
+
+    List<String> filteredAnimationsStringList_Video          = new ArrayList<String>();
+    List<String> filteredAnimationsStringList_Image_Main     = new ArrayList<String>();
+    List<String> filteredAnimationsStringList_Image_Effect   = new ArrayList<String>();
+    List<String> filteredAnimationsStringList_Dynamic_Effect = new ArrayList<String>();
+    List<String> filteredAnimationsStringList_Animations     = new ArrayList<String>();
+
+    for (Attribute attr: ExtVideoProj_VideoAttributes) {
+      filteredAnimationsStringList_Video.add(attr.animationNbr + ": " + attr.name);
+    }
+    for (Attribute attr: ExtVideoProj_MainImgAttributes) {
+      filteredAnimationsStringList_Image_Main.add(attr.animationNbr + ": " + attr.name);
+    }
+    for (Attribute attr: ExtVideoProj_ImgEffectsAttributes) {
+      filteredAnimationsStringList_Image_Effect.add(attr.animationNbr + ": " + attr.name);
+    }
+    for (Attribute attr: ExtVideoProj_DynamicEffectsAttributes) {
+      filteredAnimationsStringList_Dynamic_Effect.add(attr.animationNbr + ": " + attr.name);
+    }
+
+    //Initialize the filtered animation list with all the available animations
+    ExtVideoProj_playVideoListBox = cp5.addScrollableList("External Video Mapping - Play Video")
+                                       .setPosition(leftOffset, 3*toggleHeight + 4*spacingRow - 2)
+                                       .setSize(3*ExtVideoProjAnimations_playVideo.getWidth()/5 - 2*leftOffset, ExtVideoProjAnimations_playVideo.getBackgroundHeight() - (3*toggleHeight + 3*spacingRow) + 1)
+                                       .addItems(filteredAnimationsStringList_Video)
+                                       .setBarVisible(false) 
+                                       //.disableCollapse()
+                                       .setType(ScrollableList.LIST)
+                                       .moveTo(ExtVideoProjAnimations_playVideo)
+                                       ;
+    ExtVideoProj_playImageListBox = cp5.addScrollableList("External Video Mapping - Display Image")
+                                       .setPosition(leftOffset, 3*toggleHeight + 4*spacingRow - 2)
+                                       .setSize(3*ExtVideoProjAnimations_playImage.getWidth()/5 - 2*leftOffset, ExtVideoProjAnimations_playImage.getBackgroundHeight() - (3*toggleHeight + 3*spacingRow) + 1)
+                                       .addItems(filteredAnimationsStringList_Image_Main)
+                                       .setBarVisible(false) 
+                                       //.disableCollapse()
+                                       .setType(ScrollableList.LIST)
+                                       .moveTo(ExtVideoProjAnimations_playImage)
+                                       ;
+    ExtVideoProj_playEffectListBox = cp5.addScrollableList("External Video Mapping - Play Effect")
+                                       .setPosition(leftOffset, 4*toggleHeight + 4*spacingRow)
+                                       .setSize(3*ExtVideoProjAnimations_playEffect.getWidth()/5 - 2*leftOffset, ExtVideoProjAnimations_playEffect.getBackgroundHeight() - (4*toggleHeight + 4*spacingRow) + 1)
+                                       .addItems(filteredAnimationsStringList_Dynamic_Effect)
+                                       .setBarVisible(false) 
+                                       //.disableCollapse()
+                                       .setType(ScrollableList.LIST)
+                                       .moveTo(ExtVideoProjAnimations_playEffect)
+                                       ;
+    
+    // Set this one invisible as default
+    ExtVideoProj_playEffectImageListBox = cp5.addScrollableList("External Video Mapping - Display Image Effect")
+                                             .setPosition(leftOffset, 3*toggleHeight + 4*spacingRow - 2)
+                                             .setSize(3*ExtVideoProjAnimations_playImage.getWidth()/5 - 2*leftOffset, ExtVideoProjAnimations_playImage.getBackgroundHeight() - (3*toggleHeight + 3*spacingRow) + 1)
+                                             .addItems(filteredAnimationsStringList_Image_Main)
+                                             .setBarVisible(false) 
+                                             //.disableCollapse()
+                                             .setType(ScrollableList.LIST)
+                                             .moveTo(ExtVideoProjAnimations_playImage)
+                                             .setVisible(false)
+                                             ;
+
+    ExtVideoProj_playVideo_currentCommandDescription = cp5.addTextarea("Current Ext Video Mapping Description - Video")
+                                                          .setPosition(3*ExtVideoProjAnimations_playVideo.getWidth()/5, 4*toggleHeight + 4*spacingRow)
+                                                          .setSize(ExtVideoProjAnimations_playVideo.getWidth() - ExtVideoProj_playVideoListBox.getWidth() - 3*leftOffset, ExtVideoProj_playVideoListBox.getHeight() - 4*(toggleHeight - spacingRow))
+                                                          .setColor(color(255))
+                                                          .setFont(minimlFont)
+                                                          .hideScrollbar()
+                                                          .setColorBackground(color(255,90))
+                                                          .setColorForeground(color(255,90))
+                                                          .moveTo(ExtVideoProjAnimations_playVideo)
+                                                          ;
+    ExtVideoProj_playImage_currentCommandDescription = cp5.addTextarea("Current Ext Video Mapping Description - Image")
+                                                          .setPosition(3*ExtVideoProjAnimations_playImage.getWidth()/5, 4*toggleHeight + 4*spacingRow)
+                                                          .setSize(ExtVideoProjAnimations_playImage.getWidth() - ExtVideoProj_playImageListBox.getWidth() - 3*leftOffset, ExtVideoProj_playImageListBox.getHeight() - 4*(toggleHeight - spacingRow))
+                                                          .setColor(color(255))
+                                                          .setFont(minimlFont)
+                                                          .hideScrollbar()
+                                                          .setColorBackground(color(255,90))
+                                                          .setColorForeground(color(255,90))
+                                                          .moveTo(ExtVideoProjAnimations_playImage)
+                                                          ;
+    ExtVideoProj_playEffect_currentCommandDescription = cp5.addTextarea("Current Ext Video Mapping Description - Effects")
+                                                          .setPosition(3*ExtVideoProjAnimations_playEffect.getWidth()/5, 4*toggleHeight + 4*spacingRow)
+                                                          .setSize(ExtVideoProjAnimations_playEffect.getWidth() - ExtVideoProj_playEffectListBox.getWidth() - 3*leftOffset, ExtVideoProj_playEffectListBox.getHeight() - 4*(toggleHeight - spacingRow))
+                                                          .setColor(color(255))
+                                                          .setFont(minimlFont)
+                                                          .hideScrollbar()
+                                                          .setColorBackground(color(255,90))
+                                                          .setColorForeground(color(255,90))
+                                                          .moveTo(ExtVideoProjAnimations_playEffect)
+                                                          ;
+
+    String textDescription = "Current External Video Mapping command description \n"
+                                      + "Select a command in the list\n"
+                                      + "\n"
+                                      + "Command number : \n"
+                                      + "Corresponding note/velocity : \n"
+                                      + "Attributes: \n";
+    ExtVideoProj_playVideo_currentCommandDescription.setText(textDescription.toUpperCase());
+    ExtVideoProj_playImage_currentCommandDescription.setText(textDescription.toUpperCase());
+    ExtVideoProj_playEffect_currentCommandDescription.setText(textDescription.toUpperCase());
+
+
+    ExtVideoProj_Calibration_P1_Slider = cp5.addSlider2D("External Video Mapping - Display 1 Calibration - P1")
+                                            .setPosition(10,10)
+                                            .setSize(110,110)
+                                            .setMinMax(0,0,255,255)
+                                            .setValue(int(myExtVideoMappingController.screenPos_x1),int(myExtVideoMappingController.screenPos_y1))
+                                            .setLabel("Display 1 - P1")
+                                            .setGroup(ExtVideoProjAnimations_calibrate)
+                                            ;
+
+    ExtVideoProj_Calibration_P2_Slider = cp5.addSlider2D("External Video Mapping - Display 1 Calibration - P2")
+                                            .setPosition(125,10)
+                                            .setSize(110,110)
+                                            .setMinMax(0,0,255,255)
+                                            .setValue(int(myExtVideoMappingController.screenPos_x2),int(myExtVideoMappingController.screenPos_y2))
+                                            .setLabel("Display 1 - P2")
+                                            .setGroup(ExtVideoProjAnimations_calibrate)
+                                            ;
+    ExtVideoProj_Calibration_P3_Slider = cp5.addSlider2D("External Video Mapping - Display 1 Calibration - P3")
+                                            .setPosition(240,10)
+                                            .setSize(110,110)
+                                            .setMinMax(0,0,255,255)
+                                            .setValue(int(myExtVideoMappingController.screenPos_x3),int(myExtVideoMappingController.screenPos_y3))
+                                            .setLabel("Display 1 - P3")
+                                            .setGroup(ExtVideoProjAnimations_calibrate)
+                                            ;
+    ExtVideoProj_Calibration_P4_Slider = cp5.addSlider2D("External Video Mapping - Display 1 Calibration - P4")
+                                            .setPosition(355,10)
+                                            .setSize(110,110)
+                                            .setMinMax(0,0,255,255)
+                                            .setValue(int(myExtVideoMappingController.screenPos_x4),int(myExtVideoMappingController.screenPos_y4))
+                                            .setLabel("Display 1 - P4")
+                                            .setGroup(ExtVideoProjAnimations_calibrate)
+                                            ;
+
+    ExtVideoProj_startCalibration = cp5.addToggle("External Video Mapping - Start Calibration")
+                                   .setValue(0)
+                                   .setCaptionLabel("Start Calibration")
+                                   .setPosition(470, 10)
+                                   .setSize(100, 20)
+                                   .setColorBackground(color(110,0,0))
+                                   .setColorForeground(color(150,0,0))
+                                   .setColorActive(color(190,0,0))
+                                   .setGroup(ExtVideoProjAnimations_calibrate)
+                                   ;
+    ExtVideoProj_startCalibration.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+
+    ExtVideoProj_saveCalibrationSettings = cp5.addButton("External Video Mapping - Save Settings")
+                                              .setValue(0)
+                                              .setCaptionLabel("Save Settings")
+                                              .setPosition(470, 40)
+                                              .setSize(100, 20)
+                                              .setColorBackground(color(110,0,0))
+                                              .setColorForeground(color(150,0,0))
+                                              .setColorActive(color(190,0,0))
+                                              .setGroup(ExtVideoProjAnimations_calibrate)
+                                              ;
+    add_RackLight.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+
+
+    ArrayList<Group> groups = new ArrayList<Group>();
+    groups.add(ExtVideoProjAnimations_playVideo);
+    groups.add(ExtVideoProjAnimations_playImage);
+    groups.add(ExtVideoProjAnimations_playEffect);
+    groups.add(ExtVideoProjAnimations_calibrate);
+    return groups;
+  }
 
   void rebuildFilteredLEDPanelAnimationList(float[] checkBoxArrayValue) {
     String[] wantedAttributes = createLEDPanelAnimationListFilter(checkBoxArrayValue);
@@ -3550,6 +3838,222 @@ public class ControlFrame extends PApplet {
 
       }
 
+      else if (theEvent.getName() == "External Video Mapping - Play Video") {  
+        int selectedVal = int(ExtVideoProj_playVideoListBox.getValue());
+        String selectedItem =  (String)ExtVideoProj_playVideoListBox.getItem(selectedVal).get("text");
+        String[] selectedItemSplit = split(selectedItem, ":");
+        int animNbr = Integer.parseInt(selectedItemSplit[0]);
+
+        //Update the description
+        //Note : get animNbr - 1, because unlike for the LED Panel animations, there is no 0
+        String textDescription = "Current ExtVideoMapping video description \n"
+                                      + ExtVideoProj_VideoAttributes.get(animNbr - 1).name + "\n"
+                                      + "\n"
+                                      + "Animation number : " + ExtVideoProj_VideoAttributes.get(animNbr - 1).animationNbr + "\n"
+                                      + "Corresponding note/velocity : " + getStringFromAnimationNumber_extVideoProj_playVideo(ExtVideoProj_VideoAttributes.get(animNbr - 1).animationNbr) + "\n"
+                                      + "Attributes:\n"
+                                      + ExtVideoProj_VideoAttributes.get(animNbr - 1).attributes;
+        
+        ExtVideoProj_playVideo_currentCommandDescription.setText(textDescription.toUpperCase());
+
+        boolean loadAndPlay = ExtVideoProj_Video_loadAndPlayToggle.getState();
+        if (loadAndPlay) {
+          myExtVideoMappingController.extVideoProj_playVideo(animNbr);
+        }
+        else {
+          myExtVideoMappingController.extVideoProj_loadVideo(animNbr);
+        }
+
+      }
+
+      else if (theEvent.getName() == "External Video Mapping - Display Image") {  
+        int selectedVal = int(ExtVideoProj_playImageListBox.getValue());
+        String selectedItem =  (String)ExtVideoProj_playImageListBox.getItem(selectedVal).get("text");
+        String[] selectedItemSplit = split(selectedItem, ":");
+        int animNbr = Integer.parseInt(selectedItemSplit[0]);
+
+        //Update the description
+        //Note : get animNbr - 1, because unlike for the LED Panel animations, there is no 0
+        String textDescription = "Current ExtVideoMapping image description \n"
+                                      + ExtVideoProj_MainImgAttributes.get(animNbr - 1).name + "\n"
+                                      + "\n"
+                                      + "Animation number : " + ExtVideoProj_MainImgAttributes.get(animNbr - 1).animationNbr + "\n"
+                                      + "Corresponding note/velocity : " + getStringFromAnimationNumber_extVideoProj_displayMainImage(ExtVideoProj_MainImgAttributes.get(animNbr - 1).animationNbr) + "\n"
+                                      + "Attributes:\n"
+                                      + ExtVideoProj_MainImgAttributes.get(animNbr - 1).attributes;
+        
+        ExtVideoProj_playImage_currentCommandDescription.setText(textDescription.toUpperCase());
+
+        myExtVideoMappingController.extVideoProj_displayImage(animNbr);
+
+      }
+
+      else if (theEvent.getName() == "External Video Mapping - Display Image Effect") {  
+        int selectedVal = int(ExtVideoProj_playEffectImageListBox.getValue());
+        String selectedItem =  (String)ExtVideoProj_playEffectImageListBox.getItem(selectedVal).get("text");
+        String[] selectedItemSplit = split(selectedItem, ":");
+        int animNbr = Integer.parseInt(selectedItemSplit[0]);
+
+        //Update the description
+        //Note : get animNbr - 1, because unlike for the LED Panel animations, there is no 0
+        String textDescription = "Current ExtVideoMapping FX image description \n"
+                                      + ExtVideoProj_ImgEffectsAttributes.get(animNbr - 1).name + "\n"
+                                      + "\n"
+                                      + "FX Image number : " + ExtVideoProj_ImgEffectsAttributes.get(animNbr - 1).animationNbr + "\n"
+                                      + "Corresponding note/velocity : " + getStringFromAnimationNumber_extVideoProj_displayFxImage(ExtVideoProj_ImgEffectsAttributes.get(animNbr - 1).animationNbr) + "\n"
+                                      + "Attributes:\n"
+                                      + ExtVideoProj_ImgEffectsAttributes.get(animNbr - 1).attributes;
+        
+        ExtVideoProj_playImage_currentCommandDescription.setText(textDescription.toUpperCase());
+
+        // myExtVideoMappingController.extVideoProj_displayImage(animNbr);
+
+
+      }
+      else if (theEvent.getName() == "External Video Mapping - Play Effect") {  
+        int selectedVal = int(ExtVideoProj_playEffectListBox.getValue());
+        String selectedItem =  (String)ExtVideoProj_playEffectListBox.getItem(selectedVal).get("text");
+        String[] selectedItemSplit = split(selectedItem, ":");
+        int animNbr = Integer.parseInt(selectedItemSplit[0]);
+
+        //Update the description
+        //Note : get animNbr - 1, because unlike for the LED Panel animations, there is no 0
+        String textDescription = "Current ExtVideoMapping effect description \n"
+                                      + ExtVideoProj_DynamicEffectsAttributes.get(animNbr - 1).name + "\n"
+                                      + "\n"
+                                      + "Animation number : " + ExtVideoProj_DynamicEffectsAttributes.get(animNbr - 1).animationNbr + "\n"
+                                      + "Corresponding note/velocity : " + getStringFromAnimationNumber_extVideoProj_setCustomFx(ExtVideoProj_DynamicEffectsAttributes.get(animNbr - 1).animationNbr) + "\n"
+                                      + "Attributes:\n"
+                                      + ExtVideoProj_DynamicEffectsAttributes.get(animNbr - 1).attributes;
+        
+        ExtVideoProj_playEffect_currentCommandDescription.setText(textDescription.toUpperCase());
+
+        myExtVideoMappingController.extVideoProj_setDynamicFX(animNbr);
+
+      }
+
+      else if (theEvent.getName() == "External Video Mapping - Videos - Load and Play Toggle") {
+        // This ugly condition is necessary to avoid an infinite loop of endless callbacks
+        if (ExtVideoProj_Video_loadAndPlayToggle.getState() == true) {
+          if (ExtVideoProj_Video_loadOnlyToggle.getState() == true) {
+            ExtVideoProj_Video_loadOnlyToggle.setState(false);
+          }
+        }
+        else {
+          if (ExtVideoProj_Video_loadOnlyToggle.getState() == false) {
+            ExtVideoProj_Video_loadOnlyToggle.setState(true);
+          }
+        }
+      }
+      else if (theEvent.getName() == "External Video Mapping - Videos - Load Only Toggle") {
+        // This ugly condition is necessary to avoid an infinite loop of endless callbacks
+        if (ExtVideoProj_Video_loadOnlyToggle.getState() == true) {
+          if (ExtVideoProj_Video_loadAndPlayToggle.getState() == true) {
+            ExtVideoProj_Video_loadAndPlayToggle.setState(false);
+          }
+        }
+        else {
+          if (ExtVideoProj_Video_loadAndPlayToggle.getState() == false) {
+            ExtVideoProj_Video_loadAndPlayToggle.setState(true);
+          }
+        }
+      }
+      else if (theEvent.getName() == "External Video Mapping - Images - Display Main Toggle") {
+        if (ExtVideoProj_Image_displayMainImagesToggle.getState() == true) {
+          if (ExtVideoProj_Image_displayEffectImagesToggle.getState() == true) {
+            ExtVideoProj_Image_displayEffectImagesToggle.setState(false);
+          }
+        }
+        else {
+          if (ExtVideoProj_Image_displayEffectImagesToggle.getState() == false) {
+            ExtVideoProj_Image_displayEffectImagesToggle.setState(true);
+          }
+        }
+
+        boolean displayImageMain = ExtVideoProj_Image_displayMainImagesToggle.getState();
+        if (displayImageMain) {
+          ExtVideoProj_playEffectImageListBox.setVisible(false);
+          ExtVideoProj_playImageListBox.setVisible(true);
+        }
+        else {
+          ExtVideoProj_playImageListBox.setVisible(false);
+          ExtVideoProj_playEffectImageListBox.setVisible(true);
+        }
+      }
+
+      else if (theEvent.getName() == "External Video Mapping - Images - Display Effects Toggle") {
+        if (ExtVideoProj_Image_displayEffectImagesToggle.getState() == true) {
+          if (ExtVideoProj_Image_displayMainImagesToggle.getState() == true) {
+            ExtVideoProj_Image_displayMainImagesToggle.setState(false);
+          }
+        }
+        else {
+          if (ExtVideoProj_Image_displayMainImagesToggle.getState() == false) {
+            ExtVideoProj_Image_displayMainImagesToggle.setState(true);
+          }
+        }
+
+        boolean displayImageMain = ExtVideoProj_Image_displayMainImagesToggle.getState();
+        if (displayImageMain) {
+          ExtVideoProj_playEffectImageListBox.setVisible(false);
+          ExtVideoProj_playImageListBox.setVisible(true);
+        }
+        else {
+          ExtVideoProj_playImageListBox.setVisible(false);
+          ExtVideoProj_playEffectImageListBox.setVisible(true);
+        }
+      }
+
+      else if (theEvent.getName() == "External Video Mapping - Display 1 Calibration - P1") {
+        myExtVideoMappingController.screenPos_x1 = byte(ExtVideoProj_Calibration_P1_Slider.getArrayValue()[0]); 
+        myExtVideoMappingController.screenPos_y1 = byte(ExtVideoProj_Calibration_P1_Slider.getArrayValue()[1]); 
+        myExtVideoMappingController.screenPos_x1_fine = 0;
+        myExtVideoMappingController.screenPos_y1_fine = 0;
+        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(0, myExtVideoMappingController.screenPos_x1_fine, myExtVideoMappingController.screenPos_x1);
+        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(1, myExtVideoMappingController.screenPos_y1_fine, myExtVideoMappingController.screenPos_y1);
+      }
+
+      else if (theEvent.getName() == "External Video Mapping - Display 1 Calibration - P2") {
+        myExtVideoMappingController.screenPos_x2 = byte(ExtVideoProj_Calibration_P2_Slider.getArrayValue()[0]); 
+        myExtVideoMappingController.screenPos_y2 = byte(ExtVideoProj_Calibration_P2_Slider.getArrayValue()[1]); 
+        myExtVideoMappingController.screenPos_x2_fine = 0;
+        myExtVideoMappingController.screenPos_y2_fine = 0;
+        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(2, myExtVideoMappingController.screenPos_x2_fine, myExtVideoMappingController.screenPos_x2);
+        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(3, myExtVideoMappingController.screenPos_y2_fine, myExtVideoMappingController.screenPos_y2);
+      }
+
+      else if (theEvent.getName() == "External Video Mapping - Display 1 Calibration - P3") {
+        myExtVideoMappingController.screenPos_x3 = byte(ExtVideoProj_Calibration_P3_Slider.getArrayValue()[0]); 
+        myExtVideoMappingController.screenPos_y3 = byte(ExtVideoProj_Calibration_P3_Slider.getArrayValue()[1]); 
+        myExtVideoMappingController.screenPos_x3_fine = 0;
+        myExtVideoMappingController.screenPos_y3_fine = 0;
+        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(4, myExtVideoMappingController.screenPos_x3_fine, myExtVideoMappingController.screenPos_x3);
+        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(5, myExtVideoMappingController.screenPos_y3_fine, myExtVideoMappingController.screenPos_y3);
+      }
+
+      else if (theEvent.getName() == "External Video Mapping - Display 1 Calibration - P4") {
+        myExtVideoMappingController.screenPos_x4 = byte(ExtVideoProj_Calibration_P4_Slider.getArrayValue()[0]); 
+        myExtVideoMappingController.screenPos_y4 = byte(ExtVideoProj_Calibration_P4_Slider.getArrayValue()[1]); 
+        myExtVideoMappingController.screenPos_x4_fine = 0;
+        myExtVideoMappingController.screenPos_y4_fine = 0;
+        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(6, myExtVideoMappingController.screenPos_x4_fine, myExtVideoMappingController.screenPos_x4);
+        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(7, myExtVideoMappingController.screenPos_y4_fine, myExtVideoMappingController.screenPos_y4);
+      }
+      else if (theEvent.getName() == "External Video Mapping - Start Calibration") {
+        if (ExtVideoProj_startCalibration.getValue() == 1) {
+          myExtVideoMappingController.extVideoProj_setCalibrationImage();
+        }
+      }
+      else if (theEvent.getName() == "External Video Mapping - Save Settings") {
+        myExtVideoMappingController.extVideoProj_setVoidImage();        
+        myExtVideoMappingController.extVideoProj_writeConf(); 
+        myExtVideoMappingController.extVideoProj_sendSaveSettingsMsg();
+        
+        ExtVideoProj_startCalibration.setValue(0);
+
+      }
+
+
       else if (theEvent.getName().contains("Effect Bang")) {
         String[] eventNameSplit = split(theEvent.getName(), " ");
         int effectNumber = int(eventNameSplit[3]);
@@ -3574,12 +4078,12 @@ public class ControlFrame extends PApplet {
   void createAudioMonitoringGroup() {
         
     Group AudioMonitoringGroup = cp5.addGroup("Audio monitoring")
-                                    .setPosition(gui_audioMonitoringGroupOffsetX, gui_audioMonitoringGroupBaseHeight)
+                                    .setPosition(gui_audioMonitoringGroupOffsetX, gui_audioMonitoringGroupPosY)
                                     .setWidth(gui_audioMonitoringGroupWidth)
                                     .activateEvent(true)
                                     //.disableCollapse() 
                                     .setBackgroundColor(color(255,40))
-                                    .setBackgroundHeight(170)
+                                    .setBackgroundHeight(gui_audioMonitoringGroupHeight)
                                     .setLabel("Audio monitoring")
                                     ;
     

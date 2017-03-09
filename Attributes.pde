@@ -24,7 +24,43 @@ ArrayList<Attribute> DMXPar_ColorAttributes;
 ArrayList<Attribute> DMXPar_LightStyleAttributes;
 ArrayList<Attribute> DMXPar_AnimationAttributes;
 ArrayList<Attribute> DMXOtherFixturesAttributes;
-//StringList registeredAttributes_DMX;
+ArrayList<Attribute> ExtVideoProj_VideoAttributes;
+ArrayList<Attribute> ExtVideoProj_MainImgAttributes;
+ArrayList<Attribute> ExtVideoProj_ImgEffectsAttributes;
+ArrayList<Attribute> ExtVideoProj_DynamicEffectsAttributes;
+
+
+// Initialize all the different arrays
+void initAttributes() {
+  animationAttributes = new ArrayList<Attribute>();
+  registeredAttributes = new StringList();
+  setLEDPanelAnimationAttributes();
+  
+  //Do the same for Custom devices actions
+  customDevicesAttributes = new ArrayList<Attribute>();
+  setCustomDevicesActionsAttributes();
+  
+  //And do the same for the DMX animations
+  DMXStrobeAttributes                    = new ArrayList<Attribute>();
+  DMXMovingHead_MovementAttributes       = new ArrayList<Attribute>();
+  DMXMovingHead_ColorAttributes          = new ArrayList<Attribute>();
+  DMXMovingHead_RhythmAttributes         = new ArrayList<Attribute>();
+  DMXMovingHead_LightStyleAttributes     = new ArrayList<Attribute>();
+  DMXMovingHead_AnimationAttributes      = new ArrayList<Attribute>();
+  DMXPar_ColorAttributes                 = new ArrayList<Attribute>();
+  DMXPar_LightStyleAttributes            = new ArrayList<Attribute>();
+  DMXPar_AnimationAttributes             = new ArrayList<Attribute>();
+  DMXOtherFixturesAttributes             = new ArrayList<Attribute>();
+  
+  setDMXAnimationsAttributes();
+
+  ExtVideoProj_VideoAttributes           = new ArrayList<Attribute>();
+  ExtVideoProj_MainImgAttributes         = new ArrayList<Attribute>();
+  ExtVideoProj_ImgEffectsAttributes      = new ArrayList<Attribute>();  
+  ExtVideoProj_DynamicEffectsAttributes  = new ArrayList<Attribute>();      
+
+  setExtVideoProjAttributes();
+}
 
 //Register attributes to an animation, given its number, its name, and a list of attributes
 ArrayList<Attribute> registerAttribute(ArrayList<Attribute> attributesArray, int animationNbr, String attributeName, String[] attributeList) {
@@ -126,7 +162,7 @@ Geometric, Rotating, Circles, Lines, Curves, Triangles, Spiral
 Atmospheric, Evolving, Smooth, Violent, Rhythmic, Random, Game
 
 */
-void setAnimationAttributes() {
+void setLEDPanelAnimationAttributes() {
   //register attributes : animation number | animation name | attributes as a table of strings | indicative animation length (in number of beats)
   animationAttributes = registerAttribute(animationAttributes,   0, "Init"                                , new String[] {"Special"}                                                                            );
   animationAttributes = registerAttribute(animationAttributes,   1, "BlackOut"                            , new String[] {"Still", "Rhythmic", "B&W", "Very Dark"}                                              );
@@ -1940,6 +1976,35 @@ void setDMXAnimationsAttributes() {
   DMXPar_AnimationAttributes = registerAttribute(DMXPar_AnimationAttributes, 4,   "Side Fixtures - Perform Current Light Style"        , new String[] {"PAR-Anim-Side", "PAR-Anim-Still"                } );
   DMXPar_AnimationAttributes = registerAttribute(DMXPar_AnimationAttributes, 5,   "Left Fixtures - Perform Current Light Style"        , new String[] {"PAR-Anim-Left", "PAR-Anim-Still"                } );
   DMXPar_AnimationAttributes = registerAttribute(DMXPar_AnimationAttributes, 6,   "Right Fixtures - Perform Current Light Style"       , new String[] {"PAR-Anim-Right", "PAR-Anim-Still"               } );
+
+}
+
+void setExtVideoProjAttributes() {
+
+  ExtVideoProj_VideoAttributes = registerAttribute(ExtVideoProj_VideoAttributes, 1,   "Blackout"                        , new String[] {"ExtVideo_Video", "No Attr"       } );
+  ExtVideoProj_VideoAttributes = registerAttribute(ExtVideoProj_VideoAttributes, 2,   "Video 1"                         , new String[] {"ExtVideo_Video", "No Attr"       } );
+  ExtVideoProj_VideoAttributes = registerAttribute(ExtVideoProj_VideoAttributes, 3,   "Video 2"                         , new String[] {"ExtVideo_Video", "No Attr"       } );
+  ExtVideoProj_VideoAttributes = registerAttribute(ExtVideoProj_VideoAttributes, 4,   "Video 3"                         , new String[] {"ExtVideo_Video", "No Attr"       } );
+  ExtVideoProj_VideoAttributes = registerAttribute(ExtVideoProj_VideoAttributes, 5,   "Video 4"                         , new String[] {"ExtVideo_Video", "No Attr"       } );
+
+  ExtVideoProj_MainImgAttributes = registerAttribute(ExtVideoProj_MainImgAttributes, 1,   "Blackout"                    , new String[] {"ExtVideo_Image", "No_Attr"       } );
+  ExtVideoProj_MainImgAttributes = registerAttribute(ExtVideoProj_MainImgAttributes, 2,   "Image Main 1"                , new String[] {"ExtVideo_Image", "No_Attr"       } );
+  ExtVideoProj_MainImgAttributes = registerAttribute(ExtVideoProj_MainImgAttributes, 3,   "Image Main 2"                , new String[] {"ExtVideo_Image", "No_Attr"       } );
+  ExtVideoProj_MainImgAttributes = registerAttribute(ExtVideoProj_MainImgAttributes, 4,   "Image Main 3"                , new String[] {"ExtVideo_Image", "No_Attr"       } );
+  ExtVideoProj_MainImgAttributes = registerAttribute(ExtVideoProj_MainImgAttributes, 5,   "Image Main 4"                , new String[] {"ExtVideo_Image", "No_Attr"       } );
+
+
+  ExtVideoProj_ImgEffectsAttributes = registerAttribute(ExtVideoProj_ImgEffectsAttributes, 1,   "Blackout"              , new String[] {"ExtVideo_ImageFx", "No_Attr"     } );
+  ExtVideoProj_ImgEffectsAttributes = registerAttribute(ExtVideoProj_ImgEffectsAttributes, 2,   "Image FX 1"            , new String[] {"ExtVideo_ImageFx", "No_Attr"     } );
+  ExtVideoProj_ImgEffectsAttributes = registerAttribute(ExtVideoProj_ImgEffectsAttributes, 3,   "Image FX 2"            , new String[] {"ExtVideo_ImageFx", "No_Attr"     } );
+  ExtVideoProj_ImgEffectsAttributes = registerAttribute(ExtVideoProj_ImgEffectsAttributes, 4,   "Image FX 3"            , new String[] {"ExtVideo_ImageFx", "No_Attr"     } );
+  ExtVideoProj_ImgEffectsAttributes = registerAttribute(ExtVideoProj_ImgEffectsAttributes, 5,   "Image FX 4"            , new String[] {"ExtVideo_ImageFx", "No_Attr"     } );
+
+  ExtVideoProj_DynamicEffectsAttributes = registerAttribute(ExtVideoProj_DynamicEffectsAttributes, 1,   "Blackout"      , new String[] {"ExtVideo_CustomFx", "No_Attr"    } );
+  ExtVideoProj_DynamicEffectsAttributes = registerAttribute(ExtVideoProj_DynamicEffectsAttributes, 2,   "Dynamic FX 1"  , new String[] {"ExtVideo_CustomFx", "No_Attr"    } );
+  ExtVideoProj_DynamicEffectsAttributes = registerAttribute(ExtVideoProj_DynamicEffectsAttributes, 3,   "Dynamic FX 2"  , new String[] {"ExtVideo_CustomFx", "No_Attr"    } );
+  ExtVideoProj_DynamicEffectsAttributes = registerAttribute(ExtVideoProj_DynamicEffectsAttributes, 4,   "Dynamic FX 3"  , new String[] {"ExtVideo_CustomFx", "No_Attr"    } );
+  ExtVideoProj_DynamicEffectsAttributes = registerAttribute(ExtVideoProj_DynamicEffectsAttributes, 5,   "Dynamic FX 4"  , new String[] {"ExtVideo_CustomFx", "No_Attr"    } );
 
 }
 

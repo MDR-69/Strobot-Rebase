@@ -210,26 +210,7 @@ void setup()
   PIXELS_Y = PANEL_RESOLUTION_Y * DISPLAY_SCALING_FACTOR;                       //16 pixels high -> 64 pixels wide
   
   //Register attributes for all loaded animations
-  animationAttributes = new ArrayList<Attribute>();
-  registeredAttributes = new StringList();
-  setAnimationAttributes();
-  
-  //Do the same for Custom devices actions
-  customDevicesAttributes = new ArrayList<Attribute>();
-  setCustomDevicesActionsAttributes();
-  
-  //And do the same for the DMX animations
-  DMXStrobeAttributes                    = new ArrayList<Attribute>();
-  DMXMovingHead_MovementAttributes       = new ArrayList<Attribute>();
-  DMXMovingHead_ColorAttributes          = new ArrayList<Attribute>();
-  DMXMovingHead_RhythmAttributes         = new ArrayList<Attribute>();
-  DMXMovingHead_LightStyleAttributes     = new ArrayList<Attribute>();
-  DMXMovingHead_AnimationAttributes      = new ArrayList<Attribute>();
-  DMXPar_ColorAttributes                 = new ArrayList<Attribute>();
-  DMXPar_LightStyleAttributes            = new ArrayList<Attribute>();
-  DMXPar_AnimationAttributes             = new ArrayList<Attribute>();
-  DMXOtherFixturesAttributes             = new ArrayList<Attribute>();
-  setDMXAnimationsAttributes();
+  initAttributes();
 
   
   if (output_PHP == true) {

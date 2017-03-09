@@ -656,6 +656,53 @@ String getStringFromDMXAnimationNumber_movingHead_Animation(int animNbr) {
   return temp;
 }
 
+String getStringFromAnimationNumber_extVideoProj_playVideo(int animNbr) {
+  String temp = "Undefined";
+  if (animNbr <= 127) {                                                                   
+    temp = getStringFromNoteInt(PITCH_EXTVIDEO_PLAYVIDEO_1) + "  |  " + str(animNbr);
+  }
+  else if (animNbr <= 254) {
+    temp = getStringFromNoteInt(PITCH_EXTVIDEO_PLAYVIDEO_2) + "  |  " + str(animNbr - 127);
+  }
+  return temp;
+}
+
+String getStringFromAnimationNumber_extVideoProj_loadVideo(int animNbr) {
+  String temp = "Undefined";
+  if (animNbr <= 127) {                                                                   
+    temp = getStringFromNoteInt(PITCH_EXTVIDEO_LOADVIDEO_1) + "  |  " + str(animNbr);
+  }
+  else if (animNbr <= 254) {
+    temp = getStringFromNoteInt(PITCH_EXTVIDEO_LOADVIDEO_2) + "  |  " + str(animNbr - 127);
+  }
+  return temp;
+}
+
+String getStringFromAnimationNumber_extVideoProj_displayMainImage(int animNbr) {
+  String temp = "Undefined";
+  if (animNbr <= 127) {                                                                   
+    temp = getStringFromNoteInt(PITCH_EXTVIDEO_DISPLAYIMAGE_1) + "  |  " + str(animNbr);
+  }
+  return temp;
+}
+
+String getStringFromAnimationNumber_extVideoProj_displayFxImage(int animNbr) {
+  String temp = "Undefined";
+  if (animNbr <= 127) {                                                                   
+    temp = getStringFromNoteInt(PITCH_EXTVIDEO_DISPLAYIMAGEFX_1) + "  |  " + str(animNbr);
+  }
+  return temp;
+}
+
+String getStringFromAnimationNumber_extVideoProj_setCustomFx(int animNbr) {
+  String temp = "Undefined";
+  if (animNbr <= 127) {                                                                   
+    temp = getStringFromNoteInt(PITCH_EXTVIDEO_SETCUSTOMFX_1) + "  |  " + str(animNbr);
+  }
+  return temp;
+}
+
+
 int convertStringToInt(String text) {
   //Allow to parse either regular ints (ie MIDI notes "0", "1"...), or real notes (ie "C3", "A#-1"...) 
   

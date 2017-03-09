@@ -2,6 +2,7 @@
 applet
 Strobot_config.txt
 Strobot_logfile.txt
+Strobot_extVideoMappingConfig.csv
 application.linux32
 application.linux64
 application.macosx64
@@ -10,4 +11,3 @@ application.macosx
 tmp
 build-tmp
 *.class
-
