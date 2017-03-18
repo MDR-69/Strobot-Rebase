@@ -91,11 +91,6 @@ int NUMBER_OF_PANELS = 5;                       // Preferred number of panels - 
 //Choose the device from which Processing should receive MIDI commands
 //Standard choice : IEC bus to receive internal MIDI messages from the DAW -> "Bus 1"
 String MIDI_BUS_MAIN_INPUT       = "Bus 1";
-String MIDI_BUS_PIONEER_CONTROLLER_INPUT = "PIONEER RMX-500";
-String MIDI_BUS_CONTROLLER_INPUT = "LPD8";
-String MIDI_BUS_KEYBOARD_INPUT   = "LPK25";
-
-
 
 /////////////////////////////////////////////////////
 //--Should also be configured :                    //
@@ -149,7 +144,6 @@ boolean initComplete = false;
 //Instanciate MIDI control objects
 MidiBus myMainBus;
 MidiBus myControllerBus;
-MidiBus myPioneerControllerBus;      //Create a specific object for Pioneer RMX-like controllers, which have a special MIDI implementation, and as such specific processing
 MidiBus myKeyboardBus;
 
 //Control the brightness of the LED panels - 1 for full brightness

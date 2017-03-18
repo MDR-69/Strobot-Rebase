@@ -7,19 +7,20 @@ final static byte EXTVIDEOMAP_CMD_HEARTBEAT       = 0;
 final static byte EXTVIDEOMAP_CMD_SYSEX           = 1;
 final static byte EXTVIDEOMAP_CMD_TIMEINFO        = 2;       // Transport info: BPM, and location inside the measure, coded in 2 bytes (1/255^2 precision)
 final static byte EXTVIDEOMAP_CMD_DISPLAYIMAGE    = 3;       // Start / Stop / Resume the current loaded video, in three bytes: [Start/Stop/Resume]|[Repeat Flag]|[Spare]
-final static byte EXTVIDEOMAP_CMD_PLAYVIDEO       = 4;       // Start / Stop / Resume the current loaded video, in three bytes: [Start/Stop/Resume]|[Repeat Flag]|[Spare]
-final static byte EXTVIDEOMAP_CMD_LOADVIDEO       = 5;       // Load video: [MSB]|[LSB]|[Autoloop]
-final static byte EXTVIDEOMAP_CMD_SETIMGEFFECT    = 6;       // Set effect: [FX#]|[FX Argument]|[Repeat Flag]
-final static byte EXTVIDEOMAP_CMD_SETCUSTOMEFFECT = 7;
-final static byte EXTVIDEOMAP_CMD_CALIBRATION_X1  = 8;
-final static byte EXTVIDEOMAP_CMD_CALIBRATION_Y1  = 9;
-final static byte EXTVIDEOMAP_CMD_CALIBRATION_X2  = 10;
-final static byte EXTVIDEOMAP_CMD_CALIBRATION_Y2  = 11;
-final static byte EXTVIDEOMAP_CMD_CALIBRATION_X3  = 12;
-final static byte EXTVIDEOMAP_CMD_CALIBRATION_Y3  = 13;
-final static byte EXTVIDEOMAP_CMD_CALIBRATION_X4  = 14;
-final static byte EXTVIDEOMAP_CMD_CALIBRATION_Y4  = 15;
-final static byte EXTVIDEOMAP_CMD_SAVE_SETTINGS   = 16;
+final static byte EXTVIDEOMAP_CMD_PLAYVIDEOLOOP   = 4;       // Start / Stop / Resume the current loaded video, in three bytes: [Start/Stop/Resume]|[Repeat Flag]|[Spare]
+final static byte EXTVIDEOMAP_CMD_PLAYVIDEOONCE   = 5;
+final static byte EXTVIDEOMAP_CMD_LOADVIDEO       = 6;       // Load video: [MSB]|[LSB]|[Autoloop]
+final static byte EXTVIDEOMAP_CMD_SETIMGEFFECT    = 7;       // Set effect: [FX#]|[FX Argument]|[Repeat Flag]
+final static byte EXTVIDEOMAP_CMD_SETCUSTOMEFFECT = 8;
+final static byte EXTVIDEOMAP_CMD_CALIBRATION_X1  = 9;
+final static byte EXTVIDEOMAP_CMD_CALIBRATION_Y1  = 10;
+final static byte EXTVIDEOMAP_CMD_CALIBRATION_X2  = 11;
+final static byte EXTVIDEOMAP_CMD_CALIBRATION_Y2  = 12;
+final static byte EXTVIDEOMAP_CMD_CALIBRATION_X3  = 13;
+final static byte EXTVIDEOMAP_CMD_CALIBRATION_Y3  = 14;
+final static byte EXTVIDEOMAP_CMD_CALIBRATION_X4  = 15;
+final static byte EXTVIDEOMAP_CMD_CALIBRATION_Y4  = 16;
+final static byte EXTVIDEOMAP_CMD_SAVE_SETTINGS   = 17;
 final        byte[] EXTVIDEOMAP_CMD_CALIBRATION   = { EXTVIDEOMAP_CMD_CALIBRATION_X1,EXTVIDEOMAP_CMD_CALIBRATION_Y1,
                                                       EXTVIDEOMAP_CMD_CALIBRATION_X2,EXTVIDEOMAP_CMD_CALIBRATION_Y2,
                                                       EXTVIDEOMAP_CMD_CALIBRATION_X3,EXTVIDEOMAP_CMD_CALIBRATION_Y3,
@@ -38,6 +39,8 @@ int extVideoMap_videoAutoLoop = EXTVIDEOMAP_VIDEO_AUTOLOOP;                // Se
 class extVideoController {
 
   Tpm2 rfVideoProjDevice;
+
+  boolean exceptionRaised = false;
 
   byte screenPos_x1      = (byte) 255;
   byte screenPos_y1      = (byte) 0;
@@ -203,7 +206,15 @@ class extVideoController {
   //////////////////////////////////////////////////
 
   void extVideoProj_sendGenericCommand(byte commandNumber, byte data1, byte data2, byte data3) {
-    rfVideoProjDevice.sendRFVideoProjCommand(commandNumber,data1,data2,data3);
+    if (!exceptionRaised) {
+      try {
+        rfVideoProjDevice.sendRFVideoProjCommand(commandNumber,data1,data2,data3);
+      }
+      catch(Exception e) {
+        this.exceptionRaised = true;
+        println("Exception while trying to send an external video mapping command: " + e);
+      }
+    }
   }
 
   void extVideoProj_sendGenericCommand(int commandNumber, int data1, int data2, int data3) {
@@ -215,6 +226,7 @@ class extVideoController {
   }
 
   void extVideoProj_displayImageFx(int number) {
+    println("Send Img FX: " + number);
     extVideoProj_sendGenericCommand(EXTVIDEOMAP_CMD_SETIMGEFFECT, (byte) (number & 0xFF), (byte) ((number >> 8) & 0xFF), 0);
   }
 
@@ -226,20 +238,28 @@ class extVideoController {
     extVideoProj_loadVideo(number + 127);
   }
 
-  void extVideoProj_playVideo(int number) {
-    extVideoProj_sendGenericCommand(EXTVIDEOMAP_CMD_PLAYVIDEO, (byte) (number & 0xFF), (byte) ((number >> 8) & 0xFF), (byte) random(255));
+  void extVideoProj_playVideoLoop(int number) {
+      extVideoProj_sendGenericCommand(EXTVIDEOMAP_CMD_PLAYVIDEOLOOP, (byte) (number & 0xFF), (byte) ((number >> 8) & 0xFF), (byte) random(255));  
   }
 
-  void extVideoProj_playVideo2(int number) {
-    extVideoProj_loadVideo2(number + 127);
+  void extVideoProj_playVideoOnce(int number) {
+      extVideoProj_sendGenericCommand(EXTVIDEOMAP_CMD_PLAYVIDEOONCE, (byte) (number & 0xFF), (byte) ((number >> 8) & 0xFF), (byte) random(255));  
+  }
+
+  void extVideoProj_playVideoLoop2(int number) {
+    extVideoProj_playVideoLoop(number + 127);
+  }
+
+  void extVideoProj_playVideoOnce2(int number) {
+    extVideoProj_playVideoOnce(number + 127);
   }
 
   void extVideoProj_stopVideo() {
-    extVideoProj_sendGenericCommand(EXTVIDEOMAP_CMD_PLAYVIDEO, (byte) 0, (byte) 0, (byte) extVideoMap_videoAutoLoop);
+    extVideoProj_sendGenericCommand(EXTVIDEOMAP_CMD_PLAYVIDEOLOOP, (byte) 0, (byte) 0, (byte) random(255));
   }
 
   void extVideoProj_setDynamicFX(int number) {
-    extVideoProj_sendGenericCommand(EXTVIDEOMAP_CMD_SETCUSTOMEFFECT, (byte) (number & 0xFF), (byte) ((number >> 8) & 0xFF), 0);
+    extVideoProj_sendGenericCommand(EXTVIDEOMAP_CMD_SETCUSTOMEFFECT, (byte) (number & 0xFF), (byte) ((number >> 8) & 0xFF), (byte) random(255));
   }
 
   void extVideoProj_sendCalibrationMsg(int semiVertexIdx, byte valueLSB, byte valueMSB) {

@@ -333,7 +333,8 @@ public class ControlFrame extends PApplet {
   //controlP5.Button add_BackStrobo;
   controlP5.Toggle performRFChannelEducation;
   controlP5.Toggle performRFChannelScan;
-  controlP5.Toggle ExtVideoProj_Video_loadAndPlayToggle;
+  controlP5.Toggle ExtVideoProj_Video_loadAndPlayOnceToggle;
+  controlP5.Toggle ExtVideoProj_Video_loadAndPlayLoopToggle;
   controlP5.Toggle ExtVideoProj_Video_loadOnlyToggle;
   controlP5.Toggle ExtVideoProj_Image_displayMainImagesToggle;
   controlP5.Toggle ExtVideoProj_Image_displayEffectImagesToggle;
@@ -1046,26 +1047,6 @@ public class ControlFrame extends PApplet {
     
     gui_mainInputTextfield.getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, ControlP5.CENTER);
     
-    cp5.addTextfield("Keyboard")
-       .setPosition(accordionWidth - bigTextfieldWidth - leftOffset,leftOffset + textfieldHeight + spacingRow)
-       .setSize(bigTextfieldWidth - 2*textfieldHeight - spacingRow,textfieldHeight)
-       .setValue(MIDI_BUS_KEYBOARD_INPUT)
-       .setFont(minimlFont)
-       .setCaptionLabel("Keyboard :    ")
-       .setAutoClear(false)
-       .moveTo(midiInfo)
-       .getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, ControlP5.CENTER)
-       ;
-   cp5.addTextfield("General FX Controller")
-      .setPosition(accordionWidth - bigTextfieldWidth - leftOffset,leftOffset + 2*textfieldHeight + 2*spacingRow)
-      .setSize(bigTextfieldWidth - 2*textfieldHeight - spacingRow,textfieldHeight)
-      .setValue(MIDI_BUS_CONTROLLER_INPUT)
-      .setFont(minimlFont)
-      .setCaptionLabel("General FX Controller :    ")
-      .setAutoClear(false)
-      .moveTo(midiInfo)
-      .getCaptionLabel().align(ControlP5.LEFT_OUTSIDE, ControlP5.CENTER)
-      ;
     
     String gui_incomingMsgList =  "/////////////////////////////\n" +
                                   "// Listening on the Main Input Bus : \n" +
@@ -2411,9 +2392,9 @@ public class ControlFrame extends PApplet {
 
 
 
-    ExtVideoProj_Video_loadAndPlayToggle = cp5.addToggle("External Video Mapping - Videos - Load and Play Toggle")
+    ExtVideoProj_Video_loadAndPlayOnceToggle = cp5.addToggle("External Video Mapping - Videos - Load and Play Once Toggle")
                                                    .setValue(1)
-                                                   .setCaptionLabel("Load and Play")
+                                                   .setCaptionLabel("Load and Play Once")
                                                    .setPosition(leftOffset, toggleHeight)
                                                    .setSize(130, 12)
                                                    .setColorBackground(color(110,0,0))
@@ -2421,12 +2402,25 @@ public class ControlFrame extends PApplet {
                                                    .setColorActive(color(255,0,0))
                                                    .setGroup(ExtVideoProjAnimations_playVideo)
                                                    ;
-    ExtVideoProj_Video_loadAndPlayToggle.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+    ExtVideoProj_Video_loadAndPlayOnceToggle.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+
+    ExtVideoProj_Video_loadAndPlayLoopToggle = cp5.addToggle("External Video Mapping - Videos - Load and Play Loop Toggle")
+                                                   .setValue(0)
+                                                   .setCaptionLabel("Load and Play Loop")
+                                                   .setPosition(leftOffset + 140, toggleHeight)
+                                                   .setSize(130, 12)
+                                                   .setColorBackground(color(110,0,0))
+                                                   .setColorForeground(color(160,0,0))
+                                                   .setColorActive(color(255,0,0))
+                                                   .setGroup(ExtVideoProjAnimations_playVideo)
+                                                   ;
+    ExtVideoProj_Video_loadAndPlayLoopToggle.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+
 
     ExtVideoProj_Video_loadOnlyToggle = cp5.addToggle("External Video Mapping - Videos - Load Only Toggle")
                                                    .setValue(0)
                                                    .setCaptionLabel("Load Only")
-                                                   .setPosition(leftOffset + 140, toggleHeight)
+                                                   .setPosition(leftOffset + 280, toggleHeight)
                                                    .setSize(130, 12)
                                                    .setColorBackground(color(110,0,0))
                                                    .setColorForeground(color(160,0,0))
@@ -3442,17 +3436,6 @@ public class ControlFrame extends PApplet {
         resetExpectedTextLabel.setVisible(true);
         createConfigFile();
       }
-      else if (theEvent.getName() == "Keyboard") {
-        MIDI_BUS_KEYBOARD_INPUT = cp5.getController("Keyboard").getStringValue();
-        resetExpectedTextLabel.setVisible(true);
-        createConfigFile();
-      }
-      else if (theEvent.getName() == "General FX Controller") {
-        MIDI_BUS_CONTROLLER_INPUT = cp5.getController("DMX Microcontroller").getStringValue();
-        resetExpectedTextLabel.setVisible(true);
-        createConfigFile();
-      }
-      
       
       /////////////////////////
       // Audio input configuration
@@ -3856,9 +3839,13 @@ public class ControlFrame extends PApplet {
         
         ExtVideoProj_playVideo_currentCommandDescription.setText(textDescription.toUpperCase());
 
-        boolean loadAndPlay = ExtVideoProj_Video_loadAndPlayToggle.getState();
-        if (loadAndPlay) {
-          myExtVideoMappingController.extVideoProj_playVideo(animNbr);
+        boolean loadAndPlayOnce = ExtVideoProj_Video_loadAndPlayOnceToggle.getState();
+        boolean loadAndPlayLoop = ExtVideoProj_Video_loadAndPlayLoopToggle.getState();
+        if (loadAndPlayOnce) {
+          myExtVideoMappingController.extVideoProj_playVideoOnce(animNbr);
+        }
+        else if (loadAndPlayLoop) {
+          myExtVideoMappingController.extVideoProj_playVideoLoop(animNbr);
         }
         else {
           myExtVideoMappingController.extVideoProj_loadVideo(animNbr);
@@ -3906,7 +3893,7 @@ public class ControlFrame extends PApplet {
         
         ExtVideoProj_playImage_currentCommandDescription.setText(textDescription.toUpperCase());
 
-        // myExtVideoMappingController.extVideoProj_displayImage(animNbr);
+        myExtVideoMappingController.extVideoProj_displayImageFx(animNbr);
 
 
       }
@@ -3932,15 +3919,34 @@ public class ControlFrame extends PApplet {
 
       }
 
-      else if (theEvent.getName() == "External Video Mapping - Videos - Load and Play Toggle") {
+      else if (theEvent.getName() == "External Video Mapping - Videos - Load and Play Once Toggle") {
         // This ugly condition is necessary to avoid an infinite loop of endless callbacks
-        if (ExtVideoProj_Video_loadAndPlayToggle.getState() == true) {
+        if (ExtVideoProj_Video_loadAndPlayOnceToggle.getState() == true) {
           if (ExtVideoProj_Video_loadOnlyToggle.getState() == true) {
             ExtVideoProj_Video_loadOnlyToggle.setState(false);
           }
+          if (ExtVideoProj_Video_loadAndPlayLoopToggle.getState() == true) {
+            ExtVideoProj_Video_loadAndPlayLoopToggle.setState(false);
+          }
         }
         else {
-          if (ExtVideoProj_Video_loadOnlyToggle.getState() == false) {
+          if (ExtVideoProj_Video_loadOnlyToggle.getState() == false && ExtVideoProj_Video_loadAndPlayLoopToggle.getState() == false) {
+            ExtVideoProj_Video_loadOnlyToggle.setState(true);
+          }
+        }
+      }
+      else if (theEvent.getName() == "External Video Mapping - Videos - Load and Play Loop Toggle") {
+        // This ugly condition is necessary to avoid an infinite loop of endless callbacks
+        if (ExtVideoProj_Video_loadAndPlayLoopToggle.getState() == true) {
+          if (ExtVideoProj_Video_loadOnlyToggle.getState() == true) {
+            ExtVideoProj_Video_loadOnlyToggle.setState(false);
+          }
+          if (ExtVideoProj_Video_loadAndPlayOnceToggle.getState() == true) {
+            ExtVideoProj_Video_loadAndPlayOnceToggle.setState(false);
+          }
+        }
+        else {
+          if (ExtVideoProj_Video_loadOnlyToggle.getState() == false && ExtVideoProj_Video_loadAndPlayOnceToggle.getState() == false) {
             ExtVideoProj_Video_loadOnlyToggle.setState(true);
           }
         }
@@ -3948,13 +3954,16 @@ public class ControlFrame extends PApplet {
       else if (theEvent.getName() == "External Video Mapping - Videos - Load Only Toggle") {
         // This ugly condition is necessary to avoid an infinite loop of endless callbacks
         if (ExtVideoProj_Video_loadOnlyToggle.getState() == true) {
-          if (ExtVideoProj_Video_loadAndPlayToggle.getState() == true) {
-            ExtVideoProj_Video_loadAndPlayToggle.setState(false);
+          if (ExtVideoProj_Video_loadAndPlayLoopToggle.getState() == true) {
+            ExtVideoProj_Video_loadAndPlayLoopToggle.setState(false);
+          }
+          if (ExtVideoProj_Video_loadAndPlayOnceToggle.getState() == true) {
+            ExtVideoProj_Video_loadAndPlayOnceToggle.setState(false);
           }
         }
         else {
-          if (ExtVideoProj_Video_loadAndPlayToggle.getState() == false) {
-            ExtVideoProj_Video_loadAndPlayToggle.setState(true);
+          if (ExtVideoProj_Video_loadAndPlayOnceToggle.getState() == false && ExtVideoProj_Video_loadAndPlayLoopToggle.getState() == false) {
+            ExtVideoProj_Video_loadAndPlayOnceToggle.setState(true);
           }
         }
       }

@@ -409,12 +409,7 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
       rfDataBuffer[2] = data2;
       rfDataBuffer[3] = data3;
       
-      try {
-        tpm2.sendFrame(createCmdPayload(rfDataBuffer));
-      }
-      catch(Exception e) {
-        println("Exception while trying to send a command to the video projector microcontroller: " + e);
-      }
+      tpm2.sendFrame(createCmdPayload(rfDataBuffer));
     }
 }
 

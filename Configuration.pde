@@ -65,8 +65,6 @@ void createConfigFile() {
     configFile_write.println("Output|NumberOfPanels:" + NUMBER_OF_PANELS);
     configFile_write.println("Output|ScreenOrder:" + getScreenOrderConfiguration());
     configFile_write.println("MIDISettings|MainInputMIDIDevice:" + MIDI_BUS_MAIN_INPUT);
-    configFile_write.println("MIDISettings|ControllerInputMIDIDevice:" + MIDI_BUS_CONTROLLER_INPUT);
-    configFile_write.println("MIDISettings|PioneerControllerInputMIDIDevice:" + MIDI_BUS_PIONEER_CONTROLLER_INPUT);
     configFile_write.println();
     configFile_write.println();
     configFile_write.println("Custom Device configuration:");
@@ -255,12 +253,6 @@ void parseConfigurationFile(String line) {
       }
       else if (lineSplit[0].contains("MIDISettings|MainInputMIDIDevice")) {
         MIDI_BUS_MAIN_INPUT = lineSplit[1];
-      }
-      else if (lineSplit[0].contains("MIDISettings|PioneerControllerInputMIDIDevice")) {
-        MIDI_BUS_PIONEER_CONTROLLER_INPUT = lineSplit[1];
-      }
-      else if (lineSplit[0].contains("MIDISettings|ControllerInputMIDIDevice")) {
-        MIDI_BUS_CONTROLLER_INPUT = lineSplit[1];
       }
       
       //////////////////////////////////////////////////
@@ -659,10 +651,10 @@ String getStringFromDMXAnimationNumber_movingHead_Animation(int animNbr) {
 String getStringFromAnimationNumber_extVideoProj_playVideo(int animNbr) {
   String temp = "Undefined";
   if (animNbr <= 127) {                                                                   
-    temp = getStringFromNoteInt(PITCH_EXTVIDEO_PLAYVIDEO_1) + "  |  " + str(animNbr);
+    temp = getStringFromNoteInt(PITCH_EXTVIDEO_PLAYVIDEOONCE_1) + "  |  " + str(animNbr);
   }
   else if (animNbr <= 254) {
-    temp = getStringFromNoteInt(PITCH_EXTVIDEO_PLAYVIDEO_2) + "  |  " + str(animNbr - 127);
+    temp = getStringFromNoteInt(PITCH_EXTVIDEO_PLAYVIDEOONCE_2) + "  |  " + str(animNbr - 127);
   }
   return temp;
 }

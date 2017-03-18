@@ -6,15 +6,15 @@
 import themidibus.*;         //Import MIDI library
 
 //MIDI configuration :
-final int CHANNEL_KEYBOARD           = 0;      //MIDI Channel 1
-final int CHANNEL_SEMIAUTOMODE       = 1;      //MIDI Channel 2
-final int CHANNEL_AUTOMODE           = 2;      //MIDI Channel 3
-final int CHANNEL_MANUALMODE_1       = 3;      //MIDI Channel 4
-final int CHANNEL_MANUALMODE_2       = 4;      //MIDI Channel 5
-final int CHANNEL_MANUALMODE_3       = 5;      //MIDI Channel 6
-final int CHANNEL_MANUALMODE_4       = 6;      //MIDI Channel 7
-final int CHANNEL_EXTVIDEOPROJ_CTRL  = 7;      //MIDI Channel 8 - used by the calibration CC messages 
+final int CHANNEL_SEMIAUTOMODE       = 1;      //MIDI Channel 1
+final int CHANNEL_AUTOMODE           = 2;      //MIDI Channel 2
+final int CHANNEL_MANUALMODE_1       = 3;      //MIDI Channel 3
+final int CHANNEL_MANUALMODE_2       = 4;      //MIDI Channel 4
+final int CHANNEL_MANUALMODE_3       = 5;      //MIDI Channel 5
+final int CHANNEL_MANUALMODE_4       = 6;      //MIDI Channel 6
+final int CHANNEL_EXTVIDEOPROJ_CTRL  = 7;      //MIDI Channel 7 - used by the calibration CC messages 
 final int CHANNEL_PIONEER_RMX_CTRL   = 8;      //MIDI Channel 8 - used by the Pioneer RMX500 (as routed by Ableton)
+final int CHANNEL_KEYBOARD           = 9;      //MIDI Channel 9
 
 //Pitches for messages coming from the keyboard
 final int PITCH_P1_LEFT              = 0;
@@ -70,8 +70,10 @@ final int PITCH_DISPLAY_EFFECT_1                          = 121;
 final int PITCH_DISPLAY_EFFECT_2                          = 96;
 
 // Ext video proj commands
-final int PITCH_EXTVIDEO_PLAYVIDEO_1                      = 30;
-final int PITCH_EXTVIDEO_PLAYVIDEO_2                      = 31;
+final int PITCH_EXTVIDEO_PLAYVIDEOONCE_1                  = 28;
+final int PITCH_EXTVIDEO_PLAYVIDEOONCE_2                  = 29;
+final int PITCH_EXTVIDEO_PLAYVIDEOLOOP_1                  = 30;
+final int PITCH_EXTVIDEO_PLAYVIDEOLOOP_2                  = 31;
 final int PITCH_EXTVIDEO_LOADVIDEO_1                      = 32;
 final int PITCH_EXTVIDEO_LOADVIDEO_2                      = 33;
 final int PITCH_EXTVIDEO_DISPLAYIMAGE_1                   = 34;
@@ -174,18 +176,6 @@ void midiInit() {
   myMainBus = new MidiBus(this, MIDI_BUS_MAIN_INPUT, MIDI_BUS_MAIN_INPUT, MIDI_BUS_MAIN_INPUT);
   outputLog.println("Configuration --- Main Input MIDI device : " + MIDI_BUS_MAIN_INPUT);
   
-  boolean controllerConnected = true, pioneerConnected = true, keyboardConnected = true;
-  try {myControllerBus = new MidiBus(this, MIDI_BUS_CONTROLLER_INPUT, MIDI_BUS_CONTROLLER_INPUT, MIDI_BUS_CONTROLLER_INPUT);}
-    catch (Exception e) {println("Problem during initialization of controller MIDI input port : " + e); controllerConnected = false;}
-  try {myPioneerControllerBus = new MidiBus(this, MIDI_BUS_PIONEER_CONTROLLER_INPUT, MIDI_BUS_PIONEER_CONTROLLER_INPUT, MIDI_BUS_PIONEER_CONTROLLER_INPUT);}
-    catch (Exception e) {println("Problem during initialization of the Pioneer controller MIDI input port : " + e); pioneerConnected = false;}
-  try {myKeyboardBus = new MidiBus(this, MIDI_BUS_KEYBOARD_INPUT, MIDI_BUS_KEYBOARD_INPUT, MIDI_BUS_KEYBOARD_INPUT);}
-    catch (Exception e) {println("Problem during initialization of controller MIDI input port : " + e); keyboardConnected = false;}
-    
-  if (pioneerConnected) { outputLog.println("Device configurated --- Pioneer Controller device : " + MIDI_BUS_PIONEER_CONTROLLER_INPUT); }
-  if (controllerConnected) { outputLog.println("Device configurated --- Controller Input MIDI device : " + MIDI_BUS_CONTROLLER_INPUT); }
-  if (keyboardConnected) { outputLog.println("Configuration --- Keyboard Input MIDI device : " + MIDI_BUS_KEYBOARD_INPUT); }
-
   outputLog.println("--- MIDI initialization over ---");
 
 }
@@ -203,11 +193,12 @@ void midiInit() {
 void noteOn(int channel, int pitch, int velocity, long timestamp, String bus_name) {
   if (initComplete == true) {
     
-    if (bus_name == myControllerBus.getBusName() || bus_name == myKeyboardBus.getBusName()) {
-      processMidiInfo_standardControllers(channel, pitch, velocity);
+    //if (bus_name == myControllerBus.getBusName() || bus_name == myKeyboardBus.getBusName()) {
+    if (channel == CHANNEL_KEYBOARD) {
+      processMidiInfo_kbdControlledEffects(channel, pitch, velocity);
     }
     
-    else if (bus_name == myPioneerControllerBus.getBusName()) {
+    else if (channel == CHANNEL_PIONEER_RMX_CTRL) {
       processMidiInfo_pioneerControllerNoteOn(pitch, velocity);
     }
     
@@ -225,9 +216,8 @@ void noteOn(int channel, int pitch, int velocity, long timestamp, String bus_nam
       processMidiInfo_semiAutoMode(pitch, velocity);
     }
     
-    else if (channel == CHANNEL_KEYBOARD) {
-      processMidiInfo_keyboard(pitch, velocity);
-    }
+    // If a "change output mapping" command has been sent before, track the incoming notes' pitch and reorder the panels accordingly
+    processMidiInfo_keyboardPanelRemapping(pitch, velocity);
   }
 }
 
@@ -271,8 +261,10 @@ void processMidiInfo_semiAutoMode(int pitch, int velocity) {
     case PITCH_LOAD_IMAGE_BANK1:                            loadImage1(velocity);break;                                              // 
     case PITCH_CHANGE_OUTPUTMAPPING:                        activateKeyboardLEDPanelMapping();break;                                 // Activate the remapping procedure
 
-    case PITCH_EXTVIDEO_PLAYVIDEO_1:                        myExtVideoMappingController.extVideoProj_playVideo(velocity);      break;
-    case PITCH_EXTVIDEO_PLAYVIDEO_2:                        myExtVideoMappingController.extVideoProj_playVideo2(velocity);     break;
+    case PITCH_EXTVIDEO_PLAYVIDEOONCE_1:                    myExtVideoMappingController.extVideoProj_playVideoOnce(velocity);      break;
+    case PITCH_EXTVIDEO_PLAYVIDEOONCE_2:                    myExtVideoMappingController.extVideoProj_playVideoOnce2(velocity);     break;
+    case PITCH_EXTVIDEO_PLAYVIDEOLOOP_1:                    myExtVideoMappingController.extVideoProj_playVideoLoop(velocity);      break;
+    case PITCH_EXTVIDEO_PLAYVIDEOLOOP_2:                    myExtVideoMappingController.extVideoProj_playVideoLoop2(velocity);     break;
     case PITCH_EXTVIDEO_LOADVIDEO_1:                        myExtVideoMappingController.extVideoProj_loadVideo(velocity);      break;
     case PITCH_EXTVIDEO_LOADVIDEO_2:                        myExtVideoMappingController.extVideoProj_loadVideo2(velocity);     break;
     case PITCH_EXTVIDEO_DISPLAYIMAGE_1:                     myExtVideoMappingController.extVideoProj_displayImage(velocity);   break;
@@ -284,7 +276,7 @@ void processMidiInfo_semiAutoMode(int pitch, int velocity) {
   }
 }
 
-void processMidiInfo_keyboard(int pitch, int velocity) {
+void processMidiInfo_keyboardPanelRemapping(int pitch, int velocity) {
   //Custom function : Remapping using the keyboard, record the input notes 
   if (authorizePanelRemappingUsingKeyboard == true) {
             
@@ -315,7 +307,7 @@ void processMidiInfo_keyboard(int pitch, int velocity) {
   }
 }
 
-void processMidiInfo_standardControllers(int channel, int pitch, int velocity) {
+void processMidiInfo_kbdControlledEffects(int channel, int pitch, int velocity) {
     //Drumpad sub-keyboard - couldn't use a switch here because the pitches are not declared as finals 
     if (pitch == PITCH_P1_LEFT)                  {p1Left(channel, pitch, velocity);}
     else if (pitch == PITCH_P1_RIGHT)            {p1Right(channel, pitch, velocity);}
@@ -894,7 +886,7 @@ void noteOff(int channel, int pitch, int velocity, long timestamp, String bus_na
     
   // Receive a noteOff
   if (initComplete == true) {
-    if (bus_name == myControllerBus.getBusName() || bus_name == myKeyboardBus.getBusName()) {
+    if (channel == CHANNEL_KEYBOARD) {
       if (pitch == PITCH_P1_LEFT)                  {p1LeftStop(channel, pitch, velocity);}
       else if (pitch == PITCH_P1_RIGHT)            {p1RightStop(channel, pitch, velocity);}
       else if (pitch == PITCH_P2_LEFT)             {p2LeftStop(channel, pitch, velocity);}
@@ -934,6 +926,9 @@ void noteOff(int channel, int pitch, int velocity, long timestamp, String bus_na
         
         case PITCH_DISPLAY_EFFECT_1:                            deactivateAdditionalEffect(velocity);break;                 //C9    - Reset the effect
         case PITCH_DISPLAY_EFFECT_2:                            deactivateAdditionalEffect2(velocity);break;                //
+
+        case PITCH_EXTVIDEO_DISPLAYIMAGEFX_1:                   myExtVideoMappingController.extVideoProj_displayImageFx(1); break;
+        case PITCH_EXTVIDEO_SETCUSTOMFX_1:                      myExtVideoMappingController.extVideoProj_setDynamicFX(1);   break;
         default: break;
       }
     }
@@ -1256,16 +1251,16 @@ void controllerChange(int channel, int number, int value, long timestamp, String
     
     lastMillisecond_cc_in = System.currentTimeMillis();
     
-    if (bus_name == myPioneerControllerBus.getBusName()) {
+    if (channel == CHANNEL_PIONEER_RMX_CTRL) {
       processCCInfo_RMX500(channel, number, value);
     }
 
-    else if (bus_name == myMainBus.getBusName() && channel == CHANNEL_EXTVIDEOPROJ_CTRL) {
+    else if (channel == CHANNEL_EXTVIDEOPROJ_CTRL) {
       myExtVideoMappingController.processCCInfo_extVideoProj(channel, number, value);
     }
 
-    else if (bus_name == myControllerBus.getBusName() || bus_name == myKeyboardBus.getBusName() || bus_name == myMainBus.getBusName()) {    //Filter the panic all-notes-off messages sent by non-related devices
-      processCCInfo_standardControllers(channel, number, value);
+    else if (channel == CHANNEL_KEYBOARD) {    //Filter the panic all-notes-off messages sent by non-related devices
+      processCCInfo_kbdControlledEffects(channel, number, value);
     }
   }
   
@@ -1284,7 +1279,7 @@ void processCCInfo_RMX500(int channel, int number, int value) {
   }
 }
 
-void processCCInfo_standardControllers(int channel, int number, int value) {
+void processCCInfo_kbdControlledEffects(int channel, int number, int value) {
   // No switch here, because the pitches are not constant
   if (number == PITCH_KNOB_BRIGHTNESS)         {changeBrightness(channel, number, value);}          //Modulation wheel : change global brightness
   else if (number == PITCH_KNOB_BLACKOUT)      {setBlackOutAutoMode(channel, number, value);}       //Low-pass filter knob : blackout
