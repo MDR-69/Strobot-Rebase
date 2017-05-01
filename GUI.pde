@@ -2556,12 +2556,30 @@ public class ControlFrame extends PApplet {
     ExtVideoProj_playImage_currentCommandDescription.setText(textDescription.toUpperCase());
     ExtVideoProj_playEffect_currentCommandDescription.setText(textDescription.toUpperCase());
 
+    int videoMapping_screen1_x1 = 0;
+    int videoMapping_screen1_y1 = 0;
+    int videoMapping_screen1_x2 = 0;
+    int videoMapping_screen1_y2 = 0;
+    int videoMapping_screen1_x3 = 0;
+    int videoMapping_screen1_y3 = 0;
+    int videoMapping_screen1_x4 = 0;
+    int videoMapping_screen1_y4 = 0;
+    if (enableExternalVideoMapping) {
+      videoMapping_screen1_x1 = int(myExtVideoMappingController.screenPos_x1);
+      videoMapping_screen1_y1 = int(myExtVideoMappingController.screenPos_y1);
+      videoMapping_screen1_x2 = int(myExtVideoMappingController.screenPos_x2);
+      videoMapping_screen1_y2 = int(myExtVideoMappingController.screenPos_y2);
+      videoMapping_screen1_x3 = int(myExtVideoMappingController.screenPos_x3);
+      videoMapping_screen1_y3 = int(myExtVideoMappingController.screenPos_y3);
+      videoMapping_screen1_x4 = int(myExtVideoMappingController.screenPos_x4);
+      videoMapping_screen1_y4 = int(myExtVideoMappingController.screenPos_y4);
+    }
 
     ExtVideoProj_Calibration_P1_Slider = cp5.addSlider2D("External Video Mapping - Display 1 Calibration - P1")
                                             .setPosition(10,10)
                                             .setSize(110,110)
                                             .setMinMax(0,0,255,255)
-                                            .setValue(int(myExtVideoMappingController.screenPos_x1),int(myExtVideoMappingController.screenPos_y1))
+                                            .setValue(videoMapping_screen1_x1,videoMapping_screen1_y1)
                                             .setLabel("Display 1 - P1")
                                             .setGroup(ExtVideoProjAnimations_calibrate)
                                             ;
@@ -2570,7 +2588,7 @@ public class ControlFrame extends PApplet {
                                             .setPosition(125,10)
                                             .setSize(110,110)
                                             .setMinMax(0,0,255,255)
-                                            .setValue(int(myExtVideoMappingController.screenPos_x2),int(myExtVideoMappingController.screenPos_y2))
+                                            .setValue(videoMapping_screen1_x2,videoMapping_screen1_y2)
                                             .setLabel("Display 1 - P2")
                                             .setGroup(ExtVideoProjAnimations_calibrate)
                                             ;
@@ -2578,7 +2596,7 @@ public class ControlFrame extends PApplet {
                                             .setPosition(240,10)
                                             .setSize(110,110)
                                             .setMinMax(0,0,255,255)
-                                            .setValue(int(myExtVideoMappingController.screenPos_x3),int(myExtVideoMappingController.screenPos_y3))
+                                            .setValue(videoMapping_screen1_x3,videoMapping_screen1_y3)
                                             .setLabel("Display 1 - P3")
                                             .setGroup(ExtVideoProjAnimations_calibrate)
                                             ;
@@ -2586,7 +2604,7 @@ public class ControlFrame extends PApplet {
                                             .setPosition(355,10)
                                             .setSize(110,110)
                                             .setMinMax(0,0,255,255)
-                                            .setValue(int(myExtVideoMappingController.screenPos_x4),int(myExtVideoMappingController.screenPos_y4))
+                                            .setValue(videoMapping_screen1_x4,videoMapping_screen1_y4)
                                             .setLabel("Display 1 - P4")
                                             .setGroup(ExtVideoProjAnimations_calibrate)
                                             ;
@@ -2941,6 +2959,9 @@ public class ControlFrame extends PApplet {
     addEffectBang("43 - 25% Panel Dimmer", 43, 1, 43);
     addEffectBang("44 - 50% Panel Dimmer", 44, 1, 43);
     addEffectBang("45 - 75% Panel Dimmer", 45, 1, 43);
+    addEffectBang("46 - Center Triangle", 46, 1, 43);
+    addEffectBang("47 - Center GltchTri", 47, 1, 43);
+    addEffectBang("48 - Center GltchLines", 48, 1, 43);
   }
   
   void addEffectBang(String name, int i) {
@@ -3841,14 +3862,16 @@ public class ControlFrame extends PApplet {
 
         boolean loadAndPlayOnce = ExtVideoProj_Video_loadAndPlayOnceToggle.getState();
         boolean loadAndPlayLoop = ExtVideoProj_Video_loadAndPlayLoopToggle.getState();
-        if (loadAndPlayOnce) {
-          myExtVideoMappingController.extVideoProj_playVideoOnce(animNbr);
-        }
-        else if (loadAndPlayLoop) {
-          myExtVideoMappingController.extVideoProj_playVideoLoop(animNbr);
-        }
-        else {
-          myExtVideoMappingController.extVideoProj_loadVideo(animNbr);
+        if (enableExternalVideoMapping) {
+          if (loadAndPlayOnce) {
+            myExtVideoMappingController.extVideoProj_playVideoOnce(animNbr);
+          }
+          else if (loadAndPlayLoop) {
+            myExtVideoMappingController.extVideoProj_playVideoLoop(animNbr);
+          }
+          else {
+            myExtVideoMappingController.extVideoProj_loadVideo(animNbr);
+          }
         }
 
       }
@@ -3871,7 +3894,9 @@ public class ControlFrame extends PApplet {
         
         ExtVideoProj_playImage_currentCommandDescription.setText(textDescription.toUpperCase());
 
-        myExtVideoMappingController.extVideoProj_displayImage(animNbr);
+        if (enableExternalVideoMapping) {
+          myExtVideoMappingController.extVideoProj_displayImage(animNbr);
+        }
 
       }
 
@@ -3893,7 +3918,9 @@ public class ControlFrame extends PApplet {
         
         ExtVideoProj_playImage_currentCommandDescription.setText(textDescription.toUpperCase());
 
-        myExtVideoMappingController.extVideoProj_displayImageFx(animNbr);
+        if (enableExternalVideoMapping) {
+          myExtVideoMappingController.extVideoProj_displayImageFx(animNbr);
+        }
 
 
       }
@@ -3915,7 +3942,9 @@ public class ControlFrame extends PApplet {
         
         ExtVideoProj_playEffect_currentCommandDescription.setText(textDescription.toUpperCase());
 
-        myExtVideoMappingController.extVideoProj_setDynamicFX(animNbr);
+        if (enableExternalVideoMapping) {
+          myExtVideoMappingController.extVideoProj_setDynamicFX(animNbr);
+        }
 
       }
 
@@ -4014,50 +4043,62 @@ public class ControlFrame extends PApplet {
       }
 
       else if (theEvent.getName() == "External Video Mapping - Display 1 Calibration - P1") {
-        myExtVideoMappingController.screenPos_x1 = byte(ExtVideoProj_Calibration_P1_Slider.getArrayValue()[0]); 
-        myExtVideoMappingController.screenPos_y1 = byte(ExtVideoProj_Calibration_P1_Slider.getArrayValue()[1]); 
-        myExtVideoMappingController.screenPos_x1_fine = 0;
-        myExtVideoMappingController.screenPos_y1_fine = 0;
-        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(0, myExtVideoMappingController.screenPos_x1_fine, myExtVideoMappingController.screenPos_x1);
-        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(1, myExtVideoMappingController.screenPos_y1_fine, myExtVideoMappingController.screenPos_y1);
+        if (enableExternalVideoMapping) {
+          myExtVideoMappingController.screenPos_x1 = byte(ExtVideoProj_Calibration_P1_Slider.getArrayValue()[0]); 
+          myExtVideoMappingController.screenPos_y1 = byte(ExtVideoProj_Calibration_P1_Slider.getArrayValue()[1]); 
+          myExtVideoMappingController.screenPos_x1_fine = 0;
+          myExtVideoMappingController.screenPos_y1_fine = 0;
+          myExtVideoMappingController.extVideoProj_sendCalibrationMsg(0, myExtVideoMappingController.screenPos_x1_fine, myExtVideoMappingController.screenPos_x1);
+          myExtVideoMappingController.extVideoProj_sendCalibrationMsg(1, myExtVideoMappingController.screenPos_y1_fine, myExtVideoMappingController.screenPos_y1);
+        }
       }
 
       else if (theEvent.getName() == "External Video Mapping - Display 1 Calibration - P2") {
-        myExtVideoMappingController.screenPos_x2 = byte(ExtVideoProj_Calibration_P2_Slider.getArrayValue()[0]); 
-        myExtVideoMappingController.screenPos_y2 = byte(ExtVideoProj_Calibration_P2_Slider.getArrayValue()[1]); 
-        myExtVideoMappingController.screenPos_x2_fine = 0;
-        myExtVideoMappingController.screenPos_y2_fine = 0;
-        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(2, myExtVideoMappingController.screenPos_x2_fine, myExtVideoMappingController.screenPos_x2);
-        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(3, myExtVideoMappingController.screenPos_y2_fine, myExtVideoMappingController.screenPos_y2);
+        if (enableExternalVideoMapping) {
+          myExtVideoMappingController.screenPos_x2 = byte(ExtVideoProj_Calibration_P2_Slider.getArrayValue()[0]); 
+          myExtVideoMappingController.screenPos_y2 = byte(ExtVideoProj_Calibration_P2_Slider.getArrayValue()[1]); 
+          myExtVideoMappingController.screenPos_x2_fine = 0;
+          myExtVideoMappingController.screenPos_y2_fine = 0;
+          myExtVideoMappingController.extVideoProj_sendCalibrationMsg(2, myExtVideoMappingController.screenPos_x2_fine, myExtVideoMappingController.screenPos_x2);
+          myExtVideoMappingController.extVideoProj_sendCalibrationMsg(3, myExtVideoMappingController.screenPos_y2_fine, myExtVideoMappingController.screenPos_y2);
+        }
       }
 
       else if (theEvent.getName() == "External Video Mapping - Display 1 Calibration - P3") {
-        myExtVideoMappingController.screenPos_x3 = byte(ExtVideoProj_Calibration_P3_Slider.getArrayValue()[0]); 
-        myExtVideoMappingController.screenPos_y3 = byte(ExtVideoProj_Calibration_P3_Slider.getArrayValue()[1]); 
-        myExtVideoMappingController.screenPos_x3_fine = 0;
-        myExtVideoMappingController.screenPos_y3_fine = 0;
-        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(4, myExtVideoMappingController.screenPos_x3_fine, myExtVideoMappingController.screenPos_x3);
-        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(5, myExtVideoMappingController.screenPos_y3_fine, myExtVideoMappingController.screenPos_y3);
+        if (enableExternalVideoMapping) {
+          myExtVideoMappingController.screenPos_x3 = byte(ExtVideoProj_Calibration_P3_Slider.getArrayValue()[0]); 
+          myExtVideoMappingController.screenPos_y3 = byte(ExtVideoProj_Calibration_P3_Slider.getArrayValue()[1]); 
+          myExtVideoMappingController.screenPos_x3_fine = 0;
+          myExtVideoMappingController.screenPos_y3_fine = 0;
+          myExtVideoMappingController.extVideoProj_sendCalibrationMsg(4, myExtVideoMappingController.screenPos_x3_fine, myExtVideoMappingController.screenPos_x3);
+          myExtVideoMappingController.extVideoProj_sendCalibrationMsg(5, myExtVideoMappingController.screenPos_y3_fine, myExtVideoMappingController.screenPos_y3);
+        }
       }
 
       else if (theEvent.getName() == "External Video Mapping - Display 1 Calibration - P4") {
-        myExtVideoMappingController.screenPos_x4 = byte(ExtVideoProj_Calibration_P4_Slider.getArrayValue()[0]); 
-        myExtVideoMappingController.screenPos_y4 = byte(ExtVideoProj_Calibration_P4_Slider.getArrayValue()[1]); 
-        myExtVideoMappingController.screenPos_x4_fine = 0;
-        myExtVideoMappingController.screenPos_y4_fine = 0;
-        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(6, myExtVideoMappingController.screenPos_x4_fine, myExtVideoMappingController.screenPos_x4);
-        myExtVideoMappingController.extVideoProj_sendCalibrationMsg(7, myExtVideoMappingController.screenPos_y4_fine, myExtVideoMappingController.screenPos_y4);
+        if (enableExternalVideoMapping) {
+          myExtVideoMappingController.screenPos_x4 = byte(ExtVideoProj_Calibration_P4_Slider.getArrayValue()[0]); 
+          myExtVideoMappingController.screenPos_y4 = byte(ExtVideoProj_Calibration_P4_Slider.getArrayValue()[1]); 
+          myExtVideoMappingController.screenPos_x4_fine = 0;
+          myExtVideoMappingController.screenPos_y4_fine = 0;
+          myExtVideoMappingController.extVideoProj_sendCalibrationMsg(6, myExtVideoMappingController.screenPos_x4_fine, myExtVideoMappingController.screenPos_x4);
+          myExtVideoMappingController.extVideoProj_sendCalibrationMsg(7, myExtVideoMappingController.screenPos_y4_fine, myExtVideoMappingController.screenPos_y4);
+        }
       }
       else if (theEvent.getName() == "External Video Mapping - Start Calibration") {
-        if (ExtVideoProj_startCalibration.getValue() == 1) {
-          myExtVideoMappingController.extVideoProj_setCalibrationImage();
+        if (enableExternalVideoMapping) {
+          if (ExtVideoProj_startCalibration.getValue() == 1) {
+            myExtVideoMappingController.extVideoProj_setCalibrationImage();
+          }
         }
       }
       else if (theEvent.getName() == "External Video Mapping - Save Settings") {
-        myExtVideoMappingController.extVideoProj_setVoidImage();        
-        myExtVideoMappingController.extVideoProj_writeConf(); 
-        myExtVideoMappingController.extVideoProj_sendSaveSettingsMsg();
-        
+        if (enableExternalVideoMapping) {
+          myExtVideoMappingController.extVideoProj_setVoidImage();        
+          myExtVideoMappingController.extVideoProj_writeConf(); 
+          myExtVideoMappingController.extVideoProj_sendSaveSettingsMsg();
+        }
+
         ExtVideoProj_startCalibration.setValue(0);
 
       }

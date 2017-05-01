@@ -199,6 +199,7 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
     
     private int panelNumber;
     private String serialPort;
+    private boolean exceptionOccured;
     
     //The panel device will actually output
     public int mappingPanel;
@@ -209,6 +210,7 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
       int baud = COM_BAUD_RATE;
       this.snakeCabling = false;
       this.panelNumber = panelnumber;
+      this.exceptionOccured = false;
       
       //HINT: on windows you need to (for example) use COM1, com1 will not work! (case sensitive)
       //String serialPort = OutputHelper.getSerialPortName(ph.getTpm2Device().toUpperCase());
@@ -241,7 +243,7 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
           byte[] rgbBuffer = convertBufferTo24bit(getTransformedBuffer(), colorFormat);
           //outputLog.println(rgbBuffer);
           if (rgbBuffer.length < 511) {
-              //small frame, fit in one packed
+              //small frame, fit in one packet
               //this will always be the case with our 128 LED panels : a single packet can fit 512 bytes, amounting to 170 LED.
               tpm2.sendFrame(createImagePayload(0,1,rgbBuffer));
           } else {
@@ -264,27 +266,36 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
       }
     }
     
-
+    public void checkSerialDeviceSanity() {
+      // println(panelNumber + " --> " + " available:" + tpm2.getPort().active());
+      // try {
+      //   tpm2.getPort().read();
+      // }
+      // catch (Exception e) {
+      //   println("Exception !!!!");
+      // }
+      //exceptionOccured = true;
+    }
     
     //Transform the buffer (get a resized buffer, if necessary rotated, if necessary with a flipped 2nd scanline)
     public int[] getTransformedBuffer() {
-
-          int[] transformedBuffer = transformedBuffersLEDPanels[this.panelNumber];
-                    
-          if (this.snakeCabling) {
-              //flip each 2nd scanline
-              transformedBuffer = flipSecondScanline(transformedBuffer, xResolution, yResolution);
-          } else if (this.mapping.length>0) {
-              //do manual mapping
-              transformedBuffer = manualMapping(transformedBuffer, this.mapping, xResolution, yResolution);
-          }
-          return transformedBuffer;
+      int[] transformedBuffer = transformedBuffersLEDPanels[this.panelNumber];
+                
+      if (this.snakeCabling) {
+          //flip each 2nd scanline
+          transformedBuffer = flipSecondScanline(transformedBuffer, xResolution, yResolution);
+      } else if (this.mapping.length>0) {
+          //do manual mapping
+          transformedBuffer = manualMapping(transformedBuffer, this.mapping, xResolution, yResolution);
+      }
+      return transformedBuffer;
     }
             
     //Non-Javadoc close
     @Override
     public void close() {
       if (initialized) {
+          this.initialized = false;
           tpm2.dispose();
       }
     }
@@ -349,7 +360,7 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
       }
       
       try {
-        tpm2.sendFrame(createCmdPayload(rfDataBuffer));
+        tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
       }
       catch(Exception e) {
         println("Exception while trying to send a Start Educ cmd to output device #" + panelNumber);
@@ -364,7 +375,7 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
       }
       
       try {
-        tpm2.sendFrame(createCmdPayload(rfDataBuffer));
+        tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
       }
       catch(Exception e) {
         println("Exception while trying to send a Stop Educ cmd to output device #" + panelNumber);
@@ -380,7 +391,7 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
       }
       
       try {
-        tpm2.sendFrame(createCmdPayload(rfDataBuffer));
+        tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
       }
       catch(Exception e) {
         println("Exception while trying to send a Start Educ cmd to output device #" + panelNumber);
@@ -395,7 +406,7 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
       }
       
       try {
-        tpm2.sendFrame(createCmdPayload(rfDataBuffer));
+        tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
       }
       catch(Exception e) {
         println("Exception while trying to send a Stop Educ cmd to output device #" + panelNumber);
@@ -409,7 +420,7 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
       rfDataBuffer[2] = data2;
       rfDataBuffer[3] = data3;
       
-      tpm2.sendFrame(createCmdPayload(rfDataBuffer));
+      tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
     }
 }
 

@@ -66,6 +66,7 @@ final int PITCH_DISABLE_MAN_INPUT                         = 111;
 final int PITCH_CUSTOM_DEVICE_BANK1                       = 118;
 final int PITCH_CUSTOM_DEVICE_BANK2                       = 119;
 final int PITCH_CUSTOM_DEVICE_BANK3                       = 120;
+final int PITCH_CUSTOM_DEVICE_BANK4                       = 89;
 final int PITCH_DISPLAY_EFFECT_1                          = 121;
 final int PITCH_DISPLAY_EFFECT_2                          = 96;
 
@@ -248,6 +249,7 @@ void processMidiInfo_semiAutoMode(int pitch, int velocity) {
     case PITCH_CUSTOM_DEVICE_BANK1:                         loadCustomDeviceAnimation1(velocity);break;                              // Load an animation for the custom devices
     case PITCH_CUSTOM_DEVICE_BANK2:                         loadCustomDeviceAnimation2(velocity);break;                              // 
     case PITCH_CUSTOM_DEVICE_BANK3:                         loadCustomDeviceAnimation3(velocity);break;                              // 
+    case PITCH_CUSTOM_DEVICE_BANK4:                         loadCustomDeviceAnimation4(velocity);break;                              // 
     case PITCH_DISPLAY_EFFECT_1:                            activateAdditionalEffect(velocity);break;                                // 
     case PITCH_DISPLAY_EFFECT_2:                            activateAdditionalEffect2(velocity);break;                               // 
     case PITCH_LOAD_ANIMATION_BANK1_TEMP:                   loadTempAnimation1(velocity);break;                                      // Load a temporary animation using the LED panels
@@ -713,6 +715,9 @@ void loadCustomDeviceAnimation3(int velocity) {
   customDeviceAnimation(velocity + 254);
 }
 
+void loadCustomDeviceAnimation4(int velocity) {
+  customDeviceAnimation(velocity + 381);
+}
 
 void loadAnimation1(int velocity) {
   //Update the animation number

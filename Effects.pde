@@ -95,6 +95,9 @@ void draw_effects(int effectNb, boolean drawEnabled) {
       case 43:  draw_dimmer25Effect(); break;
       case 44:  draw_dimmer50Effect(); break;
       case 45:  draw_dimmer75Effect(); break;
+      case 46:  draw_centerPanelRedTriangleEffect(); break;
+      case 47:  draw_centerPanelRedGlitchTriangleEffect(); break;
+      case 48:  draw_centerPanelRedGlitchLinesEffect(); break;
       default: break;
     }
   }
@@ -660,4 +663,32 @@ void draw_dimmer75Effect() {
   fill(0,165);
   rect(0,0,width,height);
   popStyle();
+}
+
+void draw_centerPanelRedTriangleEffect() {
+  pushStyle();
+  noStroke();
+  
+  fill(180,0,0);
+  triangle(width/2 - (width/NUMBER_OF_PANELS)/2 + 1, 2*height/3 + 4,
+           width/2, height/3 - 4,
+           width/2 + (width/NUMBER_OF_PANELS)/2 - 1, 2*height/3 + 4);
+
+  popStyle();
+}
+
+void draw_centerPanelRedGlitchTriangleEffect() {
+  pushStyle();
+  noStroke();
+
+  fill(150 + 105*noise(frameCount), 0, 0);
+  triangle(width/2 - (width/NUMBER_OF_PANELS)/2 + 1, 2*height/3 + 4 + 8*(random(1) - 0.5),
+           width/2, height/3 - 4 + 8*(random(1) - 0.5),
+           width/2 + (width/NUMBER_OF_PANELS)/2 - 1, 2*height/3 + 4 + 8*(random(1) - 0.5) );
+
+  popStyle();
+}
+
+void draw_centerPanelRedGlitchLinesEffect() {
+
 }

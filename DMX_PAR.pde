@@ -92,6 +92,8 @@ final int    DMXANIM_PAR_FAST_SINE_WAVE_CLOCKWISE     = 14;
 final int    DMXANIM_PAR_SLOW_SINE_WAVE_ANTICLOCKWISE = 15;
 final int    DMXANIM_PAR_FAST_SINE_WAVE_ANTICLOCKWISE = 16;
 final int    DMXANIM_PAR_RANDOM_GLITCH                = 17;
+final int    DMXANIM_PAR_SINGLE_WEAK_LONG_FLASH       = 18;
+final int    DMXANIM_PAR_SINGLE_WEAK_SHORT_FLASH      = 19;
 
 
 // // Constants used for the light rhythms
@@ -231,7 +233,7 @@ class DMX_PAR {
 
     this.deviceID = deviceID;
     this.dmxStartAddr = startAddr;
-    this.dmxUniverseIdx = 0;
+    this.dmxUniverseIdx = universe;
 
     // Init
     par = getFixtureFromName(name);
@@ -892,6 +894,8 @@ class DMX_PAR {
         case DMXANIM_PAR_SLOW_SINE_WAVE_ANTICLOCKWISE : performLight_slowSineWaveAnticlockwise();   break;
         case DMXANIM_PAR_FAST_SINE_WAVE_ANTICLOCKWISE : performLight_fastSineWaveAnticlockwise();   break;
         case DMXANIM_PAR_RANDOM_GLITCH                : performLight_randomGlitch();                break;
+        case DMXANIM_PAR_SINGLE_WEAK_LONG_FLASH       : performLight_singleWeakLongFlash();         break;
+        case DMXANIM_PAR_SINGLE_WEAK_SHORT_FLASH      : performLight_singleWeakShortFlash();        break;
       }
     }
     else {
@@ -909,15 +913,15 @@ class DMX_PAR {
   }
 
   void performLight_continuousLight_strong() {
-    this.setDimmer(80);
-  }
-
-  void performLight_continuousLight_medium() {
     this.setDimmer(60);
   }
 
+  void performLight_continuousLight_medium() {
+    this.setDimmer(35);
+  }
+
   void performLight_continuousLight_weak() {
-    this.setDimmer(40);
+    this.setDimmer(10);
   }
 
   void performLight_singleLongFlash() {
@@ -931,8 +935,22 @@ class DMX_PAR {
     performLight_singleFlash(1.0);
   }
 
+  void performLight_singleWeakLongFlash() {
+    performLight_singleFlash(0.250, 40);
+  }
+
+  void performLight_singleWeakShortFlash() {
+    performLight_singleFlash(1.0, 40);
+  }
+
   void performLight_singleFlash(float factor) {
     setDimmer(max(0, 100 - 100*this.animCpt1));
+    float stepSize = factor * 1 / (frameRate*60.0/automaticSequencer.currentBPM);
+    this.animCpt1 += stepSize;
+  }
+
+  void performLight_singleFlash(float factor, int startIntensity) {
+    setDimmer(max(0, startIntensity - startIntensity*this.animCpt1));
     float stepSize = factor * 1 / (frameRate*60.0/automaticSequencer.currentBPM);
     this.animCpt1 += stepSize;
   }
@@ -989,19 +1007,19 @@ class DMX_PAR {
   }
 
   void performLight_slowSineWaveClockwise() {
-    performLight_sineWave(0.125, true);
+    performLight_sineWave(0.125/2.0, true);
   }
 
   void performLight_fastSineWaveClockwise() {
-    performLight_sineWave(0.250, true);
+    performLight_sineWave(0.125, true);
   }
 
   void performLight_slowSineWaveAnticlockwise() {
-    performLight_sineWave(0.125, false);
+    performLight_sineWave(0.125/2.0, false);
   }
 
   void performLight_fastSineWaveAnticlockwise() {
-    performLight_sineWave(0.250, false);
+    performLight_sineWave(0.125, false);
   }
 
   void performLight_randomGlitch() {
@@ -1463,6 +1481,12 @@ void dmxAnim_par_setLightStyle_allDev_singleLongFlash() {
 }
 void dmxAnim_par_setLightStyle_allDev_singleShortFlash() {
   dmxAnim_par_setLightStyle_allDev(DMXANIM_PAR_SINGLE_SHORT_FLASH);
+}
+void dmxAnim_par_setLightStyle_allDev_singleWeakLongFlash() {
+ dmxAnim_par_setLightStyle_allDev(DMXANIM_PAR_SINGLE_WEAK_LONG_FLASH); 
+}
+void dmxAnim_par_setLightStyle_allDev_singleWeakShortFlash() {
+ dmxAnim_par_setLightStyle_allDev(DMXANIM_PAR_SINGLE_WEAK_SHORT_FLASH); 
 }
 void dmxAnim_par_setLightStyle_allDev_slowCrescendo() {
   dmxAnim_par_setLightStyle_allDev(DMXANIM_PAR_SLOW_CRESCENDO);

@@ -115,6 +115,7 @@ void detectPanelOutputs() {
     for (String child : children) {
       if ((devicePath + child).contains(MICROCONTROLLER_NAME_PATTERN)) {
         availableMicrocontrollers.add(devicePath + child);
+        outputLog.println("Found microcontroller " + devicePath + child);
       }
     }
   }
@@ -171,8 +172,7 @@ void detectPanelOutputs() {
   else {
     outputLog.println("--- Found " + chosenMicrocontrollers.size() + " microcontrollers usable as an output device ---");
   }
-  
-  
+    
   // Finally, initialize the actual output objects with the associated output device
   // Create as many objects as what would be ideal, and define the associated serial port if possible
   outputDevices = new Tpm2[Panel_Main_Teensy_List.size()];
@@ -186,13 +186,11 @@ void detectPanelOutputs() {
     outputDevices[i] = new Tpm2(i, serialPort);
   }
 
-  
   //Map the output objects to their respective panel
   for (int i=0; i<outputDevices.length; i++) {
     outputDevices[i].panelNumber = screen_order_configuration[i];
     outputLog.println("Microcontroller init - device " + outputDevices[i].serialPort + " is affected to output #" + outputDevices[i].panelNumber);
   }
-
 
   // Update: the RF Scanner microcontroller is now the first microcontroller in the list
   rfScanDevice = outputDevices[0];

@@ -1490,12 +1490,14 @@ void setupDMXAnimation_par_setLightStyle() {
     case 84: dmxAnim_par_setLightStyle_rightDev_fastSineWaveAnticlockwise();         break;
     case 85: dmxAnim_par_setLightStyle_rightDev_randomGlitch();                      break;
 
+    case 86:  dmxAnim_par_setLightStyle_allDev_singleWeakLongFlash();                break;
+    case 87:  dmxAnim_par_setLightStyle_allDev_singleWeakShortFlash();               break;
+
     default: break;
   }
 }
 
 void playDMXAnimation_par() {
-
   switch(dmxAnimationNumber_par_setAnimation) {
     case 1:   dmxAnim_par_blackout();                                                               break;
 

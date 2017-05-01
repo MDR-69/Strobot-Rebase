@@ -37,13 +37,12 @@ ArrayList<DMX_PAR>         DMXList_Pars_right;
 ArrayList<DMX_PAR>         DMXList_Pars_left;
 IntList                    DMX_registeredDeviceID_Pars;
 
-//If an exception is raised when trying to send a DMX command, raise the flag, and do not try anymore for this particular device
-boolean exceptionRaisedDMX = false;
-
 
 //General DMX object, serves as en entry point to send actual DMX data over the network
 public class DMX {
- 
+  //If an exception is raised when trying to send a DMX command, raise the flag, and do not try anymore for this particular device
+  boolean exceptionRaisedDMX = false; 
+
   Serial myPort;
   String microconName;
   int universeIdx;
@@ -61,11 +60,15 @@ public class DMX {
   
   }
 
+  void close() {
+    myPort.stop();
+  }
+
   // Send command to Teensy2 to update DMX channel
   void setDmxChannel(int channel, int value) throws SerialPortException {
     // Convert the parameters into a message of the form: 123c45w where 123 is the channel and 45 is the value
     // then send to the Arduino
-    if (exceptionRaisedDMX == false) {
+    if (this.exceptionRaisedDMX == false) {
       try {
         this.myPort.write( str(channel) + "c" + str(value) + "w" );
       }

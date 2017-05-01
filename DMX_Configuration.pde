@@ -30,6 +30,7 @@ final int XLS_STRUCTURE_ARRAY_MAX_COLUMN = 54;
 
 public class DMXConfiguration {
   
+
   DMXConfiguration() {
     boolean exceptionRaised = false;
 
@@ -46,19 +47,20 @@ public class DMXConfiguration {
         dmxInit_buildSubObjects();
       }
       catch (Exception e) {
+        println("that's already bad");
         exceptionRaised = true;
         outputLog.println("Exception while trying to parse the DMX configuration (and build the internal Strobot objects: " + e);
       }
-
+   
       WritableWorkbook workbook = Workbook.createWorkbook(new File(sketchPath("") + "/" + "DMX_Configuration_temp.xls"), readWorkbook);
-
       // Print the DMX library in all the used Sheets
-      updateFixtureDefinitionInExcel(workbook.getSheet(0));
-      updateFixtureDefinitionInExcel(workbook.getSheet(1));
+      //updateFixtureDefinitionInExcel(workbook.getSheet(0));
+      //updateFixtureDefinitionInExcel(workbook.getSheet(1));
 
       workbook.write();
       workbook.close();
       readWorkbook.close();
+
     }
     catch (Exception e) {
       exceptionRaised = true;
@@ -73,12 +75,15 @@ public class DMXConfiguration {
         File tempFile = new File(sketchPath("") + "/" + "DMX_Configuration_temp.xls");
         copyFileUsingFileStreams(tempFile, new File(sketchPath("") + "/" + "DMX_Configuration.xls"));
         tempFile.delete();
-
       }
       catch (IOException e) {
         outputLog.println("Exception while overwriting the original XLS configuration file: " + e);
       }
     }
+
+  }
+
+  void close() {
 
   }
 
@@ -133,12 +138,15 @@ public class DMXConfiguration {
             try {
               if (group.toLowerCase().equals("right")) {
                 DMXList_FrontRightStroboscopes.add(new DMX_Stroboscope(fixtureName, integerID, startAddr, universeID));
+                outputLog.println("DMX Configuration: Created a new RightStrobe instance: " + fixtureName + " / ID" + integerID + " / start address:" + startAddr + " / universe " + universeID);
               }
               else if (group.toLowerCase().equals("left")) {
                 DMXList_FrontLeftStroboscopes.add(new DMX_Stroboscope(fixtureName, integerID, startAddr, universeID));
+                outputLog.println("DMX Configuration: Created a new LeftStrobe instance: " + fixtureName + " / ID" + integerID + " / start address:" + startAddr + " / universe " + universeID);
               }
               else {
                 DMXList_BackStroboscopes.add(new DMX_Stroboscope(fixtureName, integerID, startAddr, universeID));
+                outputLog.println("DMX Configuration: Created a new BackStrobe instance: " + fixtureName + " / ID" + integerID + " / start address:" + startAddr + " / universe " + universeID);
               }
             }
             catch (UndefinedFixtureException e) {
@@ -164,7 +172,8 @@ public class DMXConfiguration {
             if (!tiltMode.toLowerCase().equals("regulartilt")) { booleanTiltMode = true; }
             if (!group.toLowerCase().equals("bottom"))         { booleanGroup    = false;}
             try {
-              DMXList_MovingHeads.add(new DMX_MovingHead(fixtureName, integerID, startAddr, booleanPanMode, booleanTiltMode, booleanGroup, universeID));  
+              DMXList_MovingHeads.add(new DMX_MovingHead(fixtureName, integerID, startAddr, booleanPanMode, booleanTiltMode, booleanGroup, universeID));
+              outputLog.println("DMX Configuration: Created a new MovingHead instance: " + fixtureName + " / ID" + integerID + " / start address:" + startAddr + " / universe " + universeID);
             }
             catch (UndefinedFixtureException e) {
               outputLog.println("Error when trying to create a Moving Head instance - undefined fixture: " + e);
@@ -173,7 +182,7 @@ public class DMXConfiguration {
 
           else if (fixtureType.equals(FIXTURE_TYPE_PAR)) {
             if (cellSplit.length < 3) {
-              outputLog.println("DMX Configuration - Invalid Moving Head fixture, check the Excel configuration file: " + cellContents);
+              outputLog.println("DMX Configuration - Invalid PAR fixture, check the Excel configuration file: " + cellContents);
               break;
             }
             String id = cellSplit[2];
@@ -181,6 +190,7 @@ public class DMXConfiguration {
 
             try {
               DMXList_Pars.add(new DMX_PAR(fixtureName, integerID, startAddr, universeID));
+              outputLog.println("DMX Configuration: Created a new PAR instance: " + fixtureName + " / ID" + integerID + " / start address:" + startAddr + " / universe " + universeID);
             }
             catch (UndefinedFixtureException e) {
               outputLog.println("Error when trying to create a PAR instance - undefined fixture: " + e);

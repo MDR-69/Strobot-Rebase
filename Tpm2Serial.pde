@@ -181,6 +181,7 @@ public class Tpm2Serial {
      */
     public void dispose() {
             if (connected()) {
+                    port.clear();
                     port.stop();
             }
     }
@@ -247,6 +248,14 @@ public class Tpm2Serial {
      * @throws IllegalArgumentException the illegal argument exception
      * Send frame if the frame changed, or if the program is in init mode, or if blackout is active
      */
+    public boolean sendFrame(byte data[], boolean forceSend) throws IllegalArgumentException {
+
+        if (didFrameChange(data) || (drawImage == 1 && imagenumber == 0) || (drawAnimation == 1 && animationnumber == 1) || (drawAnimation == 1 && animationnumber == 2) || forceSend == true) {
+          writeSerialData(data);
+       }
+       return false;
+    }
+
     public boolean sendFrame(byte data[]) throws IllegalArgumentException {
       
       if (didFrameChange(data) || (drawImage == 1 && imagenumber == 0) || (drawAnimation == 1 && animationnumber == 1) || (drawAnimation == 1 && animationnumber == 2)) {
@@ -277,7 +286,8 @@ public class Tpm2Serial {
                     //DO NOT flush the buffer... hmm not sure about this, processing flush also
                     //and i discovered strange "hangs"...
             } catch (Exception e) {
-                    outputLog.println("Error !!! Failed sending serial data ! Caught exception : " + e);                       
+                println("caught something");
+                    outputLog.println("Error !!! Failed sending serial data ! Caught exception : " + e);
             }                
     }
 

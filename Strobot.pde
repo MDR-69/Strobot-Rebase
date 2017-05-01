@@ -1,70 +1,12 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////          Strobot - Processing application part of the Xi live lighting setup        /////////
-/////////                                 Martin Di Rollo - 2013                                  /////////
+/////////          Strobot - Processing application part of the XI live lighting setup            /////////
+/////////                               @author: Martin Di Rollo                                  /////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////// Main file of the program - contains the initial config, as well as setup and draw loops /////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-/*
-/////////////////////////////////////////////    -  User manual  -    /////////////////////////////////////
-
-This program allows to control a LED matrix, DMX devices and RF-controlled devices synced to MIDI commands.
-This program has two modes : automatic and manual. Manual mode allows to create very specific animations,
-and leave very little chance in the selection of the different animations.
-The easiest way to use this program is manual mode is either :
-- within Ableton Live, create a MIDI clip and compose your sequence, in reference to the audio clip you want
-- within Maschine, do the same as with Ableton, create a pattern, and link it to a scene
--> Configure the sequencer's MIDI to be output to the IAC virtual MIDI bus (OSX), this will allow this
-   program to receive these MIDI commands.
-Of course, a similar method can be applied for any other DAW
-   
-In semi-automatic mode, specific MIDI notes control each animation.
-The notes itself can be configured from within the GUI. The default config allows the following actions :
-E7  (MIDI 100) : Change both front stroboscopes' speed/intensity (without starting it if it's not active)
-F7  (MIDI 101) : Start both front stroboscope
-F#7 (MIDI 102) : Stop the front stroboscope
-G7  (MIDI 103) : Start the left front stroboscope, stop it upon releasing the note
-G#7 (MIDI 104) : Start the left front stroboscope, stop it upon releasing the note
-A7  (MIDI 105) : Start the back stroboscope, stop it upon releasing the note
-F9  (MIDI 122) : Change LED panel animation - bank 4
-D#9 (MIDI 123) : Change LED panel animation - bank 1
-E9  (MIDI 124) : Change LED panel animation - bank 2
-F9  (MIDI 125) : Change LED panel animation - bank 3
-F#9 (MIDI 126) : Display an image on the LED panels
-G9  (MIDI 127) : Change output mapping (change which panel each image is sent to)
-For the animations and the images, the animation number is specified via the MIDI note's velocity
-
-These additional commands are also available, using MIDI channel 1 (for a keyboard):
-C-1 (MIDI 0)   : For the games - Player 1 Left
-D-1 (MIDI 2)   : For the games - Player 1 Right
-B0  (MIDI 23)  : For the games - Player 2 Left
-C1  (MIDI 24)  : For the games - Player 2 Right
-
-In manual mode, the paradigm is similar, except the selection is not made following the input notes' velocity
-Using a MPC-like controller, such as Maschine, pads trigger the animations and the DMX equipments
-The registered commands in this mode are:
-Note On : trigger an animation according to the configuration
-Note Off : in case of particular animations, black out (DMX equipments), or go back to the previous persistent animation (strobe)
-The configuration allows to create groups of 16 animations which go pretty well together
-In manual mode, the additional inputs used in automatic mode also apply
-
-In automatic mode, the program's behaviour is completely different.
-Automatic behaviour is set by the audio processed directly from the DAW, using multiple instances
-of the Signal Processor VST
-
-In automatic mode, other actions include keyboard and pad input :
-For example --- 
-  - Pressing the stutter pads will trigger the stroboscope and violent animations
-  - Using the low pass filter will kill the LED panels' brightness
-  - Using the high pass filter will brighten the LED panels  
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-*/
 
 
 //import processing.video.*;
@@ -84,7 +26,7 @@ boolean output_PHP = false;
 
 //Resize option : choose either QUALITY for a slow, but good resize (using mean average), or SPEED, for a faster, but low quality pixel resize
 //Possible values : "QUALITY", "SPEED"
-final String RESIZE_OPTION = "SPEED";
+final String RESIZE_OPTION = "QUALITY";
 
 int NUMBER_OF_PANELS = 5;                       // Preferred number of panels - note: this value is updated in accordance to the available output microcontrollers
 
@@ -158,7 +100,7 @@ boolean debug_without_panels = false;
 boolean dmxAutomaticControl        = false;
 
 // Is the video mapping RF microcontroller connected ?
-boolean enableExternalVideoMapping = true;
+boolean enableExternalVideoMapping = false;
 
 //Variables used to select between image and animation mode, and which image/animation to draw
 int drawImage = 0;
@@ -188,6 +130,9 @@ void setup()
   catch (Exception e) {
     println("Couldn't create logger file : " + e); 
   }
+
+  //Prepare the code which shall be executed upon closing Strobot
+  prepareExitHandler();
   
   //Read all the available DMX fixture files
   readFixtureFiles();
@@ -251,8 +196,10 @@ void setup()
   //Initialize the object for Serial2CustomDevices microcontrollers
   myCustomDeviceController = new CustomDeviceController(this);
 
-  // Initialize the object used to send commands to an external video mapping system
-  myExtVideoMappingController = new extVideoController();
+  if (enableExternalVideoMapping == true) {
+    // Initialize the object used to send commands to an external video mapping system
+    myExtVideoMappingController = new ExtVideoController();
+  }
   
   //Initialize MIDI Control object
   //This allows Processing to be controlled by MIDI messages coming from external equipments or the IEC internal MIDI Bus (ie. messages from Ableton)
@@ -310,18 +257,26 @@ void setup()
 
 void draw()
 {  
+
   if (setupcomplete == true) 
   {
 
     // Uncomment this if you want to debug the physical output devices
 
-    // try {
-    //   //outputDevices[0].readDebugData();
-    //   myExtVideoMappingController.rfVideoProjDevice.readDebugData();
-    // }
-    // catch (Exception e) {
-    //   println("Exception while trying to read - " + e);
-    // }
+    try {
+
+      // for (int i=0; i<5; i++) {
+      //   print("outputDevices[" + i + "]: ");
+      //   outputDevices[i].readDebugData();
+      // }
+
+      //outputDevices[0].readDebugData();
+
+      //myExtVideoMappingController.rfVideoProjDevice.readDebugData();
+    }
+    catch (Exception e) {
+      println("Exception while trying to read - " + e);
+    }
 
     
 
@@ -391,12 +346,21 @@ void draw()
   if (!debug_without_panels) {
     
     // Only send the data to the panels if no education is requested
-    if (!rfChannelEducation_requested && !rfChannelScan_requested) {
-      //Update each device (only those registered during init though)
+    //if (!rfChannelEducation_requested && !rfChannelScan_requested) {
+        // --> No need to, the devices know when they are in scan mode, and automatically stop sending frames. On the contrary, it is best to keep sending them the updated buffer frames
+
+    //Update each device (only those registered during init though)
+    for (int i=0; i<outputDevices.length; i++) { 
+      outputDevices[i].update();
+    }
+
+    //Periodically check the sanity of all devices
+    if (frameCount % 10 == 0) {
       for (int i=0; i<outputDevices.length; i++) { 
-        outputDevices[i].update();
+        outputDevices[i].checkSerialDeviceSanity();
       }
     }
+    //}
 
     if (rfChannelScan_requested) {
       rfChannelScanProcess();
@@ -414,4 +378,82 @@ void draw()
       gifRecordingFrameNumber += 1;
     }      
   }
+}
+
+
+// Exit handler: code which shall be executed upon quitting Strobot
+// Close all output devices
+private void prepareExitHandler () {
+
+  Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+
+    public void run () {
+
+      outputLog.println("------------------------------");
+      outputLog.println("-- Initiating shutdown hook --");
+      outputLog.println("------------------------------");
+
+      // application exit code here
+      myDMXConfiguration.close();
+
+      for (int i=0; i<outputDevices.length; i++) {
+        try {
+          outputLog.print("Trying to close outputDevices " + i + "..."); outputLog.flush();
+          outputDevices[i].close();
+          outputLog.println("OK"); outputLog.flush();
+        }
+        catch (Exception e) {
+          // Don't do anything - we're already shutting down the program, all clean up here is "best effort"
+          outputLog.println("Exception raised while trying to close outputDevices[" + i + "]: " + e); outputLog.flush(); // Do nothing
+        }
+      }
+
+      try {
+        outputLog.print("Trying to close the RF Scan device..."); outputLog.flush();
+        rfScanDevice.close();
+        outputLog.println("OK"); outputLog.flush();
+      }
+      catch (Exception e) {
+        // Don't do anything - we're already shutting down the program, all clean up here is "best effort"
+        outputLog.println("Exception raised while trying to close rfScanDevice:" + e);  outputLog.flush(); // Do nothing
+      }
+
+      try {
+        outputLog.print("Trying to close the custom objects device..."); outputLog.flush();
+        myCustomDeviceController.close();
+        outputLog.println("OK"); outputLog.flush();
+      }
+      catch (Exception e) {
+        // Don't do anything - we're already shutting down the program, all clean up here is "best effort"
+        outputLog.println("Exception raised while trying to close myCustomDeviceController:" + e);  outputLog.flush(); // Do nothing
+      }
+
+      for (DMX myDmxController : outputDMX) {
+        try {
+          outputLog.print("Trying to close a DMX device..."); outputLog.flush();
+          myDmxController.close();
+          outputLog.println("OK"); outputLog.flush();
+        }
+        catch (Exception e) {
+          // Don't do anything - we're already shutting down the program, all clean up here is "best effort"
+          outputLog.println("Exception raised while trying to close myDmxController:" + e); outputLog.flush(); // Do nothing
+        }
+      }
+      
+      if (enableExternalVideoMapping == true) {
+        outputLog.print("Trying to close the video mapping controller..."); outputLog.flush();
+        myExtVideoMappingController.close();
+        outputLog.println("OK"); outputLog.flush();
+      }
+
+      outputLog.println("Shutdown hook complete, Strobot will now exit."); 
+
+      //Refresh the outputLog file
+      outputLog.flush();
+      outputLog.close();
+
+    }
+
+  }));
+
 }

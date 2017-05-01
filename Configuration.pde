@@ -560,6 +560,9 @@ String getStringFromCustomDeviceAnimationNumber(int animNbr) {
   else if (animNbr <= 381) {
     temp = getStringFromNoteInt(PITCH_CUSTOM_DEVICE_BANK3) + "  |  " + str(animNbr - 254);    
   }
+  else if (animNbr <= 508) {
+    temp = getStringFromNoteInt(PITCH_CUSTOM_DEVICE_BANK4) + "  |  " + str(animNbr - 381);    
+  }
   return temp;
 }
 

@@ -865,20 +865,24 @@ PFont particleletters_font;
 LinkedList<LetterParticle> particleletters_parts = new LinkedList<LetterParticle>();
 
 //Thunderlines parameters
-float thunderline_maxperturbation = 0.15;
+float thunderline_maxperturbation = 0.25;
 float thunderline_maxspeed = 8;
 ArrayList<ThunderLine> thunderline_list;
 int thunderline_density = 5;
 int thunderline_refreshrate = 10;    //0, no refresh, - 255, points disappear immediately
 int thunderline_persistance  = 12;
 boolean thunderline_init = false;
+boolean thunderline_allowRed = false;
 boolean thunderline_setupcomplete = false;
+float thunderline_redProba = 0.0;
+float thunderline_redProbaMax = 0.4;
+float thunderline_redProbaSpeed = 0.002;
 
 //Opening Whiteout parameters
 float openingWhiteout_cpt = 4;
 float openingWhiteout_verticalCpt = 0;
-float openingWhiteout_speed = 0.19;
-float openingWhiteout_verticalSpeed = 0.35;
+float openingWhiteout_speed = 0.24;
+float openingWhiteout_verticalSpeed = 0.20;
 long openingWhiteout_lastInitTimestamp = System.nanoTime();
 final long TEN_SECONDS = 10000000000l;
 
@@ -1475,3 +1479,18 @@ float scannerLine_progress = 0;
 float scannerLine_SlowSpeed = 2;
 float scannerLine_FastSpeed = 6;
 float scannerLine_SpeedVar = 0.0014;
+
+// Steam machine
+float steamMachine_progress = 0;
+float steamMachine_steamSpeed = 4.1;
+float steamMachine_machineSpeed = 4.0;
+
+// futureTunnel
+PImage futureTunnel_tex;
+PImage futureTunnel_out;
+PImage futureTunnel_darkOverlay;
+PVector futureTunnel_acceleration = new PVector(0, 0);
+PVector futureTunnel_velocity = new PVector(0, 0);
+PVector futureTunnel_position = new PVector(0, 0);
+float futureTunnel_offset = 100.0f;      // start at 100 to avoid having to flip x
+

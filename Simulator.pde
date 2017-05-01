@@ -140,8 +140,8 @@ void draw_simulator(int x, int y) {
   }
 
   //stroboscopes
-  drawSimuFrontLeftStroboscope(gui_simulatorWidth/5 + 5, gui_frontStrobePositionY);
-  drawSimuFrontRightStroboscope(4*gui_simulatorWidth/5 + 16, gui_frontStrobePositionY);
+  drawSimuFrontLeftStroboscope(gui_simulatorWidth/5 + 16, gui_frontStrobePositionY);
+  drawSimuFrontRightStroboscope(4*gui_simulatorWidth/5 + 5, gui_frontStrobePositionY);
   drawSimuBackStroboscope(gui_simulatorWidth/2 + 10, gui_frontStrobePositionY);
 
   //Moving heads

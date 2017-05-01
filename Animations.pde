@@ -1728,7 +1728,8 @@ class ExLine {
 void draw_sinefuckedup(int sinefuckedupmode) {
 int sine_fuckedup_mode = sinefuckedupmode;
 noStroke(); 
-fill(0,50);
+fill(0,80);
+//fill(0);
 rect(0,0,width,height);
 stroke(255);
 
@@ -1746,15 +1747,25 @@ if (sine_fuckedup_mode == 0) {
 }
 else if (sine_fuckedup_mode == 1)
 {
+  // beginShape();
+  // for(float x = 0; x < width; x += 1) {
+  //   vertex(x, height/2+5*height/6
+  //   *sin(v+(x/map(5,0,width,1,100)))
+  //   *tan(w+(x/map(5*height/6,0,width,100,400)))
+  //   *sin(v+(x/map(5*height/6,0,height,1,100)))
+  //   );
+  // }
+  // endShape();
   beginShape();
+  
   for(float x = 0; x < width; x += 1) {
-    vertex(x, height/2+5*height/6
-    *sin(v+(x/map(5,0,width,1,100)))
-    *tan(w+(x/map(5*height/6,0,width,100,400)))
-    *sin(v+(x/map(5*height/6,0,height,1,100)))
+    vertex(x, height/2+8
+    *sin(v+(x/map(5*width/6,0,width,1,100)))
+    *tan(w+(x/map(8,0,width,100,400)))
+    *sin(v+(x/map(8,0,height,1,100)))
     );
   }
-  endShape();  
+  endShape();
 }
 else if (sine_fuckedup_mode == 2)
 {
@@ -1770,8 +1781,20 @@ else if (sine_fuckedup_mode == 2)
   }
   endShape(); 
 }
-v -= 0.025;
-w += 0.05;
+
+if (sine_fuckedup_mode == 0) {
+  v -= 0.012;
+  w += 0.025;
+}
+else if (sine_fuckedup_mode == 1) {
+  v -= 0.012*3;
+  w += 0.025*3;
+}
+else {
+  v -= 0.025;
+  w += 0.05;
+}
+
 sine_fuckedup_counter++;
 }
 
@@ -9116,12 +9139,30 @@ void setup_thunderlines() {
   if (thunderline_init == false) {
     thunderline_list = new ArrayList<ThunderLine>();
     for (int i = 0; i < thunderline_density; i++) {
-      thunderline_list.add(new ThunderLine());
+      thunderline_list.add(new ThunderLine(false));
     }
   }
   else {
     while( thunderline_list.size() <= thunderline_density) {
-      thunderline_list.add(new ThunderLine());
+      thunderline_list.add(new ThunderLine(false));
+    }
+    while( thunderline_list.size() > thunderline_density) {
+      thunderline_list.remove(thunderline_list.size() - 1);
+    }
+  }
+  
+}
+
+void setup_thunderlines_red() {
+  if (thunderline_init == false) {
+    thunderline_list = new ArrayList<ThunderLine>();
+    for (int i = 0; i < thunderline_density; i++) {
+      thunderline_list.add(new ThunderLine(true));
+    }
+  }
+  else {
+    while( thunderline_list.size() <= thunderline_density) {
+      thunderline_list.add(new ThunderLine(true));
     }
     while( thunderline_list.size() > thunderline_density) {
       thunderline_list.remove(thunderline_list.size() - 1);
@@ -9156,13 +9197,25 @@ void draw_thunderlines() {
     }
     thunderlines_deleteoldlines();
   }
+
+  if (thunderline_allowRed) {
+    if (thunderline_redProba < thunderline_redProbaMax) {
+      thunderline_redProba += thunderline_redProbaSpeed;
+    }
+  }
 }
 
 void thunderlines_deleteoldlines() {
   for (int i = 0; i < thunderline_list.size(); i++) {
     if (thunderline_list.get(i).thunderline_x > width*2.5) {
        thunderline_list.remove(thunderline_list.get(i));
-       thunderline_list.add(new ThunderLine());
+       if (thunderline_allowRed == true) {
+         thunderline_list.add(new ThunderLine(true)); 
+       }
+       else {
+        thunderline_list.add(new ThunderLine(false)); 
+       }
+       
        break;
     }
   }
@@ -9179,9 +9232,10 @@ class ThunderLine {
  float perturbation;
  color linecolor;
  
- ThunderLine() {
+ ThunderLine(boolean insertRed) {
   thunderline_x = random(-width, 0);
-  thunderline_y = random(height/3, 2*height/3);
+  //thunderline_y = random(height/3, 2*height/3);
+  thunderline_y = random(0, height);
   
   thunderline_previousx = new float[thunderline_persistance];
   thunderline_previousy = new float[thunderline_persistance];
@@ -9192,7 +9246,18 @@ class ThunderLine {
   }
   flowspeed = random(thunderline_maxspeed/6, thunderline_maxspeed);
   perturbation = random(0, thunderline_maxperturbation)*flowspeed;
-  linecolor = color(random(150,255));
+  if (!insertRed) {
+    linecolor = color(random(150,255));
+  }
+  else {
+    if (random(1) > thunderline_redProba) { 
+      linecolor = color(random(150,255));
+    }
+    else {
+      linecolor = color(random(150,255), 0, 0);
+    }
+  }
+  
  } 
  
 }
@@ -11747,8 +11812,10 @@ void draw_bloodski ()
  
 class BloodSkiParticleManager {
    
-  int [] palette = {0x007e0000, 0x00be0000, 0x00e1d5c1, 0x00f5ecd7, 0x00fdfdfd};
-  
+  //int [] palette = {0x007e0000, 0x00be0000, 0x00e1d5c1, 0x00f5ecd7, 0x00fdfdfd};
+  // Blue version
+  int [] palette = {0x0000347e, 0x00004fbe, 0x00c8c1e1, 0x00e0d7f5, 0x00fdfdfd};
+
   PVector O;
   int bloodSki_minRad, bloodSki_maxRad, sqbloodSki_maxRad;
   
@@ -17523,4 +17590,125 @@ void draw_scannerLine2(float speed, int r, int g, int b) {
 
   popMatrix();
   scannerLine_progress += speed + (width/2 - scannerLine_progress)*(width/2 - scannerLine_progress)*scannerLine_SpeedVar;  
+}
+
+
+
+/////////////////////////
+
+void draw_stroboSinglePanel() {
+  float proba = random(1);
+  fill(0);
+  rect(0, 0, width, height);
+  fill(255);
+  if (proba < 0.2) {
+    rect(0*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+  }
+  else if (proba < 0.4) {
+    rect((NUMBER_OF_PANELS/2 - 1)*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+  }
+  else if (proba < 0.6) {
+    rect(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+  }
+  else if (proba < 0.8) {
+    rect((NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+  }
+  else {
+    rect((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+  }
+
+}
+
+
+////////////////////////////
+
+void draw_steamMachine_steam() {
+  fill(0);
+  rect(0,0,width,height);
+  fill(255,0,0);
+  text("STEAM", width - int(steamMachine_progress), 10);
+  //text("STEAM", 30, height/5);
+  steamMachine_progress += steamMachine_steamSpeed;
+}
+
+void draw_steamMachine_machine() {
+  fill(0);
+  rect(0,0,width,height);
+  fill(255,0,0);
+  text("MACHINE", width - int(steamMachine_progress), 10);
+  //text("STEAM", 30, height/5);
+  steamMachine_progress += steamMachine_machineSpeed;
+}
+
+
+/////////////////////////
+// Future Tunnel
+
+color futureTunnel_texture2D(float x, float y, boolean flip) {
+
+  int futureTunnel_ix = ((int)abs(x)) % futureTunnel_tex.width;
+  int futureTunnel_iy = ((int)abs(y)) % futureTunnel_tex.height;
+
+  if (flip) {
+    futureTunnel_iy = futureTunnel_tex.height - futureTunnel_iy - 1;
+  }
+
+  return futureTunnel_tex.pixels[futureTunnel_iy * futureTunnel_tex.width + futureTunnel_ix];
+}
+
+
+void futureTunnel_update() {
+
+  futureTunnel_acceleration.set(mouseX - width/2.0, mouseY - height/2.0);
+  futureTunnel_acceleration.normalize();
+  
+  futureTunnel_acceleration.x /= 200.0f;
+  futureTunnel_acceleration.y /= 200.0f;
+  
+  //futureTunnel_velocity.x += futureTunnel_acceleration.x;
+  //futureTunnel_velocity.y += futureTunnel_acceleration.y;
+  futureTunnel_velocity.x += 0;
+  //futureTunnel_velocity.y += -20;
+  futureTunnel_velocity.y = -10;
+  //futureTunnel_limit(futureTunnel_velocity, 10);
+  
+  futureTunnel_position.x += futureTunnel_velocity.x / 20.0f;
+  futureTunnel_position.y += futureTunnel_velocity.y / 20.0f;
+  
+  float futureTunnel_cx;
+  float futureTunnel_cy;
+
+  futureTunnel_out.loadPixels(); //for p5
+  int futureTunnel_x = 0;
+  float futureTunnel_y = 0;
+    
+  for(int i = 0; i < width * height; i++,futureTunnel_x++){
+    if(futureTunnel_x >= width){
+      futureTunnel_y++;
+      futureTunnel_x = 0;
+    }
+    futureTunnel_cx = (futureTunnel_x/(float)width) * 2.0f - 1.0f;
+    futureTunnel_cy = (futureTunnel_y/(float)height) * 2.0f - 1.0f;
+
+    float futureTunnel_deformy = abs(1.0/futureTunnel_cy) * 10; 
+    float futureTunnel_deformx = futureTunnel_cx * futureTunnel_deformy;
+    color futureTunnel_c = futureTunnel_texture2D(futureTunnel_deformx + futureTunnel_position.x, futureTunnel_deformy - futureTunnel_position.y, futureTunnel_y > height/2);
+    futureTunnel_out.pixels[i]  = futureTunnel_c;
+  }
+  
+  futureTunnel_out.updatePixels(); //for p5
+}
+
+void futureTunnel_limit(PVector v, float m) {
+  if (v.mag() > m)
+  {
+    v.normalize();
+    v.mult(m);
+  }
+}
+
+void draw_futureTunnel() {
+  futureTunnel_update();
+  image(futureTunnel_out, 0, 0);
+  image(futureTunnel_darkOverlay, 0, 0);
 }

@@ -1941,9 +1941,11 @@ void specificActions() {
         smooth();
         break;
       
-      case 184:   //FuckedUpSine2
+      case 184:   //FuckedUpSine2 - Fast
 
         frameRate(50);
+        v = -4.632016;
+        w = 9.649996;
         strokeWeight(4);
         noFill();
         smooth();
@@ -1968,23 +1970,34 @@ void specificActions() {
         w = 12.9;
         break;
 
-      case 187:   //RotatingSquare
+      case 187:   //FuckedUpSine4 - WaveDrop
 
-        rectMode(CORNER);
         frameRate(50);
-        stroke(0);
-        strokeWeight(rotatingSquare_strokeweight);
-        if (rotatingSquare_init == false) {
-          int rectangle_x, rectangle_y;
-          int rectangle_size = height;
-          int rectangle_strokeweight = 6; //strokeWeight
-          int col = 255;
-          rectangle_x = width/2;
-          rectangle_y = height/2 ;
-          TriRotElem[0] = new TriRot(rectangle_x, rectangle_y, rectangle_size, rectangle_strokeweight, col);
-          rotatingSquare_init = true;
-        }
+        strokeWeight(4);
+        noFill();
+        smooth();
+        sine_fuckedup_counter = 310;
+        v = -7.9750056;
+        w = 15.950011;
         break;
+
+      // case 187:   //RotatingSquare
+
+      //   rectMode(CORNER);
+      //   frameRate(50);
+      //   stroke(0);
+      //   strokeWeight(rotatingSquare_strokeweight);
+      //   if (rotatingSquare_init == false) {
+      //     int rectangle_x, rectangle_y;
+      //     int rectangle_size = height;
+      //     int rectangle_strokeweight = 6; //strokeWeight
+      //     int col = 255;
+      //     rectangle_x = width/2;
+      //     rectangle_y = height/2 ;
+      //     TriRotElem[0] = new TriRot(rectangle_x, rectangle_y, rectangle_size, rectangle_strokeweight, col);
+      //     rotatingSquare_init = true;
+      //   }
+      //   break;
       
       case 188:    //Mandala
 
@@ -2510,6 +2523,7 @@ void specificActions() {
         thunderline_density = 25;
         setup_thunderlines();
         thunderline_init = true;
+        thunderline_allowRed = false;
         thunderline_setupcomplete = true;
         break;
       
@@ -2527,7 +2541,9 @@ void specificActions() {
         }
         setup_thunderlines();
         thunderline_init = true;
+        thunderline_allowRed = false;
         thunderline_setupcomplete = true;
+        thunderline_redProba = 0;
         break;
       
       case 237:    //Opening Whiteout
@@ -4724,7 +4740,84 @@ void specificActions() {
         colorMode(RGB);
         scannerLine_progress = 0;
         break;
-        
+
+      case 444:    //ThunderLinesInitRed
+
+        frameRate(50);
+        stroke(255); 
+        noFill();
+        strokeWeight(4);
+        colorMode(RGB);
+        strokeCap(ROUND);
+        thunderline_setupcomplete = false;
+        thunderline_density = 25;
+        setup_thunderlines_red();
+        thunderline_init = true;
+        thunderline_allowRed = true;
+        thunderline_setupcomplete = true;
+        thunderline_redProba = 0;
+        break;
+      
+      case 445:    //ThunderLinesRed - More lines
+
+        frameRate(50);
+        stroke(255); 
+        noFill();
+        strokeWeight(4);
+        colorMode(RGB);
+        strokeCap(ROUND);
+        thunderline_setupcomplete = false;
+        if (thunderline_density < 60) {
+          thunderline_density += 1;
+        }
+        setup_thunderlines_red();
+        thunderline_init = true;
+        thunderline_allowRed = true;
+        thunderline_setupcomplete = true;
+        thunderline_redProba = 0;
+        break;
+
+      case 446:    //Random Panel Strobe
+        frameRate(30);
+        colorMode(RGB);
+        noStroke();
+
+      case 447:    //Steam Machine - Steam
+        steamMachine_progress = 0;
+        textSize(28);  
+        font = loadFont("Fonts/Gobold-28.vlw");
+        textAlign(LEFT, TOP);
+        textFont(font,height);
+        frameRate(50);
+        colorMode(RGB);
+        noStroke();
+        break;
+    
+       case 448:    //Steam Machine - Steam
+        steamMachine_progress = 0;
+        textSize(28);  
+        font = loadFont("Fonts/Gobold-28.vlw");
+        textAlign(LEFT, TOP);
+        textFont(font,height);
+        frameRate(50);
+        colorMode(RGB);
+        noStroke();
+        break;
+
+      case 449:    //Future Tunnel - Image1
+        futureTunnel_tex = loadImage("Images/animations/FutureTunnel/test.png");
+        futureTunnel_out = createImage(width, height, RGB); 
+        futureTunnel_darkOverlay = createImage(width, height, ARGB);
+
+        futureTunnel_darkOverlay.loadPixels();
+        for (int y = 0; y < height; y++) {
+          float futureTunnel_c = 1.0 - abs((y / (float)height) * 2.0 - 1.0f); 
+          for (int x = 0; x < width; x++) {
+            futureTunnel_darkOverlay.pixels[y * width + x] = color(0, futureTunnel_c * 255.0f );
+          }
+        }
+        futureTunnel_darkOverlay.updatePixels();
+
       case 509:    //Audio Monitoring
 
         background(0);

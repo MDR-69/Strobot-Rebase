@@ -31,12 +31,12 @@ final static byte EXTVIDEOMAP_VIDEO_NO_LOOP   = 1;
 
 final String extVideoMap_configFilename = "Strobot_extVideoMappingConfig.csv";
 
-extVideoController myExtVideoMappingController;
+ExtVideoController myExtVideoMappingController;
 
 int extVideoMap_videoAutoLoop = EXTVIDEOMAP_VIDEO_AUTOLOOP;                // Set autoloop for all video commands
 
 
-class extVideoController {
+class ExtVideoController {
 
   Tpm2 rfVideoProjDevice;
 
@@ -59,7 +59,7 @@ class extVideoController {
   byte screenPos_x4_fine = (byte) 127;
   byte screenPos_y4_fine = (byte) 127;
 
-  extVideoController() {
+  ExtVideoController() {
 
     //Check if the microcontroller used to send RF commands to the external video mapping system is available
     this.extVideoProj_initOutputDevice();
@@ -302,7 +302,15 @@ class extVideoController {
     }
   }
 
-  
+  // Clean up objects upon exit
+  void close() {
+    try {
+      rfVideoProjDevice.close();
+    }
+    catch (Exception e) {
+      println("Exception raised while trying to close rfVideoProjDevice:" + e);  // Do nothing
+    }
+  }
 }
 
 

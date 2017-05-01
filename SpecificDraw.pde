@@ -321,7 +321,8 @@ void specific_draw() {
       case 184: draw_sinefuckedup(1);break;                        //FuckedUpSine2
       case 185: draw_sinefuckedup(2);break;                        //FuckedUpSine3 - NO REINIT
       case 186: draw_sinefuckedup(2);break;                        //FuckedUpSine3
-      case 187: draw_rotatingsquare();break;                       //RotatingSquare
+      case 187: draw_sinefuckedup(2);break;                        //FuckedUpSine4 - wave drop
+      //case 187: draw_rotatingsquare();break;                       //RotatingSquare
       case 188: draw_mandala();break;                              //Mandala
       case 189: draw_mandala();break;                              //Mandala - change shape
       case 190: draw_clock();break;                                //Clock
@@ -578,6 +579,12 @@ void specific_draw() {
       case 441: draw_scannerLine2_slowWhite();break;               //ScannerLine 2 - Slow White
       case 442: draw_scannerLine1_slowRed();break;                 //ScannerLine 1 - Slow Red
       case 443: draw_scannerLine2_slowRed();break;                 //ScannerLine 2 - Slow Red
+      case 444: draw_thunderlines();break;                         //ThunderLinesInitRed
+      case 445: draw_thunderlines();break;                         //ThunderLinesRed - More Lines
+      case 446: draw_stroboSinglePanel(); break;                   //Random Panel Strobe
+      case 447: draw_steamMachine_steam(); break;                  //Steam Machine Text Display - Steam
+      case 448: draw_steamMachine_machine(); break;                //Steam Machine Text Display - Machine
+      case 449: draw_futureTunnel();break;
       case 509: draw_dirtyAudioProcessing();break;                 //Audio Monitoring
       case 510: draw_displayFFT_bass();break;                      //DisplayFFT - Bass
       

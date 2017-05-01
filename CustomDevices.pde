@@ -55,6 +55,11 @@ public class CustomDeviceController{
     }
   
   }
+
+  void close() {
+    exceptionRaisedCustomDevice = true;
+    myPort.stop();  
+  }
 }
 
 
