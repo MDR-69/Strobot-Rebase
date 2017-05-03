@@ -584,7 +584,9 @@ void specific_draw() {
       case 446: draw_stroboSinglePanel(); break;                   //Random Panel Strobe
       case 447: draw_steamMachine_steam(); break;                  //Steam Machine Text Display - Steam
       case 448: draw_steamMachine_machine(); break;                //Steam Machine Text Display - Machine
-      case 449: draw_futureTunnel();break;
+      case 449: draw_dropCurtain(); break;                         //Drop the curtain
+      case 450: draw_whiteFadeout();break;                         //Fadeout from a white background
+      case 451: draw_futureTunnel();break;
       case 509: draw_dirtyAudioProcessing();break;                 //Audio Monitoring
       case 510: draw_displayFFT_bass();break;                      //DisplayFFT - Bass
       

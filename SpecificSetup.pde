@@ -2706,7 +2706,7 @@ void specificActions() {
       case 248:   //Strobonormal
 
         rectMode(CORNER);
-        frameRate(30);
+        frameRate(40);
         noStroke();
         strokeWeight(8);
         background(0);
@@ -4804,7 +4804,21 @@ void specificActions() {
         noStroke();
         break;
 
-      case 449:    //Future Tunnel - Image1
+      case 449:
+        frameRate(50);
+        colorMode(RGB);
+        noStroke();
+        dropcurtain_progress = 0;
+        break;
+
+      case 450:
+        frameRate(50);
+        colorMode(RGB);
+        noStroke();
+        whiteFadeout_progress = 0;
+        break;
+        
+      case 451:    //Future Tunnel - Image1
         futureTunnel_tex = loadImage("Images/animations/FutureTunnel/test.png");
         futureTunnel_out = createImage(width, height, RGB); 
         futureTunnel_darkOverlay = createImage(width, height, ARGB);

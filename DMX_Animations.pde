@@ -6,8 +6,8 @@
 
 // Strobe related constants
 final int SINGLEFLASH_INITVAL = 6;
-final float SIDESTROBE_MAX_SPEED = 0.8;    //Max speed ratio for the side strobes (1 -> full speed => 255 DMX speed)
-final float BACKSTROBE_MAX_SPEED = 0.8;
+final float SIDESTROBE_MAX_SPEED = 1.0;    //Max speed ratio for the side strobes (1 -> full speed => 255 DMX speed)
+final float BACKSTROBE_MAX_SPEED = 1.0;
 
 int dmxAnimationNumber_strobe                       = 1;
 int dmxAnimationNumber_movingHead_initDirection     = 0;

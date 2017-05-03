@@ -1485,6 +1485,14 @@ float steamMachine_progress = 0;
 float steamMachine_steamSpeed = 4.1;
 float steamMachine_machineSpeed = 4.0;
 
+// Drop Curtain
+float dropcurtain_progress = 0;
+float dropcurtain_speed = 0.15;
+
+//White Fadeout
+float whiteFadeout_progress = 0;
+float whiteFadeout_speed = 3;
+
 // futureTunnel
 PImage futureTunnel_tex;
 PImage futureTunnel_out;

@@ -168,9 +168,22 @@ void detectPanelOutputs() {
   if (chosenMicrocontrollers.size() == 0) {
     outputLog.println("--- Found no microcontroller which can be used as an output device (as defined in the configuration) ---");
   }
-
   else {
     outputLog.println("--- Found " + chosenMicrocontrollers.size() + " microcontrollers usable as an output device ---");
+  }
+
+  // Populate the chosenMicrocontrollers list with default values: this is not necessary, however it allows the LED panel ucons to be hot-plugged (first connection once Strobot is running is possible)
+  if (chosenMicrocontrollers.size() < Panel_Main_Teensy_List.size()) {
+    outputLog.println("Output Dev Init: Not enough microcontrollers were found connected to the computer, the default output devices to be initialized will be the LED panel ones.");
+    for (int i=0; i<Panel_Main_Teensy_List.size(); i++) {
+      if (!isPanelIDConnected(i)) {
+        outputLog.println("Output Dev Init: no device found for LED panel #" + i + ", adding default device " + ((String) Panel_Backup_Teensy_List.get(i)));
+        chosenMicrocontrollers.add((String) Panel_Backup_Teensy_List.get(i));
+      }
+      else {
+        outputLog.println("Output Dev Init: a device for the LED panel #" + i + " has been found, nothing to do for this one.");
+      }
+    }
   }
     
   // Finally, initialize the actual output objects with the associated output device
@@ -313,4 +326,19 @@ void rfChannelScanFinalize() {
   // And finally, start an education
   manageRFChannelEducation(true);
   auxControlFrame.performRFChannelEducation.setState(true);
+}
+
+boolean isPanelIDConnected(int id) {
+  if (chosenMicrocontrollers.contains(RF_TX_Teensy_List.get(id))) {
+    return true;
+  }
+  else if (chosenMicrocontrollers.contains(Panel_Main_Teensy_List.get(id))) {
+    return true;
+  }
+  else if (chosenMicrocontrollers.contains(Panel_Backup_Teensy_List.get(id))) {
+    return true;
+  }
+  else {
+    return false;
+  }
 }

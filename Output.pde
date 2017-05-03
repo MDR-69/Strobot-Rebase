@@ -22,6 +22,9 @@ final byte CMD_STOP_RF_EDUCATION  = (byte) 0xA4;
 final byte CMD_START_RF_SCAN      = (byte) 0x9A;
 final byte CMD_STOP_RF_SCAN       = (byte) 0xD5;
 
+// Check the connected serial devices' sanity about once every two seconds
+final int SERIALDEV_SANITY_CHECK_PERIOD = 50;
+
 public abstract class Output {
 
   // The outputDevice - as a string, for example "TPM2"
@@ -199,7 +202,6 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
     
     private int panelNumber;
     private String serialPort;
-    private boolean exceptionOccured;
     
     //The panel device will actually output
     public int mappingPanel;
@@ -207,14 +209,14 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
     public Tpm2(int panelnumber, String serialPortName) {
       super(TPM2, 8);
 
-      int baud = COM_BAUD_RATE;
       this.snakeCabling = false;
       this.panelNumber = panelnumber;
-      this.exceptionOccured = false;
-      
-      //HINT: on windows you need to (for example) use COM1, com1 will not work! (case sensitive)
-      //String serialPort = OutputHelper.getSerialPortName(ph.getTpm2Device().toUpperCase());
 
+      serialDevInit(serialPortName, COM_BAUD_RATE);
+    }
+
+
+    public void serialDevInit(String serialPortName, int baud) {
       if (serialPortName.equals("")) {          // Debug case: the device is just a placeholder
         this.initialized = false;
       }
@@ -231,9 +233,7 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
         
         serialPort = getSerialPortName(serialPortName);      //Initialize it to the requested value, but double check just in case
       }
-      
     }
-    
 
     //Non Javadoc update
     //Send data to the TPM2 device
@@ -266,16 +266,6 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
       }
     }
     
-    public void checkSerialDeviceSanity() {
-      // println(panelNumber + " --> " + " available:" + tpm2.getPort().active());
-      // try {
-      //   tpm2.getPort().read();
-      // }
-      // catch (Exception e) {
-      //   println("Exception !!!!");
-      // }
-      //exceptionOccured = true;
-    }
     
     //Transform the buffer (get a resized buffer, if necessary rotated, if necessary with a flipped 2nd scanline)
     public int[] getTransformedBuffer() {
@@ -359,11 +349,13 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
         rfDataBuffer[i+1] = byte(RF_Channel_List[i]);
       }
       
-      try {
-        tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
-      }
-      catch(Exception e) {
-        println("Exception while trying to send a Start Educ cmd to output device #" + panelNumber);
+      if (initialized) {
+        try {
+          tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
+        }
+        catch(Exception e) {
+          println("Exception while trying to send a Start Educ cmd to output device #" + panelNumber);
+        }
       }
     }
 
@@ -374,11 +366,13 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
         rfDataBuffer[i+1] = byte(RF_Channel_List[i]);
       }
       
-      try {
-        tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
-      }
-      catch(Exception e) {
-        println("Exception while trying to send a Stop Educ cmd to output device #" + panelNumber);
+      if (initialized) {
+        try {
+          tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
+        }
+        catch(Exception e) {
+          println("Exception while trying to send a Stop Educ cmd to output device #" + panelNumber);
+        }
       }
     }
 
@@ -390,11 +384,13 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
         rfDataBuffer[i] = 0;
       }
       
-      try {
-        tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
-      }
-      catch(Exception e) {
-        println("Exception while trying to send a Start Educ cmd to output device #" + panelNumber);
+      if (initialized) {
+        try {
+          tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
+        }
+        catch(Exception e) {
+          println("Exception while trying to send a Start Educ cmd to output device #" + panelNumber);
+        }
       }
     }
 
@@ -405,11 +401,13 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
         rfDataBuffer[i] = 0;
       }
       
-      try {
-        tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
-      }
-      catch(Exception e) {
-        println("Exception while trying to send a Stop Educ cmd to output device #" + panelNumber);
+      if (initialized) {
+        try {
+          tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
+        }
+        catch(Exception e) {
+          println("Exception while trying to send a Stop Educ cmd to output device #" + panelNumber);
+        }
       }
     }
 
@@ -420,7 +418,41 @@ public class Tpm2 extends OnePanelResolutionAwareOutput {
       rfDataBuffer[2] = data2;
       rfDataBuffer[3] = data3;
       
-      tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
+      if (initialized) {
+        tpm2.sendFrame(createCmdPayload(rfDataBuffer), true);
+      }
+    }
+
+
+    public void checkSerialDeviceSanity() {
+      boolean isConnected = this.checkSerialPortIsConnected();
+
+      if (!killSignal) {
+        if (!isConnected) {
+          if (this.initialized) {
+            this.tpm2.dispose();
+          }
+          this.initialized = false;
+        }
+        else {
+          if (this.initialized) {
+            return;
+          }
+          else {
+            // Try to set the serial device back up in order
+            serialDevInit(this.serialPort, COM_BAUD_RATE);
+          }
+        }
+      }
+    }
+
+    public boolean checkSerialPortIsConnected() {
+       for (String connectedDev: Serial.list()) {
+         if (connectedDev.equals(this.serialPort)) {
+           return true;
+         }
+       }
+       return false;
     }
 }
 

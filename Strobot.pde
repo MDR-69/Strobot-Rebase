@@ -120,6 +120,9 @@ String ROOTDIR = "";    //Folder where the GIF shall be stored
 //Create a Sequencer object, to allow for automatic animation selection
 PlayMeSequencer automaticSequencer;
 
+//If the program receives a kill signal, this variable will be set to true -> don't try to reenable objects or serial devices when shit hits the fan
+boolean killSignal = false;
+
 void setup()
 {
   //Create a log file, where all system output shall be redirected to
@@ -270,7 +273,7 @@ void draw()
       //   outputDevices[i].readDebugData();
       // }
 
-      //outputDevices[0].readDebugData();
+      // outputDevices[0].readDebugData();
 
       //myExtVideoMappingController.rfVideoProjDevice.readDebugData();
     }
@@ -355,12 +358,11 @@ void draw()
     }
 
     //Periodically check the sanity of all devices
-    if (frameCount % 10 == 0) {
+    if (frameCount % SERIALDEV_SANITY_CHECK_PERIOD == 0) {
       for (int i=0; i<outputDevices.length; i++) { 
         outputDevices[i].checkSerialDeviceSanity();
       }
     }
-    //}
 
     if (rfChannelScan_requested) {
       rfChannelScanProcess();
@@ -392,6 +394,7 @@ private void prepareExitHandler () {
       outputLog.println("------------------------------");
       outputLog.println("-- Initiating shutdown hook --");
       outputLog.println("------------------------------");
+      killSignal = true;
 
       // application exit code here
       myDMXConfiguration.close();

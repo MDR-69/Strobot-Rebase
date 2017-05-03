@@ -14123,9 +14123,9 @@ void draw_nonotak_1() {
   if (nonotak_1_color == 255) {
     stroke(255);
     noFill();
-    strokeWeight(4);
+    strokeWeight(7);
     for (int i = 0; i<width/4; i++) {
-      line((i*4*4 + nonotak_1_x) % width, 0, (i*4*4 + nonotak_1_x) % width, height);
+      line((i*4*4 + nonotak_1_x - 2) % width, 0, (i*4*4 + nonotak_1_x - 2) % width, height);
     }
     
   }
@@ -17640,6 +17640,30 @@ void draw_steamMachine_machine() {
   steamMachine_progress += steamMachine_machineSpeed;
 }
 
+/////////////////////////
+// Drop Curtain
+
+void draw_dropCurtain() {
+  fill(0);
+  noStroke();
+  rect(0,0,width,height);
+
+  fill(map(dropcurtain_progress,0,height,255,0));
+  rect(0,int(dropcurtain_progress), width, height);
+
+  dropcurtain_progress += dropcurtain_speed;
+}
+
+
+/////////////////////////
+// White Fadeout
+
+void draw_whiteFadeout() {
+  fill(max(0, 255 - whiteFadeout_progress));
+  noStroke();
+  rect(0,0,width,height);
+  whiteFadeout_progress += whiteFadeout_speed;
+}
 
 /////////////////////////
 // Future Tunnel

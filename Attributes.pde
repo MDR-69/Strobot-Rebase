@@ -614,8 +614,11 @@ void setLEDPanelAnimationAttributes() {
   animationAttributes = registerAttribute(animationAttributes, 446, "Random Panel Strobe"                 , new String[] {"Violent", "Geometric", "Squares", "B&W", }                                           );
   animationAttributes = registerAttribute(animationAttributes, 447, "Steam Machine Text - Steam"          , new String[] {"Slow", "Red", "Special" }                                                            );
   animationAttributes = registerAttribute(animationAttributes, 448, "Steam Machine Text - Machine"        , new String[] {"Slow", "Red", "Special" }                                                            );
-  animationAttributes = registerAttribute(animationAttributes, 449, "Future Tunnel - Standard"            , new String[] {"Atmospheric", "Red", "Smooth", "Complex" }                                           );
-  animationAttributes = registerAttribute(animationAttributes, 450, "Future Tunnel - Reverse"             , new String[] {"Atmospheric", "Red", "Smooth", "Complex" }                                           );
+  
+  animationAttributes = registerAttribute(animationAttributes, 449, "Drop The Curtain"                    , new String[] {"Fade In/Out", "B&W", "Smooth", "Simple" }                                            );
+  animationAttributes = registerAttribute(animationAttributes, 450, "White Fadeout"                       , new String[] {"Fade In/Out", "B&W", "Smooth", "Simple" }                                            );
+
+  animationAttributes = registerAttribute(animationAttributes, 451, "Future Tunnel - Standard"            , new String[] {"Atmospheric", "Red", "Smooth", "Complex" }                                           );
   animationAttributes = registerAttribute(animationAttributes, 509, "Audio Monitoring"                    , new String[] {"Atmospheric", "Red", "Circles", "Rhythmic", "AudioInput"}                            );
   animationAttributes = registerAttribute(animationAttributes, 510, "Display FFT - Bass"                  , new String[] {"Geometric", "Simple", "AudioInput"}                                                  );  
 }
@@ -677,7 +680,7 @@ void setCustomDevicesActionsAttributes() {
   customDevicesAttributes = registerAttribute(customDevicesAttributes, 53,  "All Devices - Slow Rainbow Flash"                   , new String[] { "All Devices", "Slow", "Rainbow", "Flash"                } );
   customDevicesAttributes = registerAttribute(customDevicesAttributes, 54,  "LED Tubes   - Slow Rainbow Flash"                   , new String[] { "LED Tubes",   "Slow", "Rainbow", "Flash"                } );
   customDevicesAttributes = registerAttribute(customDevicesAttributes, 55,  "Rack Lights - Slow Rainbow Flash"                   , new String[] { "Rack Lights", "Slow", "Rainbow", "Flash"                } );
-  customDevicesAttributes = registerAttribute(customDevicesAttributes, 56,  "All Devices - Single Slow White Flash"              , new String[] { "All Devices", "Random", "Slow", "White", "Flash"        } );
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 56,  "LED Tubes   - Single Slow White Flash (NoKill)"     , new String[] { "All Devices", "Random", "Slow", "White", "Flash"        } );
   customDevicesAttributes = registerAttribute(customDevicesAttributes, 57,  "LED Tubes   - Single Slow White Flash"              , new String[] { "LED Tubes",   "Random", "Slow", "White", "Flash"        } );
   customDevicesAttributes = registerAttribute(customDevicesAttributes, 58,  "All Devices - Single Slow Red Flash"                , new String[] { "All Devices", "Random", "Slow", "Red", "Flash"          } );
   customDevicesAttributes = registerAttribute(customDevicesAttributes, 59,  "LED Tubes   - Single Slow Red Flash"                , new String[] { "LED Tubes",   "Random", "Slow", "Red", "Flash"          } );
@@ -1039,6 +1042,11 @@ void setCustomDevicesActionsAttributes() {
   customDevicesAttributes = registerAttribute(customDevicesAttributes, 414, "LED Tubes   - Right Blackout"            , new String[] { "LED Tubes",   "Right", "Black", "Plain"                  } );
   customDevicesAttributes = registerAttribute(customDevicesAttributes, 415, "LED Tubes   - Side Blackout"             , new String[] { "LED Tubes",   "Left", "Black", "Plain"                  } );
   customDevicesAttributes = registerAttribute(customDevicesAttributes, 416, "LED Tubes   - Center Blackout"           , new String[] { "LED Tubes",   "Right", "Black", "Plain"                  } );
+
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 417, "LED Tubes   - ExtremeLeft Short White Downward Single Wave"     , new String[] { "LED Tubes", "Left",  "Short", "White", "Wave"                  } );
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 418, "LED Tubes   - Left Short White Downward Single Wave"     , new String[] { "LED Tubes",  "Left", "Short", "White", "Wave"                  } );
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 419, "LED Tubes   - Right Short White Downward Single Wave"     , new String[] { "LED Tubes",  "Right", "Short", "White", "Wave"                  } );
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 420, "LED Tubes   - ExtremeRight Short White Downward Single Wave"     , new String[] { "LED Tubes",  "Right", "Short", "White", "Wave"                  } );
 }
 
 void setDMXAnimationsAttributes() {
