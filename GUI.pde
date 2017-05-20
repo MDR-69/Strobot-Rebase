@@ -2947,7 +2947,7 @@ public class ControlFrame extends PApplet {
     addEffectBang("32 - WhiteFlash", 32);
     addEffectBang("33 - RedFlash", 33);
     addEffectBang("34 - General Red Random Flicker", 34);
-    addEffectBang("35 - Light Blue Filter", 35);
+    addEffectBang("35 - Blue Filter", 35);
     addEffectBang("36 - Panels Off", 36);
     addEffectBang("37 - Only extreme left panel", 37);
     addEffectBang("38 - Only center left panel", 38);
@@ -2962,6 +2962,13 @@ public class ControlFrame extends PApplet {
     addEffectBang("46 - Center Triangle", 46, 1, 43);
     addEffectBang("47 - Center GltchTri", 47, 1, 43);
     addEffectBang("48 - Center GltchLines", 48, 1, 43);
+    addEffectBang("49 - Light Blue Filter", 49, 1, 43);
+    addEffectBang("50 - Only extreme panels", 50, 1, 43);
+    addEffectBang("51 - Only center L/R panels", 51, 1, 43);
+    addEffectBang("52 - Drop The Curtain", 52, 1, 43);
+    addEffectBang("53 - One panel - random", 53, 1, 43);
+    addEffectBang("54 - One panel - L->R seq", 54, 1, 43);
+    addEffectBang("55 - One panel - L->R seq", 55, 1, 43);
   }
   
   void addEffectBang(String name, int i) {

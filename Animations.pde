@@ -723,11 +723,11 @@ void draw_upwards_line(){
 
   background(0);
   //line(0, line_height-1, width, line_height-1);
-  line(0, line_height, width, line_height);
+  line(0, int(line_height), width, int(line_height));
   //line(0, line_height+1, width, line_height+1);
   //line(0, line_height+2, width, line_height+2);
   
-  line_height = line_height - 1;
+  line_height = line_height - 0.65;
   if (line_height < -2) { 
     line_height = height+2; 
   }
@@ -5143,8 +5143,8 @@ void draw_cosmocurve() {
     ellipse(cosmoscurve_point.x, cosmoscurve_point.y, 10, 10);
   }
   
-  cosmoscurve_n += 0.015;
-  cosmoscurve_d += 0.0005;
+  cosmoscurve_n += 0.011;
+  cosmoscurve_d += 0.0006;
 }
 
 //////////////////////////////////////////
@@ -7926,7 +7926,7 @@ void draw_shutter() {
   else if (shutter_colorMode == 2){
     for (int i=0; i<pixels.length; i++) {
       if (temp.pixels[i] != -1) {
-        pixels[i] = color(255,0,0);
+        pixels[i] = color(0,100,255);
       }
     }
   }
@@ -9153,7 +9153,7 @@ void setup_thunderlines() {
   
 }
 
-void setup_thunderlines_red() {
+void setup_thunderlines_blue() {
   if (thunderline_init == false) {
     thunderline_list = new ArrayList<ThunderLine>();
     for (int i = 0; i < thunderline_density; i++) {
@@ -9198,9 +9198,9 @@ void draw_thunderlines() {
     thunderlines_deleteoldlines();
   }
 
-  if (thunderline_allowRed) {
-    if (thunderline_redProba < thunderline_redProbaMax) {
-      thunderline_redProba += thunderline_redProbaSpeed;
+  if (thunderline_allowBlue) {
+    if (thunderline_blueProba < thunderline_blueProbaMax) {
+      thunderline_blueProba += thunderline_blueProbaSpeed;
     }
   }
 }
@@ -9209,7 +9209,7 @@ void thunderlines_deleteoldlines() {
   for (int i = 0; i < thunderline_list.size(); i++) {
     if (thunderline_list.get(i).thunderline_x > width*2.5) {
        thunderline_list.remove(thunderline_list.get(i));
-       if (thunderline_allowRed == true) {
+       if (thunderline_allowBlue == true) {
          thunderline_list.add(new ThunderLine(true)); 
        }
        else {
@@ -9232,7 +9232,7 @@ class ThunderLine {
  float perturbation;
  color linecolor;
  
- ThunderLine(boolean insertRed) {
+ ThunderLine(boolean insertBlue) {
   thunderline_x = random(-width, 0);
   //thunderline_y = random(height/3, 2*height/3);
   thunderline_y = random(0, height);
@@ -9246,15 +9246,15 @@ class ThunderLine {
   }
   flowspeed = random(thunderline_maxspeed/6, thunderline_maxspeed);
   perturbation = random(0, thunderline_maxperturbation)*flowspeed;
-  if (!insertRed) {
+  if (!insertBlue) {
     linecolor = color(random(150,255));
   }
   else {
-    if (random(1) > thunderline_redProba) { 
+    if (random(1) > thunderline_blueProba) { 
       linecolor = color(random(150,255));
     }
     else {
-      linecolor = color(random(150,255), 0, 0);
+      linecolor = color(0, 0, random(150,255));
     }
   }
   
@@ -13594,22 +13594,36 @@ class HypnoTriangle {
   float size;
   float position;
   float growthRate = 1.13;
+  boolean flash = true;
   int instance;
   
   HypnoTriangle(int instancecounter) {
     size = 4;
     position = 2;
     instance = instancecounter;
+    flash = true;
+  }
+
+  HypnoTriangle(int instancecounter, boolean strobe) {
+    size = 4;
+    position = 2;
+    instance = instancecounter;
+    flash = strobe;
   }
   
   void draw_hypnotriangle() {
     
     if (instance % 2 == 0) {
-      if (frameCount % 4 == 0 || frameCount % 4 == 1)  {
-        fill(255,0,0);
+      if (flash) {
+        if (frameCount % 4 == 0 || frameCount % 4 == 1)  {
+          fill(255,0,0);
+        }
+        else {
+          fill(0);
+        }
       }
       else {
-        fill(0);
+        fill(255,0,0);
       }
     }
     else {
@@ -16653,21 +16667,25 @@ void draw_rotatingHalfCircle() {
   fill(0);
   noStroke();
   rect(0,0,width,height);
- 
+  pushMatrix();
   translate(width/2, height/2);
    
   for (int i=0; i<rotatingHalfCircle_num; i++) {
     rotatingHalfCircle_transparency = map(sin(rotatingHalfCircle_theta+(TWO_PI/rotatingHalfCircle_num)*i), -1, 1, 0, 110);
     rotatingHalfCircle_size = map(sin(rotatingHalfCircle_theta+(TWO_PI/rotatingHalfCircle_num)*i), -1, 1, width/10, width/5);
     rotatingHalfCircle_corner = map(sin(rotatingHalfCircle_theta+(TWO_PI/rotatingHalfCircle_num)*i), -1, 1, rotatingHalfCircle_size, 0);
-    fill(#E80004, rotatingHalfCircle_transparency);
+    //fill(#E80004, rotatingHalfCircle_transparency);
+    fill(min(int(rotatingHalfCircle_intensity),230), rotatingHalfCircle_transparency);
     pushMatrix();
     rotate(i*(TWO_PI/rotatingHalfCircle_num));
     rotatingHalfCircle_x = map(sin(rotatingHalfCircle_theta), -1, 1, 0, width/6);
     rect(rotatingHalfCircle_x, width/6, 1.8*rotatingHalfCircle_size, rotatingHalfCircle_size, rotatingHalfCircle_corner);
     popMatrix();
   }
-  rotatingHalfCircle_theta += 0.0523;
+  popMatrix();
+  //rotatingHalfCircle_theta += 0.0523;
+  rotatingHalfCircle_theta += 0.0223;
+  rotatingHalfCircle_intensity += rotatingHalfCircle_growthSpeed;
  
 }
 
@@ -16731,6 +16749,14 @@ void draw_dynamicAngleLinesHalfRed() {
 
 void draw_dynamicAngleLinesRed() {
   draw_dynamicAngleLines(color(255,0,0));
+}
+
+void draw_dynamicAngleLinesHalfBlue() {
+  draw_dynamicAngleLines(color(255), color(0,0,255));
+}
+
+void draw_dynamicAngleLinesBlue() {
+  draw_dynamicAngleLines(color(0,0,255));
 }
 
 void draw_dynamicAngleLines(color color1) {
@@ -17735,4 +17761,214 @@ void draw_futureTunnel() {
   futureTunnel_update();
   image(futureTunnel_out, 0, 0);
   image(futureTunnel_darkOverlay, 0, 0);
+}
+
+
+////////////////////////////////////
+
+void draw_starSparkle() {
+  fill(0);
+  rect(0,0,width,height);
+  for (StarSparkle starSparkle: starSparkle_elements) {
+    starSparkle.drawStar();
+    starSparkle.updateStar();
+  }
+
+  for (StarSparkle starSparkle: starSparkle_elements) {
+    if (starSparkle.starLifeSpan < 0) {
+      starSparkle_elements.remove(starSparkle);
+      break;
+    }
+  }
+
+
+  Iterator<StarSparkle> iter = starSparkle_elements.iterator();
+  while (iter.hasNext()) {
+      StarSparkle element = iter.next();
+
+      if (element.posX < -10 || element.posX > width + 10 || element.posY < -10 || element.posY > height + 10) {
+          iter.remove();
+        }
+  }
+
+  starSparkle_intensity += 1; 
+}
+
+void init_starSparkle_static() {
+  if (!starSparkle_init) {
+    starSparkle_elements = new ArrayList<StarSparkle>();
+  }
+  for (int i=0; i<starSparkle_number; i++) {
+    starSparkle_elements.add(new StarSparkle(int(random(40)), int(random(16)), int(random(0,255)), random(0.02, 0.3) ) );
+  }
+}
+
+void init_starSparkle_slowMove() {
+  if (!starSparkle_init) {
+    starSparkle_elements = new ArrayList<StarSparkle>();
+  }
+  for (int i=0; i<starSparkle_number; i++) {
+    starSparkle_elements.add(new StarSparkle(int(random(40)), int(random(16)), int(random(0,255)), random(0.02, 0.3), 1 ) );
+  }
+}
+
+void init_starSparkle_fastMove() {
+  if (!starSparkle_init) {
+    starSparkle_elements = new ArrayList<StarSparkle>();
+  }
+  for (int i=0; i<starSparkle_number; i++) {
+    starSparkle_elements.add(new StarSparkle(int(random(40)), int(random(16)), int(random(0,255)), random(0.02, 0.3), 3 ) );
+  }
+}
+
+class StarSparkle {
+  
+  float posX;
+  float posY;
+  int maxIntensity;
+  float sparkleSpeed;
+  float moveSpeed;
+
+  int starLifeSpan = starSparkle_initLifeSpan;
+  
+  StarSparkle(int _posX, int _posY, int _maxIntensity, float _sparkleSpeed) {
+    posX = _posX;
+    posY = _posY;
+    maxIntensity = _maxIntensity;
+    sparkleSpeed = _sparkleSpeed;
+    moveSpeed = 0;
+  } 
+
+  StarSparkle(int _posX, int _posY, int _maxIntensity, float _sparkleSpeed, float _moveSpeed) {
+    posX = _posX;
+    posY = _posY;
+    maxIntensity = _maxIntensity;
+    sparkleSpeed = _sparkleSpeed;
+    moveSpeed = _moveSpeed;
+  } 
+
+  void drawStar() {
+    //fill(maxIntensity*noise(frameCount*sparkleSpeed) * map(starSparkle_intensity, 0, 80, 0, 1));
+    fill(map(starLifeSpan, starSparkle_initLifeSpan, starSparkle_appearVal, 0, 1)  * maxIntensity*noise(frameCount*sparkleSpeed) * map(starSparkle_intensity, 0, 80, 0, 1));
+    rect(posX*DISPLAY_SCALING_FACTOR, posY*DISPLAY_SCALING_FACTOR, DISPLAY_SCALING_FACTOR, DISPLAY_SCALING_FACTOR);
+  }
+
+  void updateStar() {
+    posX += moveSpeed * (noise(100*posX*posY + 0.1*frameCount * moveSpeed) - map(posX, 0, width/DISPLAY_SCALING_FACTOR, 0.54, 0.46) );
+    posY += moveSpeed * (noise(300*posX*posY + 0.1*frameCount * moveSpeed) - map(posY, 0, height/DISPLAY_SCALING_FACTOR, 0.54, 0.46) );
+    starLifeSpan = starLifeSpan-1;
+  }
+
+}
+
+void draw_oneLinePerPanel() {
+  fill(0);
+  rect(0,0,width,height);
+  fill(255);
+  rect(0*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 4,0,4,height);
+  rect(1*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 4,0,4,height);
+  rect(2*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 4,0,4,height);
+  rect(3*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 0,0,4,height);
+  rect(4*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 0,0,4,height);
+
+}
+
+void draw_oneLinePerPanel2() {
+  fill(0);
+  rect(0,0,width,height);
+  fill(255);
+
+  rect(0*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 4,height/4,4,height);
+  rect(1*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 4,0,4,height);
+  rect(2*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 4,height/4,4,height);
+  rect(3*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 0,0,4,height);
+  rect(4*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 0,height/4,4,height);
+
+}
+
+void draw_oneLinePerPanelWave() {
+  fill(0);
+  rect(0,0,width,height);
+  fill(255);
+  println(singlePanelLineWave_elements.size());
+  for (SinglePanelLineWave line: singlePanelLineWave_elements) {
+    line.drawSinglePanelLineWave();
+  }
+
+  for (SinglePanelLineWave line: singlePanelLineWave_elements) {
+    if (line.progress > height*2) {
+      singlePanelLineWave_elements.remove(line);
+      break;
+    }
+  }
+}
+
+void init_oneLinePerPanel_shortWaveUp() {
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(0, height/6, true));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(1, height/6, true));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(2, height/6, true));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(3, height/6, true));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(4, height/6, true));  
+}
+
+void init_oneLinePerPanel_longWaveUp() {
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(0, height/3, true));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(1, height/3, true));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(2, height/3, true));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(3, height/3, true));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(4, height/3, true));  
+}
+
+void init_oneLinePerPanel_shortWaveDown() {
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(0, height/6, false));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(1, height/6, false));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(2, height/6, false));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(3, height/6, false));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(4, height/6, false));  
+}
+
+void init_oneLinePerPanel_longWaveDown() {
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(0, height/3, false));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(1, height/3, false));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(2, height/3, false));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(3, height/3, false));
+  singlePanelLineWave_elements.add(new SinglePanelLineWave(4, height/3, false));  
+}
+class SinglePanelLineWave {
+
+  int panelNb;    // Starting from 0
+  int progress = 0;
+  int waveSize;
+  boolean waveUp;
+
+
+  SinglePanelLineWave(int panelNumber, int waveSize, boolean waveUp) {
+    this.panelNb = panelNumber;
+    this.waveSize = waveSize;
+    this.waveUp = waveUp;
+  }  
+
+  void drawSinglePanelLineWave() {
+    fill(255);
+    // rect(4,4,34,23);
+    // println("-> " + panelNb + " --" + str(height - progress) + " // " + waveSize + " with " + str(panelNb*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 4));
+
+    if (waveUp) {
+      if (panelNb <= NUMBER_OF_PANELS/2) {
+        rect(panelNb*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 4,height - progress,4,waveSize);
+      }
+      else {
+        rect(panelNb*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 0,height - progress,4,waveSize);
+      }
+    }
+    else {
+      if (panelNb <= NUMBER_OF_PANELS/2) {
+        rect(panelNb*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 4,progress - waveSize,4,waveSize);
+      }
+      else {
+        rect(panelNb*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 0,progress - waveSize,4,waveSize);
+      }      
+    }
+    progress += oneLinePerPanel_speed;
+  }
 }

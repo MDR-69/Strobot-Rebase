@@ -193,6 +193,9 @@ void midiInit() {
 // Receive a noteOn
 void noteOn(int channel, int pitch, int velocity, long timestamp, String bus_name) {
   if (initComplete == true) {
+
+    // If a "change output mapping" command has been sent before, track the incoming notes' pitch and reorder the panels accordingly
+    processMidiInfo_keyboardPanelRemapping(pitch, velocity);
     
     //if (bus_name == myControllerBus.getBusName() || bus_name == myKeyboardBus.getBusName()) {
     if (channel == CHANNEL_KEYBOARD) {
@@ -217,8 +220,6 @@ void noteOn(int channel, int pitch, int velocity, long timestamp, String bus_nam
       processMidiInfo_semiAutoMode(pitch, velocity);
     }
     
-    // If a "change output mapping" command has been sent before, track the incoming notes' pitch and reorder the panels accordingly
-    processMidiInfo_keyboardPanelRemapping(pitch, velocity);
   }
 }
 
@@ -840,6 +841,7 @@ void activateKeyboardLEDPanelMapping() {
   drawImage = 1;
   drawAnimation = 0;
   imagenumber = -1;
+
 }
 
 void finalizeLEDPanelRemappingProcedure() {

@@ -587,6 +587,18 @@ void specific_draw() {
       case 449: draw_dropCurtain(); break;                         //Drop the curtain
       case 450: draw_whiteFadeout();break;                         //Fadeout from a white background
       case 451: draw_futureTunnel();break;
+      case 452: draw_dynamicAngleLinesHalfBlue();break;            //Dynamic Angle Lines - Half Blue
+      case 453: draw_dynamicAngleLinesBlue();break;                //Dynamic Angle Lines - Blue
+      case 454: draw_hypnoflashtriangle();break;                   //HypnoNormalTriangle
+      case 455: draw_starSparkle();break;                          //StarSparkle
+      case 456: draw_starSparkle();break;                          //StarSparkle
+      case 457: draw_starSparkle();break;                          //StarSparkle
+      case 458: draw_oneLinePerPanel();break;                      //One Line Per Panel
+      case 459: draw_oneLinePerPanel2();break;                     //One Line Per Panel 2
+      case 460: draw_oneLinePerPanelWave();break;                  //One Line Per Panel - Small Wave Up
+      case 461: draw_oneLinePerPanelWave();break;                  //One Line Per Panel - Large Wave Up
+      case 462: draw_oneLinePerPanelWave();break;                  //One Line Per Panel - Small Wave Down
+      case 463: draw_oneLinePerPanelWave();break;                  //One Line Per Panel - Large Wave Down
       case 509: draw_dirtyAudioProcessing();break;                 //Audio Monitoring
       case 510: draw_displayFFT_bass();break;                      //DisplayFFT - Bass
       

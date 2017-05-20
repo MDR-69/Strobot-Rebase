@@ -1023,7 +1023,15 @@ class DMX_PAR {
   }
 
   void performLight_randomGlitch() {
-    this.setDimmer(200 * noise(frameCount*0.3));
+    //this.setDimmer(255 * noise(frameCount*1));
+    //this.setDimmer(random(255));
+    if (frameCount % 12 <= 5) {
+      this.setDimmer(255);
+    }
+    else {
+      this.setDimmer(0);
+    }
+    
   }
 
 

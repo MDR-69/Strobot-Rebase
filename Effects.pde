@@ -35,8 +35,15 @@ int windmill_growthSpeed = 10;
 int whiteflash_cpt = 0;
 int redflash_cpt = 0;
 
-final float lightBlue_reductionFactor_red = 0.4;
-final float lightBlue_reductionFactor_green = 0.4;
+float dropTheCurtain_counter = 0;
+float dropTheCurtain_speed = 0.3;
+
+final float blue_reductionFactor_red = 0.4;
+final float blue_reductionFactor_green = 0.4;
+final float lightBlue_reductionFactor_red = 0.70;
+final float lightBlue_reductionFactor_green = 0.75;
+
+int randomKillPanel_idx = 0;
 
 //General effect switcher
 void draw_effects1(){
@@ -84,7 +91,7 @@ void draw_effects(int effectNb, boolean drawEnabled) {
       case 32:  draw_whiteflash();break;
       case 33:  draw_redflash();break;
       case 34:  draw_randomRedPanelFlicker();break;
-      case 35:  draw_lightBlueFilter(); break;
+      case 35:  draw_blueFilter(); break;
       case 36:  draw_panelsOff(); break;
       case 37:  draw_onlyExtremeLeftPanel(); break;
       case 38:  draw_onlyCenterLeftPanel(); break;
@@ -98,6 +105,13 @@ void draw_effects(int effectNb, boolean drawEnabled) {
       case 46:  draw_centerPanelRedTriangleEffect(); break;
       case 47:  draw_centerPanelRedGlitchTriangleEffect(); break;
       case 48:  draw_centerPanelRedGlitchLinesEffect(); break;
+      case 49:  draw_lightBlueFilter(); break;
+      case 50:  draw_onlyExtremeLeftRightPanels(); break;
+      case 51:  draw_onlyCenterLeftRightPanels(); break;
+      case 52:  draw_dropTheCurtainEffect(); break;
+      case 53:  draw_onlyOneRandomPanel(); break;
+      case 54:  draw_onlyOneLeftRightSeqPanel(); break;
+      case 55:  draw_onlyOneRightLeftSeqPanel(); break;
       default: break;
     }
   }
@@ -123,6 +137,10 @@ void initSpecificEffectParams(int effectNb) {
     case 31: windmill_randAngle     += 0.3*PI; windmill_intensity = 0; break;
     case 32: whiteflash_cpt          = 0; break;
     case 33: redflash_cpt            = 0; break;
+    case 52: dropTheCurtain_counter  = 0; break;
+    case 53: init_randomKillPanel();      break;
+    case 54: randomKillPanel_idx = (randomKillPanel_idx + 1)%NUMBER_OF_PANELS; break;
+    case 55: randomKillPanel_idx = (randomKillPanel_idx + 1)%NUMBER_OF_PANELS; break;
     default: break;
   }
 }
@@ -228,11 +246,22 @@ void draw_redocalypseEffect() {
   updatePixels();
 }
 
+void draw_blueFilter() {
+  loadPixels();
+  for (int i=0; i<pixels.length; i++) {
+    pixels[i] = color(int(blue_reductionFactor_red * ((pixels[i] >> 16) & 0xFF)), 
+                      int(blue_reductionFactor_green * ((pixels[i] >> 8) & 0xFF)), 
+                      pixels[i] & 0xFF, 
+                      (pixels[i] >> 24) & 0xFF); 
+  }
+  updatePixels();
+}
+
 void draw_lightBlueFilter() {
   loadPixels();
   for (int i=0; i<pixels.length; i++) {
-    pixels[i] = color(int(lightBlue_reductionFactor_red * ((pixels[i] >> 16) & 0xFF)), 
-                      int(lightBlue_reductionFactor_green * ((pixels[i] >> 8) & 0xFF)), 
+    pixels[i] = color(int(lightBlue_reductionFactor_red * 1.0*((pixels[i] >> 16) & 0xFF)), 
+                      int(lightBlue_reductionFactor_green * 1.0*((pixels[i] >> 8) & 0xFF)), 
                       pixels[i] & 0xFF, 
                       (pixels[i] >> 24) & 0xFF); 
   }
@@ -589,6 +618,24 @@ void draw_panelsOff() {
   popMatrix();
 }
 
+void draw_onlyExtremeLeftRightPanels(){
+  pushStyle();
+  noStroke();
+  fill(0);
+  rect(width/NUMBER_OF_PANELS,0,(NUMBER_OF_PANELS - 2)*width/NUMBER_OF_PANELS,height);
+  popStyle();
+}
+
+void draw_onlyCenterLeftRightPanels(){
+  pushStyle();
+  noStroke();
+  fill(0);
+  rect(0,0,width/NUMBER_OF_PANELS,height);
+  rect( (NUMBER_OF_PANELS/2) *width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
+  rect( (NUMBER_OF_PANELS - 1) *width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
+  popStyle();
+}
+
 
 void draw_onlyExtremeLeftPanel() {
   pushStyle();
@@ -691,4 +738,96 @@ void draw_centerPanelRedGlitchTriangleEffect() {
 
 void draw_centerPanelRedGlitchLinesEffect() {
 
+}
+
+void draw_dropTheCurtainEffect() {
+  pushStyle();
+  noStroke();
+  fill(0);
+  rect(0,dropTheCurtain_counter - height*10, width, height*10);
+  popStyle();
+  dropTheCurtain_counter += dropTheCurtain_speed;
+}
+
+
+///////////////////////////
+
+void init_randomKillPanel() {
+  int newCandidate = floor(random(NUMBER_OF_PANELS));
+  while (randomKillPanel_idx == newCandidate) {
+    newCandidate = floor(random(NUMBER_OF_PANELS));
+  }
+  randomKillPanel_idx = newCandidate;
+}
+
+void draw_onlyOneRandomPanel() {
+  if (NUMBER_OF_PANELS == 5) {
+    switch (randomKillPanel_idx) {
+      case 0: draw_onlyExtremeLeftPanel(); break;
+      case 1: draw_onlyCenterLeftPanel(); break;
+      case 2: draw_onlyCenterPanel(); break;
+      case 3: draw_onlyCenterRightPanel(); break;
+      case 4: draw_onlyExtremeRightPanel(); break;
+      default: break;
+    }
+  }
+  else {
+    if (randomKillPanel_idx == (NUMBER_OF_PANELS - 1)/2) {
+      draw_onlyCenterPanel();
+    }
+    else if (randomKillPanel_idx < (NUMBER_OF_PANELS - 1)/2) {
+      draw_onlyExtremeLeftPanel();
+    }
+    else {
+      draw_onlyExtremeRightPanel();
+    }
+  }
+}
+
+void draw_onlyOneLeftRightSeqPanel(){
+  if (NUMBER_OF_PANELS == 5) {
+    switch (randomKillPanel_idx) {
+      case 0: draw_onlyExtremeLeftPanel(); break;
+      case 1: draw_onlyCenterLeftPanel(); break;
+      case 2: draw_onlyCenterPanel(); break;
+      case 3: draw_onlyCenterRightPanel(); break;
+      case 4: draw_onlyExtremeRightPanel(); break;
+      default: break;
+    }
+  }
+  else {
+    if (randomKillPanel_idx == (NUMBER_OF_PANELS - 1)/2) {
+      draw_onlyCenterPanel();
+    }
+    else if (randomKillPanel_idx < (NUMBER_OF_PANELS - 1)/2) {
+      draw_onlyExtremeLeftPanel();
+    }
+    else {
+      draw_onlyExtremeRightPanel();
+    }
+  }
+}
+
+void draw_onlyOneRightLeftSeqPanel(){
+  if (NUMBER_OF_PANELS == 5) {
+    switch (randomKillPanel_idx) {
+      case 4: draw_onlyExtremeLeftPanel(); break;
+      case 3: draw_onlyCenterLeftPanel(); break;
+      case 2: draw_onlyCenterPanel(); break;
+      case 1: draw_onlyCenterRightPanel(); break;
+      case 0: draw_onlyExtremeRightPanel(); break;
+      default: break;
+    }
+  }
+  else {
+    if (randomKillPanel_idx == (NUMBER_OF_PANELS - 1)/2) {
+      draw_onlyCenterPanel();
+    }
+    else if (randomKillPanel_idx > (NUMBER_OF_PANELS - 1)/2) {
+      draw_onlyExtremeLeftPanel();
+    }
+    else {
+      draw_onlyExtremeRightPanel();
+    }
+  }
 }

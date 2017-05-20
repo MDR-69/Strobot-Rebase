@@ -654,6 +654,28 @@ void customDeviceAnimation(int customDevAnimationNumber) {
     case 418: customDev_LEDTubeShortWhiteDownwardSingleWave_Left();break;
     case 419: customDev_LEDTubeShortWhiteDownwardSingleWave_Right();break;
     case 420: customDev_LEDTubeShortWhiteDownwardSingleWave_ExtremeRight();break;
+    case 421: customDev_LEDTubeShortWhiteUpwardSingleWave_ExtremeLeft();break;
+    case 422: customDev_LEDTubeShortWhiteUpwardSingleWave_Left();break;
+    case 423: customDev_LEDTubeShortWhiteUpwardSingleWave_Right();break;
+    case 424: customDev_LEDTubeShortWhiteUpwardSingleWave_ExtremeRight();break;
+    case 425: customDev_LEDTubeShortWhiteDownwardSingleLongWave_ExtremeLeft();break;
+    case 426: customDev_LEDTubeShortWhiteDownwardSingleLongWave_Left();break;
+    case 427: customDev_LEDTubeShortWhiteDownwardSingleLongWave_Right();break;
+    case 428: customDev_LEDTubeShortWhiteDownwardSingleLongWave_ExtremeRight();break;
+    case 429: customDev_LEDTubeShortWhiteUpwardSingleLongWave_ExtremeLeft();break;
+    case 430: customDev_LEDTubeShortWhiteUpwardSingleLongWave_Left();break;
+    case 431: customDev_LEDTubeShortWhiteUpwardSingleLongWave_Right();break;
+    case 432: customDev_LEDTubeShortWhiteUpwardSingleLongWave_ExtremeRight();break;
+
+    case 433: customDev_LEDTubeRightSideWhiteLongFlash();break;
+    case 434: customDev_LEDTubeRightSideRedLongFlash();break;
+    case 435: customDev_LEDTubeRightSideWhiteLongFlash();break;
+    case 436: customDev_LEDTubeRightSideRedLongFlash();break;
+
+    case 437: customDev_LEDTubeSingleShortBlueUpwardSingleWave(); break;
+    case 438: customDev_LEDTubeSingleLongBlueUpwardSingleWave(); break;
+    case 439: customDev_LEDTubeSingleShortBlueDownwardSingleWave(); break;
+    case 440: customDev_LEDTubeSingleLongBlueDownwardSingleWave(); break;
 
     default: break;                                 //Don't do anything
   }
@@ -2638,6 +2660,63 @@ void customDev_LEDTubeShortWhiteDownwardSingleWave_ExtremeRight() {
                                                              else { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITESHORTDOWNWARDWAVE_2); }
 }
 
+void customDev_LEDTubeShortWhiteUpwardSingleWave_ExtremeLeft() {
+        if (CustomDeviceList_LEDTubes.get(0).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITESHORTUPWARDWAVE);   }
+                                                             else { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITESHORTUPWARDWAVE_2); }
+}
+void customDev_LEDTubeShortWhiteUpwardSingleWave_Left() {
+        if (CustomDeviceList_LEDTubes.get(1).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITESHORTUPWARDWAVE);   }
+                                                             else { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITESHORTUPWARDWAVE_2); }
+
+}
+void customDev_LEDTubeShortWhiteUpwardSingleWave_Right() {
+        if (CustomDeviceList_LEDTubes.get(2).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITESHORTUPWARDWAVE);   }
+                                                             else { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITESHORTUPWARDWAVE_2); }
+
+}
+void customDev_LEDTubeShortWhiteUpwardSingleWave_ExtremeRight() {
+        if (CustomDeviceList_LEDTubes.get(3).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITESHORTUPWARDWAVE);   }
+                                                             else { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITESHORTUPWARDWAVE_2); }
+}
+
+void customDev_LEDTubeShortWhiteDownwardSingleLongWave_ExtremeLeft() {
+        if (CustomDeviceList_LEDTubes.get(0).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGDOWNWARDWAVE);   }
+                                                             else { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGDOWNWARDWAVE_2); }
+}
+void customDev_LEDTubeShortWhiteDownwardSingleLongWave_Left() {
+        if (CustomDeviceList_LEDTubes.get(1).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGDOWNWARDWAVE);   }
+                                                             else { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGDOWNWARDWAVE_2); }
+}
+void customDev_LEDTubeShortWhiteDownwardSingleLongWave_Right() {
+        if (CustomDeviceList_LEDTubes.get(2).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGDOWNWARDWAVE);   }
+                                                             else { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGDOWNWARDWAVE_2); }
+}
+void customDev_LEDTubeShortWhiteDownwardSingleLongWave_ExtremeRight() {
+        if (CustomDeviceList_LEDTubes.get(3).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGDOWNWARDWAVE);   }
+                                                             else { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGDOWNWARDWAVE_2); }
+}
+
+void customDev_LEDTubeShortWhiteUpwardSingleLongWave_ExtremeLeft() {
+        if (CustomDeviceList_LEDTubes.get(0).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGUPWARDWAVE);   }
+                                                             else { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGUPWARDWAVE_2); }
+}
+void customDev_LEDTubeShortWhiteUpwardSingleLongWave_Left() {
+        if (CustomDeviceList_LEDTubes.get(1).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGUPWARDWAVE);   }
+                                                             else { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGUPWARDWAVE_2); }
+
+}
+void customDev_LEDTubeShortWhiteUpwardSingleLongWave_Right() {
+        if (CustomDeviceList_LEDTubes.get(2).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGUPWARDWAVE);   }
+                                                             else { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGUPWARDWAVE_2); }
+
+}
+void customDev_LEDTubeShortWhiteUpwardSingleLongWave_ExtremeRight() {
+        if (CustomDeviceList_LEDTubes.get(3).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGUPWARDWAVE);   }
+                                                             else { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SINGLEWHITELONGUPWARDWAVE_2); }
+}
+
+
+
 //------------------------//
 
 void customDev_totalShortRedDownwardSingleWave() {
@@ -3570,6 +3649,20 @@ void customDev_LEDTubeLeftSideRedFlash() {
                                                            else { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_FASTREDFLASH_2); }
 }
 
+void customDev_LEDTubeLeftSideWhiteLongFlash(){
+  if (CustomDeviceList_LEDTubes.get(0).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWWHITEFLASH);   }
+                                                           else { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWWHITEFLASH_2); }
+  if (CustomDeviceList_LEDTubes.get(1).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWWHITEFLASH);   }
+                                                           else { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWWHITEFLASH_2); }   
+}
+void customDev_LEDTubeLeftSideRedLongFlash(){
+  if (CustomDeviceList_LEDTubes.get(0).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDFLASH);   }
+                                                           else { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDFLASH_2); }
+  if (CustomDeviceList_LEDTubes.get(1).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDFLASH);   }
+                                                           else { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDFLASH_2); }   
+}
+
+
 void customDev_LEDTubeLeftSideWhiteStroboscope() {
   CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_MEDIUMWHITESTROBOSCOPE);
   CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_MEDIUMWHITESTROBOSCOPE);
@@ -3655,6 +3748,19 @@ void customDev_LEDTubeRightSideRedFlash() {
                                                            else { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_FASTREDFLASH_2); }
   if (CustomDeviceList_LEDTubes.get(3).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_FASTREDFLASH);   }
                                                            else { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_FASTREDFLASH_2); }
+}
+
+void customDev_LEDTubeRightSideWhiteLongFlash(){
+  if (CustomDeviceList_LEDTubes.get(2).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWWHITEFLASH);   }
+                                                           else { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWWHITEFLASH_2); }
+  if (CustomDeviceList_LEDTubes.get(3).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWWHITEFLASH);   }
+                                                           else { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWWHITEFLASH_2); }   
+}
+void customDev_LEDTubeRightSideRedLongFlash(){
+  if (CustomDeviceList_LEDTubes.get(2).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDFLASH);   }
+                                                           else { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDFLASH_2); }
+  if (CustomDeviceList_LEDTubes.get(3).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDFLASH);   }
+                                                           else { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDFLASH_2); }   
 }
 
 void customDev_LEDTubeRightSideWhiteStroboscope() {
@@ -3793,6 +3899,22 @@ void customDev_LEDTubeSingleLongRedDownwardSingleWave() {
   customDev_LEDTubeSingleRhythmicAnim(CUSTOMDEV_ANIM_SINGLEREDLONGDOWNWARDWAVE, CUSTOMDEV_ANIM_SINGLEREDLONGDOWNWARDWAVE_2);
 }
 
+
+void customDev_LEDTubeSingleShortBlueUpwardSingleWave() {
+  customDev_LEDTubeSingleRhythmicAnim(CUSTOMDEV_ANIM_SINGLEBLUESHORTUPWARDWAVE, CUSTOMDEV_ANIM_SINGLEBLUESHORTUPWARDWAVE_2);
+}
+
+void customDev_LEDTubeSingleLongBlueUpwardSingleWave() {
+  customDev_LEDTubeSingleRhythmicAnim(CUSTOMDEV_ANIM_SINGLEBLUELONGUPWARDWAVE, CUSTOMDEV_ANIM_SINGLEBLUELONGUPWARDWAVE_2);
+}
+
+void customDev_LEDTubeSingleShortBlueDownwardSingleWave() {
+  customDev_LEDTubeSingleRhythmicAnim(CUSTOMDEV_ANIM_SINGLEBLUESHORTDOWNWARDWAVE, CUSTOMDEV_ANIM_SINGLEBLUESHORTDOWNWARDWAVE_2);
+}
+
+void customDev_LEDTubeSingleLongBlueDownwardSingleWave() {
+  customDev_LEDTubeSingleRhythmicAnim(CUSTOMDEV_ANIM_SINGLEBLUELONGDOWNWARDWAVE, CUSTOMDEV_ANIM_SINGLEBLUELONGDOWNWARDWAVE_2);
+}
 
 
 ////////////////////////////////////////////////////////////////
@@ -4266,4 +4388,3 @@ void customDev_LEDTubeCenterBlackout() {
   CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_BLACKOUT);
   CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_BLACKOUT);
 }
-

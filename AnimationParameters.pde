@@ -471,7 +471,7 @@ ImgProc imgProc = new ImgProc();
 float particlesflow_noiseScale = 0.01;
 float particlesflow_noiseZ = 0;
 int particlesflow_particlesDensity = 1;
-int particlesflow_particleMargin = 30; 
+int particlesflow_particleMargin = 25; 
 ParticleFlow[] particlesflow_particles;
 int[] particlesflow_currFrame;
 int[] particlesflow_prevFrame;
@@ -496,7 +496,7 @@ float[] tunnel_grises = new float[tunnel_num];
 
 //CosmoCurve parameters
 float cosmoscurve_r;
-float cosmoscurve_a = 50;
+float cosmoscurve_a = 90;
 float cosmoscurve_n = 0;
 float cosmoscurve_d = 2;
   
@@ -872,11 +872,11 @@ int thunderline_density = 5;
 int thunderline_refreshrate = 10;    //0, no refresh, - 255, points disappear immediately
 int thunderline_persistance  = 12;
 boolean thunderline_init = false;
-boolean thunderline_allowRed = false;
+boolean thunderline_allowBlue = false;
 boolean thunderline_setupcomplete = false;
-float thunderline_redProba = 0.0;
-float thunderline_redProbaMax = 0.4;
-float thunderline_redProbaSpeed = 0.002;
+float thunderline_blueProba = 0.0;
+float thunderline_blueProbaMax = 0.55;
+float thunderline_blueProbaSpeed = 0.002;
 
 //Opening Whiteout parameters
 float openingWhiteout_cpt = 4;
@@ -1372,6 +1372,8 @@ float rotatingHalfCircle_corner;
 float rotatingHalfCircle_theta;
 float rotatingHalfCircle_size;
 int rotatingHalfCircle_num = 40;
+float rotatingHalfCircle_intensity = 0;
+float rotatingHalfCircle_growthSpeed = 0.2;
 
 //PeriodicNoise parameters
 float periodicNoise_noiseSpeed = 0.02;
@@ -1502,3 +1504,17 @@ PVector futureTunnel_velocity = new PVector(0, 0);
 PVector futureTunnel_position = new PVector(0, 0);
 float futureTunnel_offset = 100.0f;      // start at 100 to avoid having to flip x
 
+// StarSparkle
+float starSparkle_progress = 0;
+float starSparkle_intensity = 0;
+ArrayList<StarSparkle> starSparkle_elements;
+int starSparkle_number = 40;
+boolean starSparkle_init = false;
+int starSparkle_initLifeSpan = 240;
+int starSparkle_appearVal = 120;
+
+// One Line Per Panel
+int oneLinePerPanel_progress = 0;
+int oneLinePerPanel_speed = 4;
+ArrayList<SinglePanelLineWave> singlePanelLineWave_elements;
+boolean singlePanelLineWave_init =false;

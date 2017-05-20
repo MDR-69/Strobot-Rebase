@@ -605,7 +605,7 @@ void specificActions() {
       
       case 65:    //NonotakPanelFill - ExtremeLeft
 
-        frameRate(30);
+        frameRate(50);
         noStroke();
         if (NUMBER_OF_PANELS == 3) {
           nonotakPanelFill_list.add(new NonotakPanelFill(2));
@@ -617,7 +617,7 @@ void specificActions() {
 
       case 66:         //NonotakPanelFill - Left
 
-        frameRate(30);
+        frameRate(50);
         noStroke();
         if (NUMBER_OF_PANELS == 3) {
           nonotakPanelFill_list.add(new NonotakPanelFill(0));
@@ -629,7 +629,7 @@ void specificActions() {
       
       case 67:         //NonotakPanelFill - Center
 
-        frameRate(30);
+        frameRate(50);
         noStroke();
         if (NUMBER_OF_PANELS == 3) {
           nonotakPanelFill_list.add(new NonotakPanelFill(1));
@@ -641,7 +641,7 @@ void specificActions() {
       
       case 68:        //NonotakPanelFill - Right
 
-        frameRate(30);
+        frameRate(50);
         noStroke();
         if (NUMBER_OF_PANELS == 3) {
           nonotakPanelFill_list.add(new NonotakPanelFill(2));
@@ -654,7 +654,7 @@ void specificActions() {
         
       case 69:    //NonotakPanelFill - ExtremeRight
 
-        frameRate(30);
+        frameRate(50);
         noStroke();
         if (NUMBER_OF_PANELS == 3) {
           nonotakPanelFill_list.add(new NonotakPanelFill(0));
@@ -1692,9 +1692,9 @@ void specificActions() {
         frameRate(50);
         noStroke();
         if (beatcircle_counter %2 == 0)
-        {fill(255);}
-        else
         {fill(255,0,0);}
+        else
+        {fill(255);}
         beatcircle_counter += 1;
         beatcircle_radius = height;
         break;
@@ -1706,9 +1706,9 @@ void specificActions() {
         strokeCap(SQUARE);
         noStroke();
         if (beatcircle_counter %2 == 0)
-        {fill(255);}
-        else
         {fill(255,0,0);}
+        else
+        {fill(255);}
         beatcircle_counter += 1;
         beatcircle_radius = height;
         beatcircles_linepos = 0;
@@ -1721,9 +1721,9 @@ void specificActions() {
         strokeCap(SQUARE);
         noStroke();
         if (beatcircle_counter %2 == 0)
-        {fill(255);}
-        else
         {fill(255,0,0);}
+        else
+        {fill(255);}
         beatcircle_counter += 1;
         beatcircle_radius = height;
         beatcircles_linepos +=1;
@@ -1736,9 +1736,9 @@ void specificActions() {
         strokeCap(SQUARE);
         noStroke();
         if (beatcircle_counter %2 == 0)
-        {fill(255);}
-        else
         {fill(255,0,0);}
+        else
+        {fill(255);}
         beatcircle_counter += 1;
         beatcircle_radius = height;
         beatcircles_linepos +=1;
@@ -1751,9 +1751,9 @@ void specificActions() {
         strokeCap(SQUARE);
         noStroke();
         if (beatcircle_counter %2 == 0)
-        {fill(255);}
-        else
         {fill(255,0,0);}
+        else
+        {fill(255);}
         beatcircle_counter += 1;
         beatcircle_radius = height;
         beatcircles_linepos +=1;
@@ -2523,7 +2523,7 @@ void specificActions() {
         thunderline_density = 25;
         setup_thunderlines();
         thunderline_init = true;
-        thunderline_allowRed = false;
+        thunderline_allowBlue = false;
         thunderline_setupcomplete = true;
         break;
       
@@ -2541,9 +2541,9 @@ void specificActions() {
         }
         setup_thunderlines();
         thunderline_init = true;
-        thunderline_allowRed = false;
+        thunderline_allowBlue = false;
         thunderline_setupcomplete = true;
-        thunderline_redProba = 0;
+        thunderline_blueProba = 0;
         break;
       
       case 237:    //Opening Whiteout
@@ -3278,7 +3278,7 @@ void specificActions() {
              if (elementcpt == particlesflow_particles.length) {
                break;
              }
-             int c = color(100+50*sin(PI*x/width), 127, 255*sin(PI*y/width));
+             int c = color(135+35*sin(PI*x/width), 140, 180*sin(PI*y/width));
              particlesflow_particles[elementcpt++] = new ParticleFlow(x, y, c);
           }
         }
@@ -4070,6 +4070,7 @@ void specificActions() {
         fill(0);
         noStroke();
         rect(0,0,width,height);
+        rotatingHalfCircle_intensity = 0;
         break;
 
       case 366:    //SlicedWave - White
@@ -4170,7 +4171,8 @@ void specificActions() {
          
         hypnopendulum_pends = new ArrayList();
         for(int n=0; n<pendulum_n; n++){
-          hypnopendulum_p = new HypnoWheelPendulum(hypnopendulum_lengths[n],color(150*(n%4),0,0));
+          //hypnopendulum_p = new HypnoWheelPendulum(hypnopendulum_lengths[n],color(150*(n%4),0,0));
+          hypnopendulum_p = new HypnoWheelPendulum(hypnopendulum_lengths[n],color(0,68*(n%4),150*(n%4)));
           hypnopendulum_pends.add(hypnopendulum_p);
         }
         smooth();
@@ -4751,11 +4753,11 @@ void specificActions() {
         strokeCap(ROUND);
         thunderline_setupcomplete = false;
         thunderline_density = 25;
-        setup_thunderlines_red();
+        setup_thunderlines_blue();
         thunderline_init = true;
-        thunderline_allowRed = true;
+        thunderline_allowBlue = true;
         thunderline_setupcomplete = true;
-        thunderline_redProba = 0;
+        thunderline_blueProba = 0;
         break;
       
       case 445:    //ThunderLinesRed - More lines
@@ -4770,11 +4772,11 @@ void specificActions() {
         if (thunderline_density < 60) {
           thunderline_density += 1;
         }
-        setup_thunderlines_red();
+        setup_thunderlines_blue();
         thunderline_init = true;
-        thunderline_allowRed = true;
+        thunderline_allowBlue = true;
         thunderline_setupcomplete = true;
-        thunderline_redProba = 0;
+        thunderline_blueProba = 0;
         break;
 
       case 446:    //Random Panel Strobe
@@ -4831,6 +4833,131 @@ void specificActions() {
           }
         }
         futureTunnel_darkOverlay.updatePixels();
+
+      case 452:    //DynamicAngleLines - Half Blue
+        
+        setup_dynamicAngleLines();
+        break;
+      
+      case 453:    //DynamicAngleLines - Blue
+        
+        setup_dynamicAngleLines();
+        break;
+
+      case 454:    //HypnoNormalTriangle
+
+        frameRate(40);
+        if (hypnotriangle_init == true) {
+          hypnotriangle_init = false;
+          hypnotriangle_list = new ArrayList<HypnoTriangle>();
+        }
+        hypnotriangle_list.add(new HypnoTriangle(hypnotriangle_instancecounter, false));
+        hypnotriangle_instancecounter += 1;
+        break;
+
+      case 455:    //StarSparkleStatic
+        frameRate(50);
+        noStroke();
+        noFill(); 
+        rectMode(CORNER);
+        colorMode(RGB);
+        // starSparkle_progress = 0;
+        // starSparkle_intensity = 0;
+        init_starSparkle_static();
+        starSparkle_init = true;
+        break;
+
+      case 456:    //StarSparkleSlowMove
+        frameRate(50);
+        noStroke();
+        noFill(); 
+        rectMode(CORNER);
+        colorMode(RGB);
+        //starSparkle_progress = 0;
+        //starSparkle_intensity = 0;
+        init_starSparkle_slowMove();
+        starSparkle_init = true;
+        break;
+
+      case 457:    //StarSparkleFastMove
+        frameRate(50);
+        noStroke();
+        noFill(); 
+        rectMode(CORNER);
+        colorMode(RGB);
+        //starSparkle_progress = 0;
+        //starSparkle_intensity = 0;
+        init_starSparkle_fastMove();
+        starSparkle_init = true;
+        break;
+
+      case 458:    //OneLinePerPanel
+        frameRate(50);
+        noStroke();
+        noFill();
+        rectMode(CORNER);
+
+      case 459:    //OneLinePerPanel 2
+        frameRate(50);
+        noStroke();
+        noFill();
+        rectMode(CORNER);
+
+      case 460:    //OneLinePerPanel Short WaveUp
+        oneLinePerPanel_progress = 0;
+        if (!singlePanelLineWave_init) {
+            singlePanelLineWave_elements = new ArrayList<SinglePanelLineWave>();
+        }
+
+        init_oneLinePerPanel_shortWaveUp();
+        singlePanelLineWave_init = true;
+        frameRate(50);
+        noStroke();
+        noFill();
+        rectMode(CORNER);
+        break;
+
+      case 461:    //OneLinePerPanel Long WaveUp
+        oneLinePerPanel_progress = 0;
+        if (!singlePanelLineWave_init) {
+            singlePanelLineWave_elements = new ArrayList<SinglePanelLineWave>();
+        }
+
+        init_oneLinePerPanel_longWaveUp();
+        singlePanelLineWave_init = true;
+        frameRate(50);
+        noStroke();
+        noFill();
+        rectMode(CORNER);
+        break;
+
+      case 462:    //OneLinePerPanel Short Wave Down
+        oneLinePerPanel_progress = 0;
+        if (!singlePanelLineWave_init) {
+            singlePanelLineWave_elements = new ArrayList<SinglePanelLineWave>();
+        }
+
+        init_oneLinePerPanel_shortWaveDown();
+        singlePanelLineWave_init = true;
+        frameRate(50);
+        noStroke();
+        noFill();
+        rectMode(CORNER);
+        break;
+
+      case 463:    //OneLinePerPanel Long Wave Down
+        oneLinePerPanel_progress = 0;
+        if (!singlePanelLineWave_init) {
+            singlePanelLineWave_elements = new ArrayList<SinglePanelLineWave>();
+        }
+
+        init_oneLinePerPanel_longWaveDown();
+        singlePanelLineWave_init = true;
+        frameRate(50);
+        noStroke();
+        noFill();
+        rectMode(CORNER);
+        break;
 
       case 509:    //Audio Monitoring
 
