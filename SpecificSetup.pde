@@ -4959,7 +4959,816 @@ void specificActions() {
         rectMode(CORNER);
         break;
 
-      case 509:    //Audio Monitoring
+      case 464:    //SunStripStyle - Type 0 - All - Fast - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(0, i, 0, 20, 0) );
+        }
+        break;
+
+      case 465:    //SunStripStyle - Type 0 - All - Slow - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(0, i, 0, 10, 0));
+        }
+        break;
+
+      case 466:    //SunStripStyle - Type 0 - All - Fast - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(0, i, 0 - i*40, 20, 0));
+        }
+        break;
+
+      case 467:    //SunStripStyle - Type 0 - All - Slow - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(0, i, 0 - i*40, 10, 0));
+        }
+        break;
+
+      case 468:    //SunStripStyle - Type 0 - All - Fast - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(0, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 20, 0));
+        }
+        break;
+
+      case 469:    //SunStripStyle - Type 0 - All - Slow - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(0, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 10, 0));
+        }
+        break;
+
+      case 470:    //SunStripStyle - Type 0 - All - Fast - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(0, NUMBER_OF_PANELS - 1 - i,  0 - i*40,                        20, 0));
+            sunStripStyle_elements.add(new SunStripStyle(0, NUMBER_OF_PANELS + i,      0 - i*40,                        20, 0));
+        }
+        break;
+
+      case 471:    //SunStripStyle - Type 0 - All - Slow - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(0, NUMBER_OF_PANELS - 1 - i,  0 - i*40, 10, 0));
+            sunStripStyle_elements.add(new SunStripStyle(0, NUMBER_OF_PANELS + i,      0 - i*40, 10, 0));
+        }
+        break;
+
+      case 472:    //SunStripStyle - Type 0 - All - Fast - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(0, i,                      0 - i*40,                        20, 0));
+            sunStripStyle_elements.add(new SunStripStyle(0, NUMBER_OF_PANELS*2-1-i, 0 - i*40,                        20, 0));
+        }
+        break;
+
+      case 473:    //SunStripStyle - Type 0 - All - Slow - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(0, i,                      0 - i*40,                        10, 0));
+            sunStripStyle_elements.add(new SunStripStyle(0, NUMBER_OF_PANELS*2-1-i, 0 - i*40,                        10, 0));
+        }
+        break;
+
+      case 474:    //SunStripStyle - Type 1 - All - Fast - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(1, i, 0, 20, 6));
+        }
+        break;
+
+      case 475:    //SunStripStyle - Type 1 - All - Slow - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(1, i, 0, 10, 6));
+        }
+        break;
+
+      case 476:    //SunStripStyle - Type 1 - All - Fast - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(1, i, 0 - i*40, 20, 6));
+        }
+        break;
+
+      case 477:    //SunStripStyle - Type 1 - All - Slow - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(1, i, 0 - i*40, 10, 6));
+        }
+        break;
+
+      case 478:    //SunStripStyle - Type 1 - All - Fast - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(1, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 20, 6));
+        }
+        break;
+
+      case 479:    //SunStripStyle - Type 1 - All - Slow - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(1, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 10, 6));
+        }
+        break;
+
+      case 480:    //SunStripStyle - Type 1 - All - Fast - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(1, NUMBER_OF_PANELS - 1 - i,  0 - i*40,                        20, 6));
+            sunStripStyle_elements.add(new SunStripStyle(1, NUMBER_OF_PANELS + i,      0 - i*40,                        20, 6));
+        }
+        break;
+
+      case 481:    //SunStripStyle - Type 1 - All - Slow - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(1, NUMBER_OF_PANELS - 1 - i,  0 - i*40, 10, 6));
+            sunStripStyle_elements.add(new SunStripStyle(1, NUMBER_OF_PANELS + i,      0 - i*40, 10, 6));
+        }
+        break;
+
+      case 482:    //SunStripStyle - Type 1 - All - Fast - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(1, i,                      0 - i*40,                        20, 6));
+            sunStripStyle_elements.add(new SunStripStyle(1, NUMBER_OF_PANELS*2-1-i, 0 - i*40,                        20, 6));
+        }
+        break;
+
+      case 483:    //SunStripStyle - Type 1 - All - Slow - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(1, i,                      0 - i*40,                        10, 6));
+            sunStripStyle_elements.add(new SunStripStyle(1, NUMBER_OF_PANELS*2-1-i, 0 - i*40,                        10, 6));
+        }
+        break;
+
+      case 484:    //SunStripStyle - Type 2 - All - Fast - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(2, i, 0, 20, 0) );
+        }
+        break;
+
+      case 485:    //SunStripStyle - Type 2 - All - Slow - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(2, i, 0, 10, 0));
+
+        }
+        break;
+
+      case 486:    //SunStripStyle - Type 2 - All - Fast - Up-Down
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(2, i, 0 - i*40, 20, 0));
+        }
+        break;
+
+      case 487:    //SunStripStyle - Type 2 - All - Slow - Up-Down
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(2, i, 0 - i*40, 10, 0));
+        }
+        break;
+
+      case 488:    //SunStripStyle - Type 2 - All - Fast - Down-Up
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(2, i, 0 - (height/(DISPLAY_SCALING_FACTOR*3)-1-i)*40, 20, 0));
+        }
+        break;
+
+      case 489:    //SunStripStyle - Type 2 - All - Slow - Down-Up
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(2, i, 0 - (height/(DISPLAY_SCALING_FACTOR*3)-1-i)*40, 10, 0));
+        }
+        break;
+
+      case 490:    //SunStripStyle - Type 2 - All - Fast - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3*2); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(2, height/(DISPLAY_SCALING_FACTOR*3*2) - i,    0 - i*40,  20, 0));
+            sunStripStyle_elements.add(new SunStripStyle(2, height/(DISPLAY_SCALING_FACTOR*3*2) + 1 + i, 0 - i*40,  20, 0));
+        }
+        break;
+
+      case 491:    //SunStripStyle - Type 2 - All - Slow - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3*2); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(2, height/(DISPLAY_SCALING_FACTOR*3*2) - i,    0 - i*40,  10, 0));
+            sunStripStyle_elements.add(new SunStripStyle(2, height/(DISPLAY_SCALING_FACTOR*3*2) + 1 + i, 0 - i*40,  10, 0));
+        }
+        break;
+
+      case 492:    //SunStripStyle - Type 2 - All - Fast - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3*2); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(2, i,                                     0 - i*40,  20, 0));
+            sunStripStyle_elements.add(new SunStripStyle(2, height/(DISPLAY_SCALING_FACTOR*3) - i, 0 - i*40,  20, 0));
+        }
+        break;
+
+      case 493:    //SunStripStyle - Type 2 - All - Slow - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3*2); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(2, i,                                     0 - i*40,  10, 0));
+            sunStripStyle_elements.add(new SunStripStyle(2, height/(DISPLAY_SCALING_FACTOR*3) - i, 0 - i*40,  10, 0));
+        }
+        break;
+
+      case 494:    //SunStripStyle - Type 3 - All - Fast - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(3, i, 0, 20, 10, 5));
+        }
+        break;
+
+      case 495:    //SunStripStyle - Type 3 - All - Slow - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(3, i, 0, 10, 10, 5));
+        }
+        break;
+
+      case 496:    //SunStripStyle - Type 3 - All - Fast - Up-Down
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(3, i, 0 - i*40, 20, 10, 5));
+        }
+        break;
+
+      case 497:    //SunStripStyle - Type 3 - All - Slow - Up-Down
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(3, i, 0 - i*40, 10, 10, 5));
+        }
+        break;
+
+      case 498:    //SunStripStyle - Type 3 - All - Fast - Down-Up
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(3, i, 0 - (height/(DISPLAY_SCALING_FACTOR*3)-1-i)*40, 20, 10, 5));
+        }
+        break;
+
+      case 499:    //SunStripStyle - Type 3 - All - Slow - Down-Up
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(3, i, 0 - (height/(DISPLAY_SCALING_FACTOR*3)-1-i)*40, 10, 10, 5));
+        }
+        break;
+
+      case 500:    //SunStripStyle - Type 3 - All - Fast - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3*2); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(3, height/(DISPLAY_SCALING_FACTOR*3*2) - i,     0 - i*160,  20, 10, 5));
+            sunStripStyle_elements.add(new SunStripStyle(3, height/(DISPLAY_SCALING_FACTOR*3*2) + 1 + i, 0 - i*160,  20, 10, 5));
+        }
+        break;
+
+      case 501:    //SunStripStyle - Type 3 - All - Slow - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3*2); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(3, height/(DISPLAY_SCALING_FACTOR*3*2) - i,     0 - i*160,  10, 10, 5));
+            sunStripStyle_elements.add(new SunStripStyle(3, height/(DISPLAY_SCALING_FACTOR*3*2) + 1 + i, 0 - i*160,  10, 10, 5));
+        }
+        break;
+
+      case 502:    //SunStripStyle - Type 3 - All - Fast - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3*2); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(3, i,                                     0 - i*160,  20, 10, 5));
+            sunStripStyle_elements.add(new SunStripStyle(3, height/(DISPLAY_SCALING_FACTOR*3) - i, 0 - i*160,  20, 10, 5));
+        }
+        break;
+
+      case 503:    //SunStripStyle - Type 3 - All - Slow - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3*2); i++) {
+            sunStripStyle_elements.add(new SunStripStyle(3, i,                                     0 - i*160,  10, 10, 5));
+            sunStripStyle_elements.add(new SunStripStyle(3, height/(DISPLAY_SCALING_FACTOR*3) - i, 0 - i*160,  10, 10, 5));
+        }
+        break;
+
+      case 504:    //SunStripStyle - Type 4 - All - Fast - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, i, 0, 20, 6, 4));
+        }
+        break;
+
+      case 505:    //SunStripStyle - Type 4 - All - Medium - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, i, 0, 5, 4, 4));
+        }
+        break;
+
+      case 506:    //SunStripStyle - Type 4 - All - Slow - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, i, 0, 2, 2, 2));
+        }
+        break;
+
+      case 507:    //SunStripStyle - Type 4 - All - Fast - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, i, 0 - i*40, 20, 6, 4));
+        }
+        break;
+
+      case 508:    //SunStripStyle - Type 4 - All - Medium - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, i, 0 - i*40, 5, 4, 4));
+        }
+        break;
+
+      case 509:    //SunStripStyle - Type 4 - All - Slow - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, i, 0 - i*40, 2, 2, 2));
+        }
+        break;
+
+      case 510:    //SunStripStyle - Type 4 - All - Fast - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 20, 6, 4));
+        }
+        break;
+
+      case 511:    //SunStripStyle - Type 4 - All - Medium - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 5, 4, 4));
+        }
+        break;
+
+      case 512:    //SunStripStyle - Type 4 - All - Slow - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 2, 2, 2));
+        }
+        break;
+
+      case 513:    //SunStripStyle - Type 4 - All - Fast - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, NUMBER_OF_PANELS - 1 - i,  0 - i*40,                        20, 6, 4));
+            sunStripStyle_elements.add(new SunStripStyle(4, NUMBER_OF_PANELS + i,      0 - i*40,                        20, 6, 4));
+        }
+        break;
+
+      case 514:    //SunStripStyle - Type 4 - All - Medium - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, NUMBER_OF_PANELS - 1 - i,  0 - i*40, 5, 4, 4));
+            sunStripStyle_elements.add(new SunStripStyle(4, NUMBER_OF_PANELS + i,      0 - i*40, 5, 4, 4));
+        }
+        break;
+
+      case 515:    //SunStripStyle - Type 4 - All - Slow - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, NUMBER_OF_PANELS - 1 - i,  0 - i*40, 2, 2, 2));
+            sunStripStyle_elements.add(new SunStripStyle(4, NUMBER_OF_PANELS + i,      0 - i*40, 2, 2, 2));
+        }
+        break;
+
+      case 516:    //SunStripStyle - Type 4 - All - Fast - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, i,                      0 - i*40,                        20, 6, 4));
+            sunStripStyle_elements.add(new SunStripStyle(4, NUMBER_OF_PANELS*2-1-i, 0 - i*40,                        20, 6, 4));
+        }
+        break;
+
+      case 517:    //SunStripStyle - Type 4 - All - Medium - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, i,                      0 - i*40,                        5, 4, 4));
+            sunStripStyle_elements.add(new SunStripStyle(4, NUMBER_OF_PANELS*2-1-i, 0 - i*40,                        5, 4, 4));
+        }
+        break;
+
+      case 518:    //SunStripStyle - Type 4 - All - Slow - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(4, i,                      0 - i*40,                        2, 2, 2));
+            sunStripStyle_elements.add(new SunStripStyle(4, NUMBER_OF_PANELS*2-1-i, 0 - i*40,                        2, 2, 2));
+        }
+        break;        
+
+      case 519:    //SunStripStyle - Type 5 - All - Fast - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, i, 0, 20, 6, 4));
+        }
+        break;
+
+      case 520:    //SunStripStyle - Type 5 - All - Medium - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, i, 0, 8, 4, 4));
+        }
+        break;
+
+      case 521:    //SunStripStyle - Type 5 - All - Slow - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, i, 0, 4, 2, 2));
+        }
+        break;
+
+      case 522:    //SunStripStyle - Type 5 - All - Fast - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, i, 0 - i*40, 20, 6, 4));
+        }
+        break;
+
+      case 523:    //SunStripStyle - Type 5 - All - Medium - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, i, 0 - i*20, 8, 4, 4));
+        }
+        break;
+
+      case 524:    //SunStripStyle - Type 5 - All - Slow - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, i, 0 - i*10, 4, 2, 2));
+        }
+        break;
+
+      case 525:    //SunStripStyle - Type 5 - All - Fast - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 20, 6, 4));
+        }
+        break;
+
+      case 526:    //SunStripStyle - Type 5 - All - Medium - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, i, 0 - (NUMBER_OF_PANELS*2-1-i)*20, 8, 4, 4));
+        }
+        break;
+
+      case 527:    //SunStripStyle - Type 5 - All - Slow - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, i, 0 - (NUMBER_OF_PANELS*2-1-i)*10, 4, 2, 2));
+        }
+        break;
+
+      case 528:    //SunStripStyle - Type 5 - All - Fast - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, NUMBER_OF_PANELS - 1 - i,  0 - i*40,                        20, 6, 4));
+            sunStripStyle_elements.add(new SunStripStyle(5, NUMBER_OF_PANELS + i,      0 - i*40,                        20, 6, 4));
+        }
+        break;
+
+      case 529:    //SunStripStyle - Type 5 - All - Medium - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, NUMBER_OF_PANELS - 1 - i,  0 - i*20, 8, 4, 4));
+            sunStripStyle_elements.add(new SunStripStyle(5, NUMBER_OF_PANELS + i,      0 - i*20, 8, 4, 4));
+        }
+        break;
+
+      case 530:    //SunStripStyle - Type 5 - All - Slow - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, NUMBER_OF_PANELS - 1 - i,  0 - i*10, 4, 2, 2));
+            sunStripStyle_elements.add(new SunStripStyle(5, NUMBER_OF_PANELS + i,      0 - i*10, 4, 2, 2));
+        }
+        break;
+
+      case 531:    //SunStripStyle - Type 5 - All - Fast - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, i,                      0 - i*40,                        20, 6, 4));
+            sunStripStyle_elements.add(new SunStripStyle(5, NUMBER_OF_PANELS*2-1-i, 0 - i*40,                        20, 6, 4));
+        }
+        break;
+
+      case 532:    //SunStripStyle - Type 5 - All - Medium - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, i,                      0 - i*20,                        8, 4, 4));
+            sunStripStyle_elements.add(new SunStripStyle(5, NUMBER_OF_PANELS*2-1-i, 0 - i*20,                        8, 4, 4));
+        }
+        break;
+
+      case 533:    //SunStripStyle - Type 5 - All - Slow - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(5, i,                      0 - i*10,                        4, 2, 2));
+            sunStripStyle_elements.add(new SunStripStyle(5, NUMBER_OF_PANELS*2-1-i, 0 - i*10,                        4, 2, 2));
+        }
+        break;
+
+      case 534:    //SunStripStyle - Type 6 - All - Fast - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, i, 0, 20, 6));
+        }
+        break;
+
+      case 535:    //SunStripStyle - Type 6 - All - Medium - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, i, 0, 5, 4));
+        }
+        break;
+
+      case 536:    //SunStripStyle - Type 6 - All - Slow - Sync
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, i, 0, 2, 2));
+        }
+        break;
+
+      case 537:    //SunStripStyle - Type 6 - All - Fast - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, i, 0 - i*40, 20, 6));
+        }
+        break;
+
+      case 538:    //SunStripStyle - Type 6 - All - Medium - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, i, 0 - i*40, 5, 4));
+        }
+        break;
+
+      case 539:    //SunStripStyle - Type 6 - All - Slow - Left-Right
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, i, 0 - i*40, 2, 2));
+        }
+        break;
+
+      case 540:    //SunStripStyle - Type 6 - All - Fast - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 20, 6));
+        }
+        break;
+
+      case 541:    //SunStripStyle - Type 6 - All - Medium - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 5, 4));
+        }
+        break;
+
+      case 542:    //SunStripStyle - Type 6 - All - Slow - Right-Left
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 2, 2));
+        }
+        break;
+
+      case 543:    //SunStripStyle - Type 6 - All - Fast - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, NUMBER_OF_PANELS - 1 - i,  0 - i*40,                        20, 6));
+            sunStripStyle_elements.add(new SunStripStyle(6, NUMBER_OF_PANELS + i,      0 - i*40,                        20, 6));
+        }
+        break;
+
+      case 544:    //SunStripStyle - Type 6 - All - Medium - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, NUMBER_OF_PANELS - 1 - i,  0 - i*40, 5, 4));
+            sunStripStyle_elements.add(new SunStripStyle(6, NUMBER_OF_PANELS + i,      0 - i*40, 5, 4));
+        }
+        break;
+
+      case 545:    //SunStripStyle - Type 6 - All - Slow - Center-Side
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, NUMBER_OF_PANELS - 1 - i,  0 - i*40, 2, 2));
+            sunStripStyle_elements.add(new SunStripStyle(6, NUMBER_OF_PANELS + i,      0 - i*40, 2, 2));
+        }
+        break;
+
+      case 546:    //SunStripStyle - Type 6 - All - Fast - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, i,                      0 - i*40,                        20, 6));
+            sunStripStyle_elements.add(new SunStripStyle(6, NUMBER_OF_PANELS*2-1-i, 0 - i*40,                        20, 6));
+        }
+        break;
+
+      case 547:    //SunStripStyle - Type 6 - All - Medium - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, i,                      0 - i*40,                        5, 4));
+            sunStripStyle_elements.add(new SunStripStyle(6, NUMBER_OF_PANELS*2-1-i, 0 - i*40,                        5, 4));
+        }
+        break;
+
+      case 548:    //SunStripStyle - Type 6 - All - Slow - Side-Center
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(6, i,                      0 - i*40,                        2, 2));
+            sunStripStyle_elements.add(new SunStripStyle(6, NUMBER_OF_PANELS*2-1-i, 0 - i*40,                        2, 2));
+        }
+        break;
+
+      case 549:    //SunStripStyle - Type 7 - All - High Probability
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(7, i, 0, 6, 0.5));
+        }
+        break;
+
+      case 550:    //SunStripStyle - Type 7 - All - Med Probability
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(7, i, 0, 6, 0.25));
+        }
+        break;
+
+      case 551:    //SunStripStyle - Type 7 - All - Low Probability
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(7, i, 0, 6, 0.1));
+        }
+        break;
+
+      case 552:    //SunStripStyle - Type 7 - Single - High Probability
+        frameRate(50);
+        init_sunstripstyle();
+        sunStripStyle_elements.add(new SunStripStyle(7, sunStripStyle_i, 0, 6, 0.65));
+        sunStripStyle_i = (sunStripStyle_i + 1) % (NUMBER_OF_PANELS*2);
+        break;
+
+      case 553:    //SunStripStyle - Type 7 - Single - Med Probability
+        frameRate(50);
+        init_sunstripstyle();
+        sunStripStyle_elements.add(new SunStripStyle(7, sunStripStyle_i, 0, 6, 0.4));
+        sunStripStyle_i = (sunStripStyle_i + 1) % (NUMBER_OF_PANELS*2);
+        break;
+
+      case 554:    //SunStripStyle - Type 7 - Single - Low Probability
+        frameRate(50);
+        init_sunstripstyle();
+        sunStripStyle_elements.add(new SunStripStyle(7, sunStripStyle_i, 0, 6, 0.2));
+        sunStripStyle_i = (sunStripStyle_i + 1) % (NUMBER_OF_PANELS*2);
+        break;
+
+      case 555:    //SunStripStyle - Type 8 - Pos - Fast
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, 0.5, 0.1, 1.5));
+        }
+        break;
+
+      case 556:    //SunStripStyle - Type 8 - Pos - Medium
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, 0.5, 0.05, 1));
+        }
+        break;
+
+      case 557:    //SunStripStyle - Type 8 - Pos - Slow
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, 0.5, 0.025, 0.2));
+        }
+        break;
+
+      case 558:    //SunStripStyle - Type 8 - Neg - Fast
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, -0.5, -0.1, 1.5));
+        }
+        break;
+
+      case 559:    //SunStripStyle - Type 8 - Neg - Medium
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, -0.5, -0.05, 1));
+        }
+        break;
+
+      case 560:    //SunStripStyle - Type 8 - Neg - Slow
+        frameRate(50);
+        init_sunstripstyle();
+        for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, -0.5, -0.025, 0.2));
+        }
+        break;
+
+
+      case 600:    //Audio Monitoring
 
         background(0);
         uglyImpulseKickList = new ArrayList<UglyImpulseKick>();
@@ -4968,7 +5777,7 @@ void specificActions() {
         uglyImpulseBassList = new ArrayList<UglyImpulseBass>();
         break;
       
-      case 510:    //Bass FFT display
+      case 601:    //Bass FFT display
         
         frameRate(50);
         colorMode(RGB);

@@ -43,10 +43,10 @@ int PITCH_KNOB_WHITENOISE      = 7;
 final int PITCH_SET_AUTOMODE_OFF                          = 90;
 final int PITCH_SET_AUTOMODE_ON                           = 91;
 
-final int PITCH_LOAD_ANIMATION_BANK1_TEMP                 = 92;
-final int PITCH_LOAD_ANIMATION_BANK2_TEMP                 = 93;
-final int PITCH_LOAD_ANIMATION_BANK3_TEMP                 = 94;
-final int PITCH_LOAD_ANIMATION_BANK4_TEMP                 = 95;
+final int PITCH_LOAD_ANIMATION_BANK1_TEMP                 = -10;    // Not used for now
+final int PITCH_LOAD_ANIMATION_BANK2_TEMP                 = -11;
+final int PITCH_LOAD_ANIMATION_BANK3_TEMP                 = -12;
+final int PITCH_LOAD_ANIMATION_BANK4_TEMP                 = -13;
 
 final int PITCH_DMX_ANIMATION_MOVING_HEAD_INIT_DIRECTION  = 98;
 final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_COLOR       = 99;
@@ -103,6 +103,8 @@ final int PITCH_LOAD_ANIMATION_BANK1                      = 123;
 final int PITCH_LOAD_ANIMATION_BANK2                      = 124;
 final int PITCH_LOAD_ANIMATION_BANK3                      = 125;
 final int PITCH_LOAD_ANIMATION_BANK4                      = 122;
+final int PITCH_LOAD_ANIMATION_BANK5                      = 92;
+final int PITCH_LOAD_ANIMATION_BANK6                      = 93;
 final int PITCH_LOAD_IMAGE_BANK1                          = 126;
 final int PITCH_CHANGE_OUTPUTMAPPING                      = 127;
 
@@ -261,6 +263,8 @@ void processMidiInfo_semiAutoMode(int pitch, int velocity) {
     case PITCH_LOAD_ANIMATION_BANK2:                        loadAnimation2(velocity);break;                                          // 
     case PITCH_LOAD_ANIMATION_BANK3:                        loadAnimation3(velocity);break;                                          // 
     case PITCH_LOAD_ANIMATION_BANK4:                        loadAnimation4(velocity);break;                                          // 
+    case PITCH_LOAD_ANIMATION_BANK5:                        loadAnimation5(velocity);break;                                          // 
+    case PITCH_LOAD_ANIMATION_BANK6:                        loadAnimation6(velocity);break;                                          // 
     case PITCH_LOAD_IMAGE_BANK1:                            loadImage1(velocity);break;                                              // 
     case PITCH_CHANGE_OUTPUTMAPPING:                        activateKeyboardLEDPanelMapping();break;                                 // Activate the remapping procedure
 
@@ -738,6 +742,16 @@ void loadAnimation3(int velocity) {
 void loadAnimation4(int velocity) {  
   //Update the animation number
   loadAnimation(velocity + 381);
+}
+
+void loadAnimation5(int velocity) {  
+  //Update the animation number
+  loadAnimation(velocity + 508);
+}
+
+void loadAnimation6(int velocity) {  
+  //Update the animation number
+  loadAnimation(velocity + 635);
 }
 
 void loadAnimation (int number) {

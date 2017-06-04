@@ -545,7 +545,13 @@ String getStringFromAnimationNumber(int animNbr) {
   }
   else if (animNbr <= 508) {
     temp = getStringFromNoteInt(PITCH_LOAD_ANIMATION_BANK4) + "  |  " + str(animNbr - 381);
-  }  
+  }
+  else if (animNbr <= 635) {
+    temp = getStringFromNoteInt(PITCH_LOAD_ANIMATION_BANK5) + "  |  " + str(animNbr - 508);
+  }
+  else if (animNbr <= 762) {
+    temp = getStringFromNoteInt(PITCH_LOAD_ANIMATION_BANK6) + "  |  " + str(animNbr - 635);
+  }
   return temp;
 }
 

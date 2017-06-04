@@ -599,8 +599,115 @@ void specific_draw() {
       case 461: draw_oneLinePerPanelWave();break;                  //One Line Per Panel - Large Wave Up
       case 462: draw_oneLinePerPanelWave();break;                  //One Line Per Panel - Small Wave Down
       case 463: draw_oneLinePerPanelWave();break;                  //One Line Per Panel - Large Wave Down
-      case 509: draw_dirtyAudioProcessing();break;                 //Audio Monitoring
-      case 510: draw_displayFFT_bass();break;                      //DisplayFFT - Bass
+      
+      case 464: draw_sunstripstyle();break;                        //SunStripStyle
+      case 465: draw_sunstripstyle();break;                        //SunStripStyle
+      case 466: draw_sunstripstyle();break;                        //SunStripStyle
+      case 467: draw_sunstripstyle();break;                        //SunStripStyle
+      case 468: draw_sunstripstyle();break;                        //SunStripStyle
+      case 469: draw_sunstripstyle();break;                        //SunStripStyle
+      case 470: draw_sunstripstyle();break;                        //SunStripStyle
+      case 471: draw_sunstripstyle();break;                        //SunStripStyle
+      case 472: draw_sunstripstyle();break;                        //SunStripStyle
+      case 473: draw_sunstripstyle();break;                        //SunStripStyle
+
+      case 474: draw_sunstripstyle();break;                        //SunStripStyle
+      case 475: draw_sunstripstyle();break;                        //SunStripStyle
+      case 476: draw_sunstripstyle();break;                        //SunStripStyle
+      case 477: draw_sunstripstyle();break;                        //SunStripStyle
+      case 478: draw_sunstripstyle();break;                        //SunStripStyle
+      case 479: draw_sunstripstyle();break;                        //SunStripStyle
+      case 480: draw_sunstripstyle();break;                        //SunStripStyle
+      case 481: draw_sunstripstyle();break;                        //SunStripStyle
+      case 482: draw_sunstripstyle();break;                        //SunStripStyle
+      case 483: draw_sunstripstyle();break;                        //SunStripStyle
+
+      case 484: draw_sunstripstyle();break;                        //SunStripStyle
+      case 485: draw_sunstripstyle();break;                        //SunStripStyle
+      case 486: draw_sunstripstyle();break;                        //SunStripStyle
+      case 487: draw_sunstripstyle();break;                        //SunStripStyle
+      case 488: draw_sunstripstyle();break;                        //SunStripStyle
+      case 489: draw_sunstripstyle();break;                        //SunStripStyle
+      case 490: draw_sunstripstyle();break;                        //SunStripStyle
+      case 491: draw_sunstripstyle();break;                        //SunStripStyle
+      case 492: draw_sunstripstyle();break;                        //SunStripStyle
+      case 493: draw_sunstripstyle();break;                        //SunStripStyle
+
+      case 494: draw_sunstripstyle();break;                        //SunStripStyle
+      case 495: draw_sunstripstyle();break;                        //SunStripStyle
+      case 496: draw_sunstripstyle();break;                        //SunStripStyle
+      case 497: draw_sunstripstyle();break;                        //SunStripStyle
+      case 498: draw_sunstripstyle();break;                        //SunStripStyle
+      case 499: draw_sunstripstyle();break;                        //SunStripStyle
+      case 500: draw_sunstripstyle();break;                        //SunStripStyle
+      case 501: draw_sunstripstyle();break;                        //SunStripStyle
+      case 502: draw_sunstripstyle();break;                        //SunStripStyle
+      case 503: draw_sunstripstyle();break;                        //SunStripStyle
+
+      case 504: draw_sunstripstyle();break;                        //SunStripStyle
+      case 505: draw_sunstripstyle();break;                        //SunStripStyle
+      case 506: draw_sunstripstyle();break;                        //SunStripStyle
+      case 507: draw_sunstripstyle();break;                        //SunStripStyle
+      case 508: draw_sunstripstyle();break;                        //SunStripStyle
+      case 509: draw_sunstripstyle();break;                        //SunStripStyle
+      case 510: draw_sunstripstyle();break;                        //SunStripStyle
+      case 511: draw_sunstripstyle();break;                        //SunStripStyle
+      case 512: draw_sunstripstyle();break;                        //SunStripStyle
+      case 513: draw_sunstripstyle();break;                        //SunStripStyle
+      case 514: draw_sunstripstyle();break;                        //SunStripStyle
+      case 515: draw_sunstripstyle();break;                        //SunStripStyle
+      case 516: draw_sunstripstyle();break;                        //SunStripStyle
+      case 517: draw_sunstripstyle();break;                        //SunStripStyle
+      case 518: draw_sunstripstyle();break;                        //SunStripStyle
+
+      case 519: draw_sunstripstyle();break;                        //SunStripStyle
+      case 520: draw_sunstripstyle();break;                        //SunStripStyle
+      case 521: draw_sunstripstyle();break;                        //SunStripStyle
+      case 522: draw_sunstripstyle();break;                        //SunStripStyle
+      case 523: draw_sunstripstyle();break;                        //SunStripStyle
+      case 524: draw_sunstripstyle();break;                        //SunStripStyle
+      case 525: draw_sunstripstyle();break;                        //SunStripStyle
+      case 526: draw_sunstripstyle();break;                        //SunStripStyle
+      case 527: draw_sunstripstyle();break;                        //SunStripStyle
+      case 528: draw_sunstripstyle();break;                        //SunStripStyle
+      case 529: draw_sunstripstyle();break;                        //SunStripStyle
+      case 530: draw_sunstripstyle();break;                        //SunStripStyle
+      case 531: draw_sunstripstyle();break;                        //SunStripStyle
+      case 532: draw_sunstripstyle();break;                        //SunStripStyle
+      case 533: draw_sunstripstyle();break;                        //SunStripStyle
+
+      case 534: draw_sunstripstyle();break;                        //SunStripStyle
+      case 535: draw_sunstripstyle();break;                        //SunStripStyle
+      case 536: draw_sunstripstyle();break;                        //SunStripStyle
+      case 537: draw_sunstripstyle();break;                        //SunStripStyle
+      case 538: draw_sunstripstyle();break;                        //SunStripStyle
+      case 539: draw_sunstripstyle();break;                        //SunStripStyle
+      case 540: draw_sunstripstyle();break;                        //SunStripStyle
+      case 541: draw_sunstripstyle();break;                        //SunStripStyle
+      case 542: draw_sunstripstyle();break;                        //SunStripStyle
+      case 543: draw_sunstripstyle();break;                        //SunStripStyle
+      case 544: draw_sunstripstyle();break;                        //SunStripStyle
+      case 545: draw_sunstripstyle();break;                        //SunStripStyle
+      case 546: draw_sunstripstyle();break;                        //SunStripStyle
+      case 547: draw_sunstripstyle();break;                        //SunStripStyle
+      case 548: draw_sunstripstyle();break;                        //SunStripStyle
+
+      case 549: draw_sunstripstyle();break;                        //SunStripStyle
+      case 550: draw_sunstripstyle();break;                        //SunStripStyle
+      case 551: draw_sunstripstyle();break;                        //SunStripStyle
+      case 552: draw_sunstripstyle();break;                        //SunStripStyle
+      case 553: draw_sunstripstyle();break;                        //SunStripStyle
+      case 554: draw_sunstripstyle();break;                        //SunStripStyle
+
+      case 555: draw_sunstripstyle();break;                        //SunStripStyle
+      case 556: draw_sunstripstyle();break;                        //SunStripStyle
+      case 557: draw_sunstripstyle();break;                        //SunStripStyle
+      case 558: draw_sunstripstyle();break;                        //SunStripStyle
+      case 559: draw_sunstripstyle();break;                        //SunStripStyle
+      case 560: draw_sunstripstyle();break;                        //SunStripStyle
+
+      case 600: draw_dirtyAudioProcessing();break;                 //Audio Monitoring
+      case 601: draw_displayFFT_bass();break;                      //DisplayFFT - Bass
       
       default: break;                                              //Default animation : do nothing, the screen will not be updated
     }

@@ -1484,8 +1484,8 @@ float scannerLine_SpeedVar = 0.0014;
 
 // Steam machine
 float steamMachine_progress = 0;
-float steamMachine_steamSpeed = 4.1;
-float steamMachine_machineSpeed = 4.0;
+float steamMachine_steamSpeed = 4.25;
+float steamMachine_machineSpeed = 4.05;
 
 // Drop Curtain
 float dropcurtain_progress = 0;
@@ -1518,3 +1518,9 @@ int oneLinePerPanel_progress = 0;
 int oneLinePerPanel_speed = 4;
 ArrayList<SinglePanelLineWave> singlePanelLineWave_elements;
 boolean singlePanelLineWave_init =false;
+
+// SunStripStyle
+ArrayList<SunStripStyle> sunStripStyle_elements;
+boolean sunStripStyle_init = false;
+int sunStripStyle_lineWidth = DISPLAY_SCALING_FACTOR;
+int sunStripStyle_i = 0;

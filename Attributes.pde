@@ -633,8 +633,113 @@ void setLEDPanelAnimationAttributes() {
   animationAttributes = registerAttribute(animationAttributes, 462, "One Line Per Panel Short Wave Down"  , new String[] {"Geometric", "Simple", "Smooth", "B&W"}                                               );
   animationAttributes = registerAttribute(animationAttributes, 463, "One Line Per Panel Long Wave Down"   , new String[] {"Geometric", "Simple", "Smooth", "B&W"}                                               );
 
-  animationAttributes = registerAttribute(animationAttributes, 509, "Audio Monitoring"                    , new String[] {"Atmospheric", "Red", "Circles", "Rhythmic", "AudioInput"}                            );
-  animationAttributes = registerAttribute(animationAttributes, 510, "Display FFT - Bass"                  , new String[] {"Geometric", "Simple", "AudioInput"}                                                  );  
+  animationAttributes = registerAttribute(animationAttributes, 464, "SunStripStyle - Type0 - Fast - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 465, "SunStripStyle - Type0 - Slow - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 466, "SunStripStyle - Type0 - Fast - L-R"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 467, "SunStripStyle - Type0 - Slow - L-R"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 468, "SunStripStyle - Type0 - Fast - R-L"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 469, "SunStripStyle - Type0 - Slow - R-L"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 470, "SunStripStyle - Type0 - Fast - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 471, "SunStripStyle - Type0 - Slow - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 472, "SunStripStyle - Type0 - Fast - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 473, "SunStripStyle - Type0 - Slow - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 474, "SunStripStyle - Type1 - Fast - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 475, "SunStripStyle - Type1 - Slow - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 476, "SunStripStyle - Type1 - Fast - L-R"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 477, "SunStripStyle - Type1 - Slow - L-R"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 478, "SunStripStyle - Type1 - Fast - R-L"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 479, "SunStripStyle - Type1 - Slow - R-L"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 480, "SunStripStyle - Type1 - Fast - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 481, "SunStripStyle - Type1 - Slow - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 482, "SunStripStyle - Type1 - Fast - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 483, "SunStripStyle - Type1 - Slow - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+
+  animationAttributes = registerAttribute(animationAttributes, 484, "SunStripStyle - Type2 - Fast - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 485, "SunStripStyle - Type2 - Slow - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 486, "SunStripStyle - Type2 - Fast - U-D"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 487, "SunStripStyle - Type2 - Slow - U-D"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 488, "SunStripStyle - Type2 - Fast - D-U"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 489, "SunStripStyle - Type2 - Slow - D-U"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 490, "SunStripStyle - Type2 - Fast - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 491, "SunStripStyle - Type2 - Slow - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 492, "SunStripStyle - Type2 - Fast - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 493, "SunStripStyle - Type2 - Slow - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 494, "SunStripStyle - Type3 - Fast - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 495, "SunStripStyle - Type3 - Slow - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 496, "SunStripStyle - Type3 - Fast - U-D"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 497, "SunStripStyle - Type3 - Slow - U-D"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 498, "SunStripStyle - Type3 - Fast - D-U"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 499, "SunStripStyle - Type3 - Slow - D-U"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 500, "SunStripStyle - Type3 - Fast - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 501, "SunStripStyle - Type3 - Slow - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 502, "SunStripStyle - Type3 - Fast - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 503, "SunStripStyle - Type3 - Slow - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+
+  animationAttributes = registerAttribute(animationAttributes, 504, "SunStripStyle - Type4 - Fast - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 505, "SunStripStyle - Type4 - Medium - Sync",new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 506, "SunStripStyle - Type4 - Slow - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 507, "SunStripStyle - Type4 - Fast - L-R"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 508, "SunStripStyle - Type4 - Medium - L-R", new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 509, "SunStripStyle - Type4 - Slow - L-R"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 510, "SunStripStyle - Type4 - Fast - R-L"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 511, "SunStripStyle - Type4 - Medium - R-" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 512, "SunStripStyle - Type4 - Slow - R-L"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 513, "SunStripStyle - Type4 - Fast - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 514, "SunStripStyle - Type4 - Medium - C-S", new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 515, "SunStripStyle - Type4 - Slow - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 516, "SunStripStyle - Type4 - Fast - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 517, "SunStripStyle - Type4 - Medium - S-C", new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 518, "SunStripStyle - Type4 - Slow - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+
+  animationAttributes = registerAttribute(animationAttributes, 519, "SunStripStyle - Type5 - Fast - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 520, "SunStripStyle - Type5 - Medium - Sync",new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 521, "SunStripStyle - Type5 - Slow - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 522, "SunStripStyle - Type5 - Fast - L-R"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 523, "SunStripStyle - Type5 - Medium - L-R" ,new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 524, "SunStripStyle - Type5 - Slow - L-R"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 525, "SunStripStyle - Type5 - Fast - R-L"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 526, "SunStripStyle - Type5 - Medium - R-L" ,new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 527, "SunStripStyle - Type5 - Slow - R-L"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 528, "SunStripStyle - Type5 - Fast - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 529, "SunStripStyle - Type5 - Medium - C-S" ,new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 530, "SunStripStyle - Type5 - Slow - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 531, "SunStripStyle - Type5 - Fast - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 532, "SunStripStyle - Type5 - Medium - S-C" ,new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 533, "SunStripStyle - Type5 - Slow - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+
+  animationAttributes = registerAttribute(animationAttributes, 534, "SunStripStyle - Type6 - Fast - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 535, "SunStripStyle - Type6 - Medium - Sync",new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 536, "SunStripStyle - Type6 - Slow - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 537, "SunStripStyle - Type6 - Fast - L-R"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 538, "SunStripStyle - Type6 - Medium - L-R", new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 539, "SunStripStyle - Type6 - Slow - L-R"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 540, "SunStripStyle - Type6 - Fast - R-L"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 541, "SunStripStyle - Type6 - Medium - R-" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 542, "SunStripStyle - Type6 - Slow - R-L"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 543, "SunStripStyle - Type6 - Fast - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 544, "SunStripStyle - Type6 - Medium - C-S", new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 545, "SunStripStyle - Type6 - Slow - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 546, "SunStripStyle - Type6 - Fast - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 547, "SunStripStyle - Type6 - Medium - S-C", new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 548, "SunStripStyle - Type6 - Slow - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+
+  animationAttributes = registerAttribute(animationAttributes, 549, "SunStripStyle - Type7 - All - High"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 550, "SunStripStyle - Type7 - All - Med"   , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 551, "SunStripStyle - Type7 - All - Low"   , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 552, "SunStripStyle - Type7 - Single - High",new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 553, "SunStripStyle - Type7 - Single - Med", new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 554, "SunStripStyle - Type7 - Single - Low", new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+
+  animationAttributes = registerAttribute(animationAttributes, 555, "SunStripStyle - Type8 - Pos - Fast"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 556, "SunStripStyle - Type8 - Pos - Med"   , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 557, "SunStripStyle - Type8 - Pos - Slow"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 558, "SunStripStyle - Type8 - Neg - Fast"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 559, "SunStripStyle - Type8 - Neg - Med"   , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 560, "SunStripStyle - Type8 - Neg - Slow"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+
+
+  animationAttributes = registerAttribute(animationAttributes, 601, "Audio Monitoring"                    , new String[] {"Atmospheric", "Red", "Circles", "Rhythmic", "AudioInput"}                            );
+  animationAttributes = registerAttribute(animationAttributes, 602, "Display FFT - Bass"                  , new String[] {"Geometric", "Simple", "AudioInput"}                                                  );  
 }
 
 

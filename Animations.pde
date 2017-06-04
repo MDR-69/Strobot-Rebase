@@ -17934,6 +17934,7 @@ void init_oneLinePerPanel_longWaveDown() {
   singlePanelLineWave_elements.add(new SinglePanelLineWave(3, height/3, false));
   singlePanelLineWave_elements.add(new SinglePanelLineWave(4, height/3, false));  
 }
+
 class SinglePanelLineWave {
 
   int panelNb;    // Starting from 0
@@ -17970,5 +17971,280 @@ class SinglePanelLineWave {
       }      
     }
     progress += oneLinePerPanel_speed;
+  }
+}
+
+
+////////////////////////////////////////////////////////////
+// SunStripStyle : series of animations which look kinda like sunstrips
+
+void init_sunstripstyle() {
+  if (!sunStripStyle_init) {
+    sunStripStyle_elements = new ArrayList<SunStripStyle>();
+    sunStripStyle_init = true;
+  }
+}
+
+void draw_sunstripstyle() {
+  fill(0,200);
+  noStroke();
+  rect(0,0,width,height);
+  for (SunStripStyle sunStripElement: sunStripStyle_elements) {
+    sunStripElement.draw();
+  }
+
+  for (SunStripStyle sunStripElement: sunStripStyle_elements) {
+    if (sunStripElement.deathFlag) {
+      sunStripStyle_elements.remove(sunStripElement);
+      break;
+    }
+  }
+  
+}
+
+class SunStripStyle {
+
+  int animType;
+  int itemId;
+  float arg1;
+  float arg2;
+  float arg3;
+  float arg4;
+  float var1 = 0;   // Additional variables
+  float var2 = 0;   // Additional variables
+
+  boolean deathFlag = false;
+
+  SunStripStyle(int animType, int itemId, float arg1, float arg2, float arg3) {
+    this.animType = animType;
+    this.itemId = itemId;
+    this.arg1 = arg1;
+    this.arg2 = arg2;
+    this.arg3 = arg3;
+  }
+
+  SunStripStyle(int animType, int itemId, float arg1, float arg2, float arg3, float arg4) {
+    this.animType = animType;
+    this.itemId = itemId;
+    this.arg1 = arg1;
+    this.arg2 = arg2;
+    this.arg3 = arg3;
+    this.arg4 = arg4;
+  }
+
+  void draw() {
+    switch (animType) {
+      case 0: this.drawType0(); break;
+      case 1: this.drawType1(); break;
+      case 2: this.drawType2(); break;
+      case 3: this.drawType3(); break;
+      case 4: this.drawType4(); break;
+      case 5: this.drawType5(); break;
+      case 6: this.drawType6(); break;
+      case 7: this.drawType7(); break;
+      case 8: this.drawType8(); break;
+
+      default: break;
+    }
+  }
+
+  //arg1: progress ; arg2: progressSpeed ; arg3: N/A
+  void drawType0() {
+    noStroke();
+    if (this.arg1 > 0) {
+      fill(255 - this.arg1);
+      rect(this.getXcoordForItem(this.itemId), 0, sunStripStyle_lineWidth, height);
+    }
+    this.arg1 += this.arg2;
+    if (this.arg1 > 400) {
+      this.deathFlag = true;
+    }
+  }
+
+  //arg1: progress ; arg2: progressSpeed ; arg3: appearanceSpeed
+  void drawType1() {
+    noStroke();
+    if (this.arg1 > 0) {
+      fill(max(255,280 - this.arg1));
+      if (this.itemId % 2 == 0) {
+        //rect(this.getXcoordForItem(this.itemId), max(height - var1, 0), sunStripStyle_lineWidth, height);
+        rect(this.getXcoordForItem(this.itemId), height - var1, sunStripStyle_lineWidth, height*1.5);
+      }
+      else {
+        rect(this.getXcoordForItem(this.itemId), var1 - height*1.5, sunStripStyle_lineWidth, height*1.5);
+      }
+      this.var1 += this.arg3;
+    }
+    this.arg1 += this.arg2;
+    if (this.arg1 > 600) {
+      this.deathFlag = true;
+    }
+  }
+
+  void drawType2() {
+    noStroke();
+    if (this.arg1 > 0) {
+      fill(255 - this.arg1);
+      rect(0, this.getYcoordForItem(this.itemId), width, sunStripStyle_lineWidth);
+    }
+    this.arg1 += this.arg2;
+    if (this.arg1 > 600) {
+      this.deathFlag = true;
+    }
+  }
+
+  //arg1: progress ; arg2: progressSpeed ; arg3: appearanceSpeed
+  void drawType3() {
+    noStroke();
+    if (this.arg1 > 0) {
+      fill(min(255,280 - this.var2));
+      if (this.itemId % 2 == 0) {
+        rect(width - this.var1, this.getYcoordForItem(this.itemId), width*1.5, sunStripStyle_lineWidth);
+      }
+      else {
+        rect(this.var1 - width*1.5, this.getYcoordForItem(this.itemId), width*1.5, sunStripStyle_lineWidth);
+      }
+      this.var1 += this.arg3;
+      this.var2 += this.arg4;
+    }
+    this.arg1 += this.arg2;
+    if (this.arg1 > 900) {
+      this.deathFlag = true;
+    }
+  }
+
+  //arg1: progress ; arg2: progressSpeed ; arg3: appearanceSpeed
+  void drawType4() {
+    noStroke();
+    if (this.arg1 > 0) {
+      
+      if (this.itemId % 2 == 0) {
+        fill(min(255,255 - this.var2));
+        rect(this.getXcoordForItem(this.itemId), height - var1, sunStripStyle_lineWidth, height/4);
+      }
+      else {
+        fill(min(255,320 - this.var2));
+        rect(this.getXcoordForItem(this.itemId), var1 - height*1.5, sunStripStyle_lineWidth, height/4);
+      }
+      this.var1 += this.arg3;
+      this.var2 += this.arg4;
+    }
+    this.arg1 += this.arg2;
+    if (this.arg1 > 600) {
+      this.deathFlag = true;
+    }
+  }
+
+  //arg1: progress ; arg2: progressSpeed ; arg3: appearanceSpeed
+  void drawType5() {
+    noStroke();
+    if (this.arg1 > 0) {
+      fill(min(255,280 - this.var2));
+      if (this.var1 < height) {
+        rect(this.getXcoordForItem(this.itemId), height/2, sunStripStyle_lineWidth, this.var1);
+        rect(this.getXcoordForItem(this.itemId), height/2, sunStripStyle_lineWidth, -this.var1);
+      }
+      else {
+        rect(this.getXcoordForItem(this.itemId), height/2 + this.var1 - height, sunStripStyle_lineWidth, height);
+        rect(this.getXcoordForItem(this.itemId), height/2 - this.var1 + height, sunStripStyle_lineWidth, -height);
+        
+      }
+      this.var1 += this.arg3;
+      this.var2 += this.arg4;
+    }
+    this.arg1 += this.arg2;
+    if (this.arg1 > 600) {
+      this.deathFlag = true;
+    }
+  }
+
+  //arg1: progress ; arg2: progressSpeed ; arg3: appearanceSpeed
+  void drawType6() {
+    noStroke();
+    if (this.arg1 < 90) {
+      fill(160, this.arg1);
+    }
+    else {
+      fill(160, min(90, 380 - this.arg1));  
+    }
+    rect(this.getXcoordForItem(this.itemId), 0, sunStripStyle_lineWidth, height);
+    if (this.arg1 > 0) {
+      fill(max(255,280 - this.arg1));
+      println(int(height - var1) + " vs " + int(var1 - height));
+      if (this.itemId % 2 == 0) {
+        rect(this.getXcoordForItem(this.itemId), height - var1, sunStripStyle_lineWidth, height/8);
+      }
+      else {
+        rect(this.getXcoordForItem(this.itemId), var1 - height, sunStripStyle_lineWidth, height/8);
+      }
+      this.var1 += this.arg3;
+    }
+    this.arg1 += this.arg2;
+    if (this.arg1 > 600) {
+      this.deathFlag = true;
+    }
+  }
+
+  // Random - arg3: probability
+  void drawType7() {
+    noStroke();
+    if (this.arg1 >= 0) {
+      fill(min(255,280 - this.arg1));
+      if (random(1) < this.arg3)
+      rect(this.getXcoordForItem(this.itemId), DISPLAY_SCALING_FACTOR*int(random(height/DISPLAY_SCALING_FACTOR)), sunStripStyle_lineWidth, height/8);
+      this.var1 += this.arg3;
+    }
+    this.arg1 += this.arg2;
+    if (this.arg1 > 300) {
+      this.deathFlag = true;
+    }
+  }
+
+  // var2: current angle, arg2: sweep size (related to the angle)
+  void drawType8() {
+    noStroke();
+
+    fill(255, min(255,255 - this.var1));    
+    float topPoint = max(0-2*height, min(2*height, (this.getXcoordForItem(this.itemId) + sunStripStyle_lineWidth/2 - width/2)*tan(this.var2) ));
+    float lowPoint = max(0-2*height, min(2*height, (this.getXcoordForItem(this.itemId) + sunStripStyle_lineWidth/2 - width/2)*tan( max((this.var2-this.arg2),0)) ));;
+
+    if (this.itemId >= NUMBER_OF_PANELS) {
+      if (topPoint > lowPoint) {
+        rect(this.getXcoordForItem(this.itemId), height/2 + lowPoint, sunStripStyle_lineWidth, topPoint - lowPoint );  
+      }  
+      else {
+        rect(this.getXcoordForItem(this.itemId), height/2 + lowPoint, sunStripStyle_lineWidth, lowPoint - topPoint );  
+      }
+    }
+    else {
+      if (topPoint < lowPoint) {
+        rect(this.getXcoordForItem(this.itemId), height/2 + lowPoint, sunStripStyle_lineWidth, topPoint - lowPoint );  
+      }  
+      else {
+        rect(this.getXcoordForItem(this.itemId), height/2 + lowPoint, sunStripStyle_lineWidth, lowPoint - topPoint );  
+      }
+    }
+    
+    this.var2 += this.arg3;
+    this.var1 += this.arg4;
+
+    this.arg1 += this.arg2;
+    if (this.arg1 > 300) {
+      this.deathFlag = true;
+    }
+  }
+
+
+  int getXcoordForItem(int itemID) {
+    if (itemID % 2 == 0) {
+      return ( width * (itemID/2) ) / NUMBER_OF_PANELS;
+    }
+    else {
+      return ( width * ((itemID-1)/2) ) / NUMBER_OF_PANELS + width/NUMBER_OF_PANELS - DISPLAY_SCALING_FACTOR;
+    }
+  }
+
+  int getYcoordForItem(int itemID) {
+    return itemID * 3 * (height / (DISPLAY_SCALING_FACTOR * 4));
   }
 }
