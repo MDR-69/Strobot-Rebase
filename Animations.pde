@@ -398,32 +398,64 @@ void draw_shadows() {
 // Specific actions for the Vertical lines animation
 //////////////////////////////////////////
 
+class Carglass {
+
+  float progress = 0;
+  boolean type;
+  float speed;
+  float linelength;
+
+  Carglass(boolean type, float speed, float linelength) {
+    this.type = type;
+    this.speed = speed;
+    this.linelength = linelength;
+  }
+
+  void draw_carglass() {
+    if (type) {
+      pushMatrix();
+      translate(0,height/2);
+      rotate(-PI/2.0);
+      rotate(this.progress-(this.speed/3));
+      line(0,0,this.linelength,0);
+      rotate(this.speed/3);
+      line(0,0,this.linelength,0);
+      rotate(this.speed/3);
+      line(0,0,this.linelength,0);
+      popMatrix();
+    }
+    else {
+      pushMatrix();
+      translate(width,height/2);
+      rotate(PI/2.0);
+      rotate(this.progress-(this.speed/3));
+      line(0,0,this.linelength,0);
+      rotate(this.speed/3);
+      line(0,0,this.linelength,0);
+      rotate(this.speed/3);
+      line(0,0,this.linelength,0);
+      popMatrix();
+    }
+    this.progress += this.speed;
+  }
+}
+
 void draw_carglass() {
   noStroke();
   fill(0,15);
   rect(0,0,width,height);
   stroke(255);
-  pushMatrix();
-  translate(0,height/2);
-  rotate(carglass_progress-(carglass_speed/3));
-  line(0,0,carglass_linelength,0);
-  rotate(carglass_speed/3);
-  line(0,0,carglass_linelength,0);
-  rotate(carglass_speed/3);
-  line(0,0,carglass_linelength,0);
-  popMatrix();
-  
-  pushMatrix();
-  translate(width,height/2);
-  rotate(carglass_progress-(carglass_speed/3));
-  line(0,0,carglass_linelength,0);
-  rotate(carglass_speed/3);
-  line(0,0,carglass_linelength,0);
-  rotate(carglass_speed/3);
-  line(0,0,carglass_linelength,0);
-  popMatrix();
-  
-  carglass_progress += carglass_speed;
+
+  for (Carglass carglass_elem: carglass_array) {
+    carglass_elem.draw_carglass();
+  }
+
+  for (Carglass carglass_elem: carglass_array) {
+    if (carglass_elem.progress > 1.5*PI) {
+      carglass_array.remove(carglass_elem);
+      break;
+    }
+  }  
 }
 
 //////////////////////////////////////////
@@ -5872,11 +5904,11 @@ void draw_hypnopendulum() {
     hypnopendulum_p.render();
   }
   
-  if (hypnopendulum_fadein < 255) {
-    fill(0, 255 - hypnopendulum_fadein);
-    rect(0,0,width,height);
-    hypnopendulum_fadein += hypnopendulum_fadeinSpeed;
-  }
+  //if (hypnopendulum_fadein < 255) {
+  fill(0, 255 - min(hypnopendulum_fadein, 127) );
+  rect(0,0,width,height);
+  hypnopendulum_fadein += hypnopendulum_fadeinSpeed;
+  //}
 }
 
 
@@ -11815,6 +11847,7 @@ class BloodSkiParticleManager {
   //int [] palette = {0x007e0000, 0x00be0000, 0x00e1d5c1, 0x00f5ecd7, 0x00fdfdfd};
   // Blue version
   int [] palette = {0x0000347e, 0x00004fbe, 0x00c8c1e1, 0x00e0d7f5, 0x00fdfdfd};
+  //int [] palette = {0x007C6700, 0x00BC9D00, 0x00E0DBC0, 0x00F5F0D7, 0x00fdfdfd};
 
   PVector O;
   int bloodSki_minRad, bloodSki_maxRad, sqbloodSki_maxRad;
@@ -12271,7 +12304,7 @@ void draw_rednoise_circle() {
   stroke(255);
   noFill();
   ellipse(width/2,height/2, rednoise_circlerad, rednoise_circlerad);
-  rednoise_circlerad += 8;
+  rednoise_circlerad += 12;
 }
 
 void draw_rednoise_trianglestrobo() {
@@ -13304,10 +13337,10 @@ color lightfusion_RGB (float x, float y, float lightfusion_time, int u, int v) {
   float d = d1*d2*d3;
   float d_bis = d1_bis*d2*d3_bis;
   if (d < d_bis) {
-    return color(luma/d, luma/d - lightfusion_Y, luma/d - lightfusion_Y);
+    return color(luma/d - lightfusion_Y, luma/d - lightfusion_Y, luma/d);
   }
   else {
-    return color(luma/d_bis, luma/d_bis - lightfusion_Y, luma/d_bis - lightfusion_Y); 
+    return color(luma/d_bis - lightfusion_Y, luma/d_bis - lightfusion_Y, luma/d_bis); 
   }
 }
 
@@ -13595,20 +13628,29 @@ class HypnoTriangle {
   float position;
   float growthRate = 1.13;
   boolean flash = true;
+  boolean white = false;
   int instance;
   
   HypnoTriangle(int instancecounter) {
-    size = 4;
-    position = 2;
-    instance = instancecounter;
-    flash = true;
+    this.size = 4;
+    this.position = 2;
+    this.instance = instancecounter;
+    this.flash = true;
   }
 
   HypnoTriangle(int instancecounter, boolean strobe) {
-    size = 4;
-    position = 2;
-    instance = instancecounter;
-    flash = strobe;
+    this.size = 4;
+    this.position = 2;
+    this.instance = instancecounter;
+    this.flash = strobe;
+  }
+
+  HypnoTriangle(int instancecounter, boolean strobe, boolean white) {
+    this.size = 4;
+    this.position = 2;
+    this.instance = instancecounter;
+    this.flash = strobe;
+    this.white = white;
   }
   
   void draw_hypnotriangle() {
@@ -13616,14 +13658,25 @@ class HypnoTriangle {
     if (instance % 2 == 0) {
       if (flash) {
         if (frameCount % 4 == 0 || frameCount % 4 == 1)  {
-          fill(255,0,0);
+          if (white) {
+            fill(255,255,255);
+          }
+          else {
+            fill(255,0,0);
+          }
+          
         }
         else {
           fill(0);
         }
       }
       else {
-        fill(255,0,0);
+        if (white) {
+          fill(255,255,255);
+        }
+        else {
+          fill(255,0,0); 
+        }
       }
     }
     else {
@@ -14135,12 +14188,37 @@ class TrigoShapeParticle {
 
 void draw_nonotak_1() {
   if (nonotak_1_color == 255) {
-    stroke(255);
-    noFill();
-    strokeWeight(7);
-    for (int i = 0; i<width/4; i++) {
-      line((i*4*4 + nonotak_1_x - 2) % width, 0, (i*4*4 + nonotak_1_x - 2) % width, height);
+    // stroke(255);
+    // noFill();
+    // strokeWeight(7);
+    // for (int i = 0; i<width/4; i++) {
+    //   line((i*4*4 + nonotak_1_x - 2) % width, 0, (i*4*4 + nonotak_1_x - 2) % width, height);
+    // }
+
+    for (int i=0; i<NUMBER_OF_PANELS*2; i++) {
+      fill(255);
+      int coordX = 0;
+      if (i % 2 == 0) {
+        coordX = ( width * (i/2) ) / NUMBER_OF_PANELS;
+      }
+      else {
+        coordX = ( width * ((i-1)/2) ) / NUMBER_OF_PANELS + width/NUMBER_OF_PANELS - DISPLAY_SCALING_FACTOR;
+      }
+
+      if (nonotak_1_cpt % 2 == 0) {
+        if (i == 0 || i == 1 || i == 4 || i == 5 || i == 8 || i == 9) {
+          rect(coordX, 0, sunStripStyle_lineWidth, height);
+        }
+      }
+      else {
+        if (i == 2 || i == 3 || i == 6 || i == 7) {
+          rect(coordX, 0, sunStripStyle_lineWidth, height);
+        }
+      }
+      
+
     }
+
     
   }
   else {
@@ -16047,28 +16125,28 @@ class Crecy {
       stroke(crecy_red, crecy_green, crecy_blue);
     }
     strokeWeight(4);
-    pushMatrix();
-    translate(0,2);
-    if (width/NUMBER_OF_PANELS - progress*8 >= 0) {
-      if (direction == 0 || direction == 1) {
-        line(width/NUMBER_OF_PANELS - 2, 0, width/NUMBER_OF_PANELS - 2 - progress*8, 0);
-      }
-      else {
-        line((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2, 0, (NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 + progress*8, 0);
-      }
-    }
-    else if (2*width/NUMBER_OF_PANELS - progress*8 >= 0) {
-      if (direction == 0 || direction == 1) {
-        line(0, 0, 2*width/NUMBER_OF_PANELS - progress*8 - 2, 0);
-      }
-      else {
-        line(width, 0, (NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS + progress*8 + 2, 0);
-      }
-    }
-    popMatrix();
+    // pushMatrix();
+    // translate(0,2);
+    // if (width/NUMBER_OF_PANELS - progress*8 >= 0) {
+    //   if (direction == 0 || direction == 1) {
+    //     line(width/NUMBER_OF_PANELS - 2 + width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS - 2 - progress*8 + width/NUMBER_OF_PANELS, 0);
+    //   }
+    //   else {
+    //     line((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 - width/NUMBER_OF_PANELS, 0, (NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 + progress*8 - width/NUMBER_OF_PANELS, 0);
+    //   }
+    // }
+    // else if (2*width/NUMBER_OF_PANELS - progress*8 >= 0) {
+    //   if (direction == 0 || direction == 1) {
+    //     line(width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS + 2*width/NUMBER_OF_PANELS - progress*8 - 2, 0);
+    //   }
+    //   else {
+    //     line(width - width/NUMBER_OF_PANELS, 0, (NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS + progress*8 + 2  - width/NUMBER_OF_PANELS, 0);
+    //   }
+    // }
+    // popMatrix();
     
     if (NUMBER_OF_PANELS >=5) {
-      line(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS + 2, height - progress*8, ((NUMBER_OF_PANELS-1)/2 + 1)*width/NUMBER_OF_PANELS - 2, height - progress*8);
+      line(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS + 2 + width/NUMBER_OF_PANELS, height - progress*8, ((NUMBER_OF_PANELS-1)/2 + 1)*width/NUMBER_OF_PANELS - 2 + width/NUMBER_OF_PANELS, height - progress*8);
     }
     progress += 1;
   }
@@ -16084,28 +16162,28 @@ class Crecy {
       stroke(crecy_red, crecy_green, crecy_blue);
     }
     strokeWeight(4);
-    pushMatrix();
-    translate(0,2+height/5);
-    if (width/NUMBER_OF_PANELS - progress*8 >= 0) {
-      if (direction == 0 || direction == 1) {
-        line(width/NUMBER_OF_PANELS - 2, 0, width/NUMBER_OF_PANELS - 2 - progress*8, 0);
-      }
-      else {
-        line((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2, 0, (NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 + progress*8, 0);
-      }
-    }
-    else if (2*width/NUMBER_OF_PANELS - progress*8 >= 0) {
-      if (direction == 0 || direction == 1) {
-        line(0, 0, 2*width/NUMBER_OF_PANELS - progress*8 - 2, 0);
-      }
-      else {
-        line(width, 0, (NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS + progress*8 + 2, 0);
-      }
-    }
-    popMatrix();
+    // pushMatrix();
+    // translate(0,2+height/5);
+    // if (width/NUMBER_OF_PANELS - progress*8 >= 0) {
+    //   if (direction == 0 || direction == 1) {
+    //     line(width/NUMBER_OF_PANELS - 2 + width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS - 2 - progress*8 + width/NUMBER_OF_PANELS, 0);
+    //   }
+    //   else {
+    //     line((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 - width/NUMBER_OF_PANELS, 0, (NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 + progress*8 - width/NUMBER_OF_PANELS, 0);
+    //   }
+    // }
+    // else if (2*width/NUMBER_OF_PANELS - progress*8 >= 0) {
+    //   if (direction == 0 || direction == 1) {
+    //     line(width/NUMBER_OF_PANELS, 0, 2*width/NUMBER_OF_PANELS - progress*8 - 2 + width/NUMBER_OF_PANELS, 0);
+    //   }
+    //   else {
+    //     line(width - width/NUMBER_OF_PANELS, 0, (NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS + progress*8 + 2 - width/NUMBER_OF_PANELS, 0);
+    //   }
+    // }
+    // popMatrix();
     
     if (NUMBER_OF_PANELS >=5) {
-      line(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS + 2, height - progress*8, ((NUMBER_OF_PANELS-1)/2 + 1)*width/NUMBER_OF_PANELS - 2, height - progress*8);
+      line(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS + 2 + width/NUMBER_OF_PANELS, height - progress*8, ((NUMBER_OF_PANELS-1)/2 + 1)*width/NUMBER_OF_PANELS - 2 + width/NUMBER_OF_PANELS, height - progress*8);
     }
     progress += 1;
   }
@@ -16121,28 +16199,28 @@ class Crecy {
       stroke(crecy_red, crecy_green, crecy_blue);
     }
     strokeWeight(4);
-    pushMatrix();
-    translate(0,2+2*height/5);
-    if (width/NUMBER_OF_PANELS - progress*8 >= 0) {
-      if (direction == 0 || direction == 1) {
-        line(width/NUMBER_OF_PANELS - 2, 0, width/NUMBER_OF_PANELS - 2 - progress*8, 0);
-      }
-      else {
-        line((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2, 0, (NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 + progress*8, 0);
-      }
-    }
-    else if (2*width/NUMBER_OF_PANELS - progress*8 >= 0) {
-      if (direction == 0 || direction == 1) {
-        line(0, 0, 2*width/NUMBER_OF_PANELS - progress*8 - 2, 0);
-      }
-      else {
-        line(width, 0, (NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS + progress*8 + 2, 0);
-      }
-    }
-    popMatrix();
+    // pushMatrix();
+    // translate(0,2+2*height/5);
+    // if (width/NUMBER_OF_PANELS - progress*8 >= 0) {
+    //   if (direction == 0 || direction == 1) {
+    //     line(width/NUMBER_OF_PANELS - 2 + width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS - 2 - progress*8 + width/NUMBER_OF_PANELS, 0);
+    //   }
+    //   else {
+    //     line((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 - width/NUMBER_OF_PANELS, 0, (NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 + progress*8 - width/NUMBER_OF_PANELS, 0);
+    //   }
+    // }
+    // else if (2*width/NUMBER_OF_PANELS - progress*8 >= 0) {
+    //   if (direction == 0 || direction == 1) {
+    //     line(width/NUMBER_OF_PANELS, 0, 2*width/NUMBER_OF_PANELS - progress*8 - 2 + width/NUMBER_OF_PANELS, 0);
+    //   }
+    //   else {
+    //     line(width - width/NUMBER_OF_PANELS, 0, (NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS + progress*8 + 2 - width/NUMBER_OF_PANELS, 0);
+    //   }
+    // }
+    // popMatrix();
     
     if (NUMBER_OF_PANELS >=5) {
-      line(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS + 2, height - progress*8, ((NUMBER_OF_PANELS-1)/2 + 1)*width/NUMBER_OF_PANELS - 2, height - progress*8);
+      line(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS + 2 + width/NUMBER_OF_PANELS, height - progress*8, ((NUMBER_OF_PANELS-1)/2 + 1)*width/NUMBER_OF_PANELS - 2 + width/NUMBER_OF_PANELS, height - progress*8);
     }
     progress += 1;
   }
@@ -16158,28 +16236,28 @@ class Crecy {
       stroke(crecy_red, crecy_green, crecy_blue);
     }
     strokeWeight(4);
-    pushMatrix();
-    translate(0,2+3*height/5);
-    if (width/NUMBER_OF_PANELS - progress*8 >= 0) {
-      if (direction == 0 || direction == 1) {
-        line(width/NUMBER_OF_PANELS - 2, 0, width/NUMBER_OF_PANELS - 2 - progress*8, 0);
-      }
-      else {
-        line((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2, 0, (NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 + progress*8, 0);
-      }
-    }
-    else if (2*width/NUMBER_OF_PANELS - progress*8 >= 0) {
-      if (direction == 0 || direction == 1) {
-        line(0, 0, 2*width/NUMBER_OF_PANELS - progress*8 - 2, 0);
-      }
-      else {
-        line(width, 0, (NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS + progress*8 + 2, 0);
-      }
-    }
-    popMatrix();
+    // pushMatrix();
+    // translate(0,2+3*height/5);
+    // if (width/NUMBER_OF_PANELS - progress*8 >= 0) {
+    //   if (direction == 0 || direction == 1) {
+    //     line(width/NUMBER_OF_PANELS - 2 + width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS - 2 - progress*8 + width/NUMBER_OF_PANELS, 0);
+    //   }
+    //   else {
+    //     line((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 - width/NUMBER_OF_PANELS, 0, (NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 + progress*8 - width/NUMBER_OF_PANELS, 0);
+    //   }
+    // }
+    // else if (2*width/NUMBER_OF_PANELS - progress*8 >= 0) {
+    //   if (direction == 0 || direction == 1) {
+    //     line(width/NUMBER_OF_PANELS, 0, 2*width/NUMBER_OF_PANELS - progress*8 - 2 + width/NUMBER_OF_PANELS, 0);
+    //   }
+    //   else {
+    //     line(width - width/NUMBER_OF_PANELS, 0, (NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS + progress*8 + 2 - width/NUMBER_OF_PANELS, 0);
+    //   }
+    // }
+    // popMatrix();
     
     if (NUMBER_OF_PANELS >=5) {
-      line(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS + 2, height - progress*8, ((NUMBER_OF_PANELS-1)/2 + 1)*width/NUMBER_OF_PANELS - 2, height - progress*8);
+      line(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS + 2 + width/NUMBER_OF_PANELS, height - progress*8, ((NUMBER_OF_PANELS-1)/2 + 1)*width/NUMBER_OF_PANELS - 2 + width/NUMBER_OF_PANELS, height - progress*8);
     }
     progress += 1;
   }  
@@ -16196,28 +16274,28 @@ class Crecy {
       stroke(crecy_red, crecy_green, crecy_blue);
     }
     strokeWeight(4);
-    pushMatrix();
-    translate(0,2+4*height/5);
-    if (width/NUMBER_OF_PANELS - progress*8 >= 0) {
-      if (direction == 0 || direction == 1) {
-        line(width/NUMBER_OF_PANELS - 2, 0, width/NUMBER_OF_PANELS - 2 - progress*8, 0);
-      }
-      else {
-        line((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2, 0, (NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 + progress*8, 0);
-      }
-    }
-    else if (2*width/NUMBER_OF_PANELS - progress*8 >= 0) {
-      if (direction == 0 || direction == 1) {
-        line(0, 0, 2*width/NUMBER_OF_PANELS - progress*8 - 2, 0);
-      }
-      else {
-        line(width, 0, (NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS + progress*8 + 2, 0);
-      }
-    }
-    popMatrix();
+    // pushMatrix();
+    // translate(0,2+4*height/5);
+    // if (width/NUMBER_OF_PANELS - progress*8 >= 0) {
+    //   if (direction == 0 || direction == 1) {
+    //     line(width/NUMBER_OF_PANELS - 2 + width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS - 2 - progress*8 - width/NUMBER_OF_PANELS, 0);
+    //   }
+    //   else {
+    //     line((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 - width/NUMBER_OF_PANELS, 0, (NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 + progress*8 - width/NUMBER_OF_PANELS, 0);
+    //   }
+    // }
+    // else if (2*width/NUMBER_OF_PANELS - progress*8 >= 0) {
+    //   if (direction == 0 || direction == 1) {
+    //     line(width/NUMBER_OF_PANELS, 0, 2*width/NUMBER_OF_PANELS - progress*8 - 2 + width/NUMBER_OF_PANELS, 0);
+    //   }
+    //   else {
+    //     line(width - width/NUMBER_OF_PANELS, 0, (NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS + progress*8 + 2 - width/NUMBER_OF_PANELS, 0);
+    //   }
+    // }
+    // popMatrix();
     
     if (NUMBER_OF_PANELS >=5) {
-      line(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS + 2, height - progress*8, ((NUMBER_OF_PANELS-1)/2 + 1)*width/NUMBER_OF_PANELS - 2, height - progress*8);
+      line(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS + 2 + width/NUMBER_OF_PANELS, height - progress*8, ((NUMBER_OF_PANELS-1)/2 + 1)*width/NUMBER_OF_PANELS - 2 + width/NUMBER_OF_PANELS, height - progress*8);
     }
     progress += 1;
   }
@@ -16233,28 +16311,28 @@ class Crecy {
       stroke(crecy_red, crecy_green, crecy_blue);
     }
     strokeWeight(4);
-    pushMatrix();
-    translate(0,-2+height);
-    if (width/NUMBER_OF_PANELS - progress*8 >= 0) {
-      if (direction == 0 || direction == 1) {
-        line(width/NUMBER_OF_PANELS - 2, 0, width/NUMBER_OF_PANELS - 2 - progress*8, 0);
-      }
-      else {
-        line((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2, 0, (NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 + progress*8, 0);
-      }
-    }
-    else if (2*width/NUMBER_OF_PANELS - progress*8 >= 0) {
-      if (direction == 0 || direction == 1) {
-        line(0, 0, 2*width/NUMBER_OF_PANELS - progress*8 - 2, 0);
-      }
-      else {
-        line(width, 0, (NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS + progress*8 + 2, 0);
-      }
-    }
-    popMatrix();
+    // pushMatrix();
+    // translate(0,-2+height);
+    // if (width/NUMBER_OF_PANELS - progress*8 >= 0) {
+    //   if (direction == 0 || direction == 1) {
+    //     line(width/NUMBER_OF_PANELS - 2 + width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS - 2 - progress*8 + width/NUMBER_OF_PANELS, 0);
+    //   }
+    //   else {
+    //     line((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 - width/NUMBER_OF_PANELS, 0, (NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS + 2 + progress*8 - width/NUMBER_OF_PANELS, 0);
+    //   }
+    // }
+    // else if (2*width/NUMBER_OF_PANELS - progress*8 >= 0) {
+    //   if (direction == 0 || direction == 1) {
+    //     line(width/NUMBER_OF_PANELS, 0, 2*width/NUMBER_OF_PANELS - progress*8 - 2 + width/NUMBER_OF_PANELS, 0);
+    //   }
+    //   else {
+    //     line(width - width/NUMBER_OF_PANELS, 0, (NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS + progress*8 + 2 - width/NUMBER_OF_PANELS, 0);
+    //   }
+    // }
+    // popMatrix();
     
     if (NUMBER_OF_PANELS >=5) {
-      line(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS + 2, height - progress*8, ((NUMBER_OF_PANELS-1)/2 + 1)*width/NUMBER_OF_PANELS - 2, height - progress*8);
+      line(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS + 2 + width/NUMBER_OF_PANELS, height - progress*8, ((NUMBER_OF_PANELS-1)/2 + 1)*width/NUMBER_OF_PANELS - 2 + width/NUMBER_OF_PANELS, height - progress*8);
     }
     progress += 1;
   }
@@ -16448,10 +16526,10 @@ class Snake {
     pushStyle();
     strokeWeight(snake_weight);
     if (red == true) {
-      stroke(255,255*noise(0.02*frameCount),255*noise(0.02*frameCount));
+      stroke(snake_intensity*255,snake_intensity*255*noise(0.02*frameCount),snake_intensity*255*noise(0.02*frameCount));
     }
     else {
-      stroke(255*noise(0.02*frameCount),255*noise(0.02*frameCount),255);
+      stroke(snake_intensity*255*noise(0.02*frameCount),snake_intensity*255*noise(0.02*frameCount),snake_intensity*255);
     }
     line(this.prevX,this.prevY,this.x,this.y);
     popStyle();
@@ -17890,7 +17968,6 @@ void draw_oneLinePerPanelWave() {
   fill(0);
   rect(0,0,width,height);
   fill(255);
-  println(singlePanelLineWave_elements.size());
   for (SinglePanelLineWave line: singlePanelLineWave_elements) {
     line.drawSinglePanelLineWave();
   }
@@ -17951,8 +18028,6 @@ class SinglePanelLineWave {
 
   void drawSinglePanelLineWave() {
     fill(255);
-    // rect(4,4,34,23);
-    // println("-> " + panelNb + " --" + str(height - progress) + " // " + waveSize + " with " + str(panelNb*(width/NUMBER_OF_PANELS) + (width/NUMBER_OF_PANELS)/2 - 4));
 
     if (waveUp) {
       if (panelNb <= NUMBER_OF_PANELS/2) {
@@ -17983,10 +18058,11 @@ void init_sunstripstyle() {
     sunStripStyle_elements = new ArrayList<SunStripStyle>();
     sunStripStyle_init = true;
   }
+  sunStripStyle_fadeOut = 200;
 }
 
 void draw_sunstripstyle() {
-  fill(0,200);
+  fill(0,sunStripStyle_fadeOut);
   noStroke();
   rect(0,0,width,height);
   for (SunStripStyle sunStripElement: sunStripStyle_elements) {
@@ -18010,6 +18086,7 @@ class SunStripStyle {
   float arg2;
   float arg3;
   float arg4;
+  float arg5;
   float var1 = 0;   // Additional variables
   float var2 = 0;   // Additional variables
 
@@ -18032,6 +18109,16 @@ class SunStripStyle {
     this.arg4 = arg4;
   }
 
+  SunStripStyle(int animType, int itemId, float arg1, float arg2, float arg3, float arg4, float arg5) {
+    this.animType = animType;
+    this.itemId = itemId;
+    this.arg1 = arg1;
+    this.arg2 = arg2;
+    this.arg3 = arg3;
+    this.arg4 = arg4;
+    this.arg5 = arg5;
+  }
+
   void draw() {
     switch (animType) {
       case 0: this.drawType0(); break;
@@ -18043,7 +18130,7 @@ class SunStripStyle {
       case 6: this.drawType6(); break;
       case 7: this.drawType7(); break;
       case 8: this.drawType8(); break;
-
+      case 9: this.drawType9(); break;
       default: break;
     }
   }
@@ -18170,7 +18257,6 @@ class SunStripStyle {
     rect(this.getXcoordForItem(this.itemId), 0, sunStripStyle_lineWidth, height);
     if (this.arg1 > 0) {
       fill(max(255,280 - this.arg1));
-      println(int(height - var1) + " vs " + int(var1 - height));
       if (this.itemId % 2 == 0) {
         rect(this.getXcoordForItem(this.itemId), height - var1, sunStripStyle_lineWidth, height/8);
       }
@@ -18204,9 +18290,13 @@ class SunStripStyle {
   void drawType8() {
     noStroke();
 
-    fill(255, min(255,255 - this.var1));    
+    fill(255, min(255,255 - this.var1));
     float topPoint = max(0-2*height, min(2*height, (this.getXcoordForItem(this.itemId) + sunStripStyle_lineWidth/2 - width/2)*tan(this.var2) ));
     float lowPoint = max(0-2*height, min(2*height, (this.getXcoordForItem(this.itemId) + sunStripStyle_lineWidth/2 - width/2)*tan( max((this.var2-this.arg2),0)) ));;
+    if (this.arg3 < 0) {
+      topPoint = -topPoint;
+      lowPoint = -lowPoint;
+    }    
 
     if (this.itemId >= NUMBER_OF_PANELS) {
       if (topPoint > lowPoint) {
@@ -18225,15 +18315,80 @@ class SunStripStyle {
       }
     }
     
-    this.var2 += this.arg3;
+    this.var2 += abs(this.arg3);
     this.var1 += this.arg4;
 
     this.arg1 += this.arg2;
-    if (this.arg1 > 300) {
+    if (this.var1 > 255) {
       this.deathFlag = true;
     }
   }
 
+
+  //itemId: startingpoint, arg1: color, arg2: speed, arg3: lifetime, arg4: direction
+  void drawType9() {
+    noStroke();
+    float lifePointsBeforeDeath = this.arg3;
+    if (this.arg1 == 0.0) {
+      fill(0,200,100,  min(255,lifePointsBeforeDeath - this.var2));
+    } 
+    else if (this.arg1 == 1.0) {
+      fill(255,0,0, min(255,lifePointsBeforeDeath - this.var2));
+    }
+    else if (this.arg1 == 2.0) {
+      fill(0,0,255, min(255,lifePointsBeforeDeath - this.var2));
+    }
+    else if (this.arg1 == 3.0) {
+      fill(0,255,255, min(255,lifePointsBeforeDeath - this.var2));
+    }
+    else if (this.arg1 == 4.0) {
+      fill(0,255,255, min(255,lifePointsBeforeDeath - this.var2));
+    }
+    else if (this.arg1 == 5.0) {
+      fill(255,170,0, min(255,lifePointsBeforeDeath - this.var2));
+    }
+    else {
+      fill(196,57,10, min(255,lifePointsBeforeDeath - this.var2));
+    }
+
+    float stage1_limit = 0;
+    //int 
+    if (this.arg4 == 0.0) {
+      stage1_limit = this.arg5;
+    }
+    if (this.arg4 == 1.0) {
+      stage1_limit = this.arg5;
+    }
+    if (this.arg4 == 2.0) {
+      stage1_limit = width - this.getXcoordForItem(this.itemId);
+    }
+    else {
+      stage1_limit = this.getXcoordForItem(this.itemId);
+    }
+
+    if (this.var1 < stage1_limit) {
+      if (this.arg4 == 0.0) {
+        rect(this.getXcoordForItem(this.itemId), this.arg5 + this.var1, sunStripStyle_lineWidth, sunStripStyle_lineWidth);
+      }
+      else if (this.arg4 == 1.0) {
+        rect(this.getXcoordForItem(this.itemId), this.arg5 - this.var1, sunStripStyle_lineWidth, sunStripStyle_lineWidth);
+      }
+      else if (this.arg4 == 2.0) {
+        rect(this.getXcoordForItem(this.itemId) + this.var1, this.arg5, sunStripStyle_lineWidth, sunStripStyle_lineWidth);
+      }
+      else if (this.arg4 == 3.0) {
+        rect(this.getXcoordForItem(this.itemId) - this.var1, this.arg5, sunStripStyle_lineWidth, sunStripStyle_lineWidth);
+      }
+    }
+    //else {
+
+    //}
+
+    this.var1 += this.arg2;
+    if (this.var1 > 600) {
+      this.deathFlag = true;
+    }    
+  }
 
   int getXcoordForItem(int itemID) {
     if (itemID % 2 == 0) {
@@ -18246,5 +18401,370 @@ class SunStripStyle {
 
   int getYcoordForItem(int itemID) {
     return itemID * 3 * (height / (DISPLAY_SCALING_FACTOR * 4));
+  }
+}
+
+
+////////////////////////////
+
+void draw_ctoOut() {
+  fill(255,224,144);
+  rect(0,0,width, height);
+}
+
+void draw_ctoFlash() {
+  fill(255,224,144);
+  rect(0,0,width, height);
+
+}
+
+////////////////////////////
+
+void draw_bouncingColorBalls(){
+  fill (0, 40);
+  rect (0, 0, width, height);
+
+  for (BouncingColorBall ball: bouncingColorBall_array) {
+    ball.update (bouncingColorBall_mode);
+    ball.flock (bouncingColorBall_array);
+    ball.move();
+    ball.checkEdges();
+    ball.display();
+  }
+}
+
+class BouncingColorBall
+{
+  PVector direction;
+  PVector location;
+
+  float speed;
+  float SPEED;
+
+  float noiseScale;
+  float noiseStrength;
+  float forceStrength;
+
+  float ellipseSize;
+  
+  color c;
+
+
+  BouncingColorBall() {
+    setRandomValues();
+  }
+
+  BouncingColorBall(float x, float y) {
+    setRandomValues ();
+  }
+
+  void setRandomValues () {
+    location = new PVector (random (width), random (height));
+    ellipseSize = random (4, 15);
+
+    float angle = random (TWO_PI);
+    direction = new PVector (cos (angle), sin (angle));
+
+    speed = random (3, 5);
+    SPEED = speed;
+    noiseScale = 80;
+    noiseStrength = 1;
+    forceStrength = random (0.1, 0.2);
+    
+    setRandomColor();
+  }
+
+  void setRandomColor() {
+    int colorDice = (int) random (4);
+
+    if (colorDice == 0) c = #ffedbc;
+    else if (colorDice == 1) c = #A75265;
+    else if (colorDice == 2) c = #ec7263;
+    else c = #febe7e;
+  }
+
+  void update () {
+    update (0);
+  }
+
+  void update (int mode){
+    if (mode == 0) // bouncing ball
+    {
+      speed = SPEED * 0.7;
+      move();
+      checkEdgesAndBounce();
+    }
+    else if (mode == 1) // noise
+    {
+      speed = SPEED * 0.7;
+      addNoise ();
+      move();
+      checkEdgesAndRelocate ();
+    }
+    else if (mode == 2) // steer
+    {
+      steer(width*noise(frameCount*0.2), height/2);
+      //steer (mouseX, mouseY);
+      move();
+    }
+    else if (mode == 3) // seek
+    {
+      speed = SPEED * 0.7;
+      seek (mouseX, mouseY);
+      move();
+    }
+    else // radial
+    {
+      speed = SPEED * 0.7;
+      addRadial ();
+      move();
+      checkEdges();
+    }
+
+    display();
+  }
+
+  void flock (ArrayList <BouncingColorBall> balls){
+
+    PVector other;
+    float otherSize ;
+
+    PVector cohesionSum = new PVector (0, 0);
+    float cohesionCount = 0;
+
+    PVector seperationSum = new PVector (0, 0);
+    float seperationCount = 0;
+
+    PVector alignSum = new PVector (0, 0);
+    float speedSum = 0;
+    float alignCount = 0;
+
+    for (int i = 0; i < balls.size(); i++)
+    {
+      other = balls.get(i).location;
+      otherSize = balls.get(i).ellipseSize;
+
+      float distance = PVector.dist (other, location);
+
+
+      if (distance > 0 && distance <70)
+      {
+        cohesionSum.add (other);
+        cohesionCount++;
+
+        alignSum.add (balls.get(i).direction);
+        speedSum += balls.get(i).speed;
+        alignCount++;
+      }
+
+      if (distance > 0 && distance < (ellipseSize+otherSize)*1.2)
+      {
+        float angle = atan2 (location.y-other.y, location.x-other.x);
+
+        seperationSum.add (cos (angle), sin (angle), 0);
+        seperationCount++;
+      }
+
+      if (alignCount > 8 && seperationCount > 12) break;
+    }
+
+    if (cohesionCount > 0)
+    {
+      cohesionSum.div (cohesionCount);
+      cohesion (cohesionSum, 1);
+    }
+
+    if (alignCount > 0)
+    {
+      speedSum /= alignCount;
+      alignSum.div (alignCount);
+      align (alignSum, speedSum, 1.3);
+    }
+
+    if (seperationCount > 0)
+    {
+      seperationSum.div (seperationCount);
+      seperation (seperationSum, 2);
+    }
+  }
+
+  void cohesion (PVector force, float strength){
+    steer (force.x, force.y, strength);
+  }
+
+  void seperation (PVector force, float strength){
+    force.limit (strength*forceStrength);
+
+    direction.add (force);
+    direction.normalize();
+
+    speed *= 1.1;
+    speed = constrain (speed, 0, SPEED * 1.5);
+  }
+
+  void align (PVector force, float forceSpeed, float strength){
+    speed = lerp (speed, forceSpeed, strength*forceStrength);
+
+    force.normalize();
+    force.mult (strength*forceStrength);
+
+    direction.add (force);
+    direction.normalize();
+  }
+
+  void steer (float x, float y){
+    steer (x, y, 1);
+  }
+
+  void steer (float x, float y, float strength){
+
+    float angle = atan2 (y-location.y, x -location.x);
+
+    PVector force = new PVector (cos (angle), sin (angle));
+    force.mult (forceStrength * strength);
+
+    direction.add (force);
+    direction.normalize();
+
+    float currentDistance = dist (x, y, location.x, location.y);
+
+    if (currentDistance < 70)
+    {
+      speed = map (currentDistance, 0, 70, 0, SPEED);
+    }
+    else speed = SPEED;
+  }
+
+  void seek (float x, float y){
+    seek (x, y, 1);
+  }
+
+  void seek (float x, float y, float strength){
+
+    float angle = atan2 (y-location.y, x -location.x);
+
+    PVector force = new PVector (cos (angle), sin (angle));
+    force.mult (forceStrength * strength);
+
+    direction.add (force);
+    direction.normalize();
+  }
+
+  void addRadial (){
+
+    float m = noise (frameCount / (2*noiseScale));
+    m = map (m, 0, 1, - 1.2, 1.2);
+
+    float maxDistance = m * dist (0, 0, width/2, height/2);
+    float distance = dist (location.x, location.y, width/2, height/2);
+
+    float angle = map (distance, 0, maxDistance, 0, TWO_PI);
+
+    PVector force = new PVector (cos (angle), sin (angle));
+    force.mult (forceStrength);
+
+    direction.add (force);
+    direction.normalize();
+  }
+
+  void addNoise (){
+
+    float noiseValue = noise (location.x /noiseScale, location.y / noiseScale, frameCount / noiseScale);
+    noiseValue*= TWO_PI * noiseStrength;
+
+    PVector force = new PVector (cos (noiseValue), sin (noiseValue));
+    //Processing 2.0:
+    //PVector force = PVector.fromAngle (noiseValue);
+    force.mult (forceStrength);
+    direction.add (force);
+    direction.normalize();
+  }
+
+  void move (){
+
+    PVector velocity = direction.get();
+    velocity.mult (speed);
+    location.add (velocity);
+  }
+
+  void checkEdgesAndRelocate (){
+    float diameter = ellipseSize;
+
+    if (location.x < -diameter/2)
+    {
+      location.x = random (-diameter/2, width+diameter/2);
+      location.y = random (-diameter/2, height+diameter/2);
+    }
+    else if (location.x > width+diameter/2)
+    {
+      location.x = random (-diameter/2, width+diameter/2);
+      location.y = random (-diameter/2, height+diameter/2);
+    }
+
+    if (location.y < -diameter/2)
+    {
+      location.x = random (-diameter/2, width+diameter/2);
+      location.y = random (-diameter/2, height+diameter/2);
+    }
+    else if (location.y > height + diameter/2)
+    {
+      location.x = random (-diameter/2, width+diameter/2);
+      location.y = random (-diameter/2, height+diameter/2);
+    }
+  }
+
+
+  void checkEdges (){
+    float diameter = ellipseSize;
+
+    if (location.x < -diameter / 2)
+    {
+      location.x = width+diameter /2;
+    }
+    else if (location.x > width+diameter /2)
+    {
+      location.x = -diameter /2;
+    }
+
+    if (location.y < -diameter /2)
+    {
+      location.y = height+diameter /2;
+    }
+    else if (location.y > height+diameter /2)
+    {
+      location.y = -diameter /2;
+    }
+  }
+
+  void checkEdgesAndBounce (){
+    float radius = ellipseSize / 2;
+
+    if (location.x < radius )
+    {
+      location.x = radius ;
+      direction.x = direction.x * -1;
+    }
+    else if (location.x > width-radius )
+    {
+      location.x = width-radius ;
+      direction.x *= -1;
+    }
+
+    if (location.y < radius )
+    {
+      location.y = radius ;
+      direction.y *= -1;
+    }
+    else if (location.y > height-radius )
+    {
+      location.y = height-radius ;
+      direction.y *= -1;
+    }
+  }
+
+  void display() {
+  noStroke();
+    fill(c);
+    ellipse(location.x, location.y, ellipseSize, ellipseSize);
   }
 }

@@ -300,6 +300,8 @@ void draw()
             specific_draw();
             draw_effects1();
             draw_effects2();
+            draw_effects3();
+            draw_effects4();
           }
           //Draw the post-treatment effects
           actionControlled_postSpecificDraw();
@@ -309,12 +311,16 @@ void draw()
           specific_draw();
           draw_effects1();
           draw_effects2();
+          draw_effects3();
+          draw_effects4();
         }
       }
       else {
         automaticSequencer.performAutomaticActions();
         draw_effects1();
         draw_effects2();
+        draw_effects3();
+        draw_effects4(); 
       }
       
       //DMX animations - set to true when receiving the corresponding MIDI message, or when the general AUTOMATIC mode is on

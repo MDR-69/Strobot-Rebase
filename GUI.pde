@@ -1127,6 +1127,8 @@ public class ControlFrame extends PApplet {
                                   "INPUT MIDI (VAL | NOTE) : " + PITCH_LOAD_IMAGE_BANK1                          + " | " + getStringFromNoteInt(PITCH_LOAD_IMAGE_BANK1                         ) + "\n" +
                                   "INPUT MIDI (VAL | NOTE) : " + PITCH_DISPLAY_EFFECT_1                          + " | " + getStringFromNoteInt(PITCH_DISPLAY_EFFECT_1                         ) + "\n" +
                                   "INPUT MIDI (VAL | NOTE) : " + PITCH_DISPLAY_EFFECT_2                          + " | " + getStringFromNoteInt(PITCH_DISPLAY_EFFECT_2                         ) + "\n" +
+                                  "INPUT MIDI (VAL | NOTE) : " + PITCH_DISPLAY_EFFECT_3                          + " | " + getStringFromNoteInt(PITCH_DISPLAY_EFFECT_3                         ) + "\n" +
+                                  "INPUT MIDI (VAL | NOTE) : " + PITCH_DISPLAY_EFFECT_4                          + " | " + getStringFromNoteInt(PITCH_DISPLAY_EFFECT_4                         ) + "\n" +
                                   "INPUT MIDI (VAL | NOTE) : " + PITCH_DMX_ANIMATION_STROBE                      + " | " + getStringFromNoteInt(PITCH_DMX_ANIMATION_STROBE                     ) + "\n" +
                                   
                                   "INPUT MIDI (VAL | NOTE) : " + PITCH_DMX_ANIMATION_PAR_SET_COLOR               + " | " + getStringFromNoteInt(PITCH_DMX_ANIMATION_PAR_SET_COLOR              ) + "\n" +
@@ -2969,6 +2971,12 @@ public class ControlFrame extends PApplet {
     addEffectBang("53 - One panel - random", 53, 1, 43);
     addEffectBang("54 - One panel - L->R seq", 54, 1, 43);
     addEffectBang("55 - One panel - L->R seq", 55, 1, 43);
+    addEffectBang("56 - Extreme & Center panels", 56, 1, 43);
+    addEffectBang("57 - Narrow View", 57, 1, 43);
+    addEffectBang("58 - Narrow View - Open", 58, 1, 43);
+    addEffectBang("59 - White Flash FX", 59, 1, 43);
+    addEffectBang("60 - Slow Fadein", 60, 1, 43);
+    addEffectBang("61 - CTO Filter", 61, 1, 43);
   }
   
   void addEffectBang(String name, int i) {

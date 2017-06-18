@@ -8,6 +8,9 @@
 float carglass_progress = 0;
 float carglass_speed = 0.1;
 float carglass_linelength;
+boolean carglass_currElem = false;
+ArrayList<Carglass> carglass_array;
+boolean carglass_init = false;
 
 //initFlasher (intro) parameters
 int initFlasher_progress = 0;
@@ -583,7 +586,7 @@ ArrayList hypnopendulum_pends;
 float[] hypnopendulum_lengths = new float[pendulum_n];
 float hypnopendulum_g = 9.8;
 float hypnopendulum_fadein = 0;
-float hypnopendulum_fadeinSpeed = 0.1;
+float hypnopendulum_fadeinSpeed = 0.04;
 
 //Mugen parameters
 float mugen_xamp, mugen_yamp, mugen_x, mugen_y, mugen_px, mugen_py;
@@ -1021,7 +1024,7 @@ float weirdsquare_noiseSpeed = 0.0015;
 float progressivered_color = 0;
 
 //SpotsMulticolor parameters
-color[] spotsmulticolor_colorselection = {color(0, 176, 250),color(89, 180, 116),color(71, 206, 205),color(255, 255, 255),color(38, 30, 157),color(255, 255, 255),color(123, 9, 254),color(63, 144, 86),color(255, 255, 255)};
+color[] spotsmulticolor_colorselection = {color(0, 176, 250),color(89, 180, 116),color(71, 206, 205),color(239, 49, 45),color(38, 30, 157),color(240, 169, 39),color(123, 9, 254),color(63, 144, 86),color(255, 255, 0)};
 
 //Strobolinecolor parameters
 color[] strobolinecolor_colorselection;
@@ -1137,6 +1140,7 @@ float invertexplode_anglespeed = 0.5 * (PI/invertexplode_numberoflines);
 //DarkSnakes and BrightSnakes parameters
 BrightSnake[] brightsnakes_snakes = new BrightSnake[0];
 DarkSnake[] darksnakes_snakes = new DarkSnake[0];
+float snake_intensity = 1.0;
 
 
 //LightPainting parameters
@@ -1177,7 +1181,7 @@ float lightfusion_X;
 float lightfusion_Y;
 float lightfusion_speedX;
 float lightfusion_speedY;
-float lightfusion_timeincrement = 0.4;
+float lightfusion_timeincrement = 0.1;
 float lightfusion_time = 0;
 boolean lightfusion_moveUp;
 boolean lightfusion_moveRight;
@@ -1285,6 +1289,7 @@ boolean trigoshapes_initComplete = false;
 //nonotak parameters
 int nonotak_1_color = 0;
 int nonotak_1_x = 0;
+int nonotak_1_cpt = 0;
 int nonotak_2_x = 0;
 int nonotak_3_x = 0;
 int nonotak_4_y = 0;
@@ -1524,3 +1529,11 @@ ArrayList<SunStripStyle> sunStripStyle_elements;
 boolean sunStripStyle_init = false;
 int sunStripStyle_lineWidth = DISPLAY_SCALING_FACTOR;
 int sunStripStyle_i = 0;
+int sunStripStyle_currenti = 0;
+int sunStripStyle_fadeOut = 200;
+
+// BoundingColorBalls
+ArrayList <BouncingColorBall> bouncingColorBall_array;
+boolean bouncingColorBall_init = false;
+int bouncingColorBall_mode = 0;
+int bouncingColorBall_nb = 180;

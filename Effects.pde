@@ -23,6 +23,7 @@ float flutterEffect_theta = 0;
 float fadeout_counter = 0;
 float fadein_counter = 0;
 float fadeout_speed = 0.7;
+float slowfadeout_speed = 0.3;
 int whiteout_speed = 8;
 
 float blackWaveCircle_counter = 0;
@@ -42,8 +43,17 @@ final float blue_reductionFactor_red = 0.4;
 final float blue_reductionFactor_green = 0.4;
 final float lightBlue_reductionFactor_red = 0.70;
 final float lightBlue_reductionFactor_green = 0.75;
+final float cto_reductionFactor_red = 1.00;
+final float cto_reductionFactor_green = 0.75;
+final float cto_reductionFactor_blue = 0.38;
 
 int randomKillPanel_idx = 0;
+
+float narrovView_progress = 0;
+float narrovView_speed = 0.2;
+
+int whiteFlashEffect_progress = 0;
+int whiteFlashEffect_speed = 10;
 
 //General effect switcher
 void draw_effects1(){
@@ -52,6 +62,14 @@ void draw_effects1(){
 
 void draw_effects2(){
   draw_effects(currentEffect2Number, effect2ToBeDrawn);
+}
+
+void draw_effects3(){
+  draw_effects(currentEffect3Number, effect3ToBeDrawn);
+}
+
+void draw_effects4(){
+  draw_effects(currentEffect4Number, effect4ToBeDrawn);
 }
 
 void draw_effects(int effectNb, boolean drawEnabled) {
@@ -112,6 +130,12 @@ void draw_effects(int effectNb, boolean drawEnabled) {
       case 53:  draw_onlyOneRandomPanel(); break;
       case 54:  draw_onlyOneLeftRightSeqPanel(); break;
       case 55:  draw_onlyOneRightLeftSeqPanel(); break;
+      case 56:  draw_onlyExtremeAndCenterPanels(); break;
+      case 57:  draw_narrowView(); break;
+      case 58:  draw_narrowViewOpen(); break;
+      case 59:  draw_WhiteFlashEffect(); break;
+      case 60:  draw_additionalLongfadein();break;
+      case 61:  draw_ctoFilter(); break;
       default: break;
     }
   }
@@ -123,6 +147,14 @@ void initSpecificEffectParams1() {
 
 void initSpecificEffectParams2() {
   initSpecificEffectParams(currentEffect2Number);
+}
+
+void initSpecificEffectParams3() {
+  initSpecificEffectParams(currentEffect3Number);
+}
+
+void initSpecificEffectParams4() {
+  initSpecificEffectParams(currentEffect4Number);
 }
 
 void initSpecificEffectParams(int effectNb) {
@@ -141,6 +173,9 @@ void initSpecificEffectParams(int effectNb) {
     case 53: init_randomKillPanel();      break;
     case 54: randomKillPanel_idx = (randomKillPanel_idx + 1)%NUMBER_OF_PANELS; break;
     case 55: randomKillPanel_idx = (randomKillPanel_idx + 1)%NUMBER_OF_PANELS; break;
+    case 58: narrovView_progress = 0;       break;
+    case 59: whiteFlashEffect_progress = 0; break;
+    case 60: fadein_counter          = 0; break;
     default: break;
   }
 }
@@ -263,6 +298,17 @@ void draw_lightBlueFilter() {
     pixels[i] = color(int(lightBlue_reductionFactor_red * 1.0*((pixels[i] >> 16) & 0xFF)), 
                       int(lightBlue_reductionFactor_green * 1.0*((pixels[i] >> 8) & 0xFF)), 
                       pixels[i] & 0xFF, 
+                      (pixels[i] >> 24) & 0xFF); 
+  }
+  updatePixels();
+}
+
+void draw_ctoFilter() {
+  loadPixels();
+  for (int i=0; i<pixels.length; i++) {
+    pixels[i] = color(int(cto_reductionFactor_red * ((pixels[i] >> 16) & 0xFF)), 
+                      int(cto_reductionFactor_green * ((pixels[i] >> 8) & 0xFF)), 
+                      int(cto_reductionFactor_blue * (pixels[i] & 0xFF)), 
                       (pixels[i] >> 24) & 0xFF); 
   }
   updatePixels();
@@ -508,6 +554,16 @@ void draw_additionalfadein() {
   fadein_counter += fadeout_speed;
 }
 
+void draw_additionalLongfadein() {
+  pushStyle();
+  noStroke();
+  fill(0, 0, 0, max(0, 255 - fadein_counter));
+  rect(0,0,width,height);
+  popStyle();
+  
+  fadein_counter += slowfadeout_speed;
+}
+
 void draw_additionalfadeout_red() {
   draw_redocalypseEffect();
   pushStyle();
@@ -634,6 +690,16 @@ void draw_onlyCenterLeftRightPanels(){
   rect( (NUMBER_OF_PANELS/2) *width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
   rect( (NUMBER_OF_PANELS - 1) *width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
   popStyle();
+}
+
+void draw_onlyExtremeAndCenterPanels() {
+  pushStyle();
+  noStroke();
+  fill(0);  
+  rect(width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
+  rect((NUMBER_OF_PANELS/2 + 1) *width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
+  popStyle();
+
 }
 
 
@@ -830,4 +896,32 @@ void draw_onlyOneRightLeftSeqPanel(){
       draw_onlyExtremeRightPanel();
     }
   }
+}
+
+void draw_narrowView() {
+  pushStyle();
+  noStroke();
+  fill(0);
+  rect(0,0, width, height/4);
+  rect(0,3*height/4, width, height/2);
+  popStyle();
+}
+
+void draw_narrowViewOpen() {
+  pushStyle();
+  noStroke();
+  fill(0);
+  rect(0,0, width, height/4 - narrovView_progress);
+  rect(0,3*height/4 + narrovView_progress, width, height/2);
+  popStyle();
+  narrovView_progress += narrovView_speed;
+}
+
+void draw_WhiteFlashEffect() {
+  pushStyle();
+  noStroke();
+  fill(255, max(0, 255 - whiteFlashEffect_progress));
+  rect(0,0, width, height);
+  popStyle();
+  whiteFlashEffect_progress += whiteFlashEffect_speed;
 }

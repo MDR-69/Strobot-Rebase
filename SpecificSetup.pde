@@ -554,14 +554,16 @@ void specificActions() {
 
       case 60:          //Nonotak 1
 
-        if (nonotak_1_color == 0) {nonotak_1_color = 255;}
+        if (nonotak_1_color == 0) {nonotak_1_color = 255; nonotak_1_cpt += 1;}
         else {nonotak_1_color = 0;}
         frameRate(20);
         colorMode(RGB);
         background(0);
-        stroke(255);
-        strokeWeight(4);
-        noFill();
+        // stroke(255);
+        // strokeWeight(4);
+        noStroke();
+        fill(255);
+        //noFill();
         nonotak_1_x += 2;
         break;
       
@@ -844,7 +846,7 @@ void specificActions() {
         crecy_init = true;
         parallelworlds_init = true;
         parallelworlds_list.add(new ParallelWorldLine(true));
-        parallelworlds_speed = 3;
+        parallelworlds_speed = 3.5;
         parallelworlds_reverse = false;
         break;
       
@@ -860,7 +862,7 @@ void specificActions() {
         crecy_init = true;
         parallelworlds_init = true;
         parallelworlds_list.add(new ParallelWorldLine(true));
-        parallelworlds_speed = 2;
+        parallelworlds_speed = 1.3;
         parallelworlds_reverse = false;
         crecy_internalCounter = 3;
         break;
@@ -1090,6 +1092,7 @@ void specificActions() {
           snake_instance6 = new Snake(4, true);        
         }
         snake_init = true;
+        snake_intensity = 0.4;
         break;
       
       case 104:    //Snake2
@@ -1105,6 +1108,7 @@ void specificActions() {
           snake_instance6 = new Snake(4, true);        
         }
         snake_init = true;
+        snake_intensity = 0.4;
         break;
       
       case 105:    //Snake3
@@ -1120,6 +1124,7 @@ void specificActions() {
           snake_instance6 = new Snake(4, true);
         }
         snake_init = true;
+        snake_intensity = 1.0;
         break;
       
       case 106:    //Snake4
@@ -1135,6 +1140,7 @@ void specificActions() {
           snake_instance6 = new Snake(4, true);
         }
         snake_init = true;
+        snake_intensity = 1.0;
         break;
       
       case 107:    //Snake5
@@ -1150,6 +1156,7 @@ void specificActions() {
           snake_instance6 = new Snake(4, true);
         }
         snake_init = true;
+        snake_intensity = 1.0;
         break;
       
       case 108:    //Snake6
@@ -1165,30 +1172,31 @@ void specificActions() {
           snake_instance6 = new Snake(4, true);
         }
         snake_init = true;
+        snake_intensity = 1.0;
         break;
 
-      case 109:   //MovingSine
+      case 109:   //Carglass - Slow
 
-        frameRate(25);
-        background(0);
-        stroke(255);
-        strokeWeight(1);
-        movingsine_speed = 0.4;
-        float movingsine_x = 0;
-        float movingsine_theta = 0;
-        for (int j = 0; j < SineElem.length; j++) {
-          movingsine_x += width/movingsine_howMany;
-          SineElem[j]= new ExLine(movingsine_x, movingsine_theta);
-          movingsine_theta += PI/movingsine_howMany;
+        frameRate(50);
+        strokeWeight(4);
+        if (!carglass_init) {
+            carglass_init = true;
+            carglass_array = new ArrayList<Carglass>();
         }
+        carglass_array.add(new Carglass(carglass_currElem, 0.06, (width/2)*1.2));
+        carglass_currElem = !carglass_currElem;
         break;
       
-      case 110:    //Carglass
+      case 110:    //Carglass - Fast
       
         frameRate(50);
         strokeWeight(4);
-        carglass_progress = 0;
-        carglass_linelength = (width/2)*1.2;
+        if (!carglass_init) {
+            carglass_init = true;
+            carglass_array = new ArrayList<Carglass>();
+        }
+        carglass_array.add(new Carglass(carglass_currElem, 0.13, (width/2)*1.2));
+        carglass_currElem = !carglass_currElem;
         break;
       
       case 111:    //Va et vient - 1
@@ -2621,12 +2629,12 @@ void specificActions() {
 
         noStroke();
         background(255);
-        frameRate(50);
+        frameRate(30);
         lightfusion_xspan = lightfusion_xmax - lightfusion_xmin;
         lightfusion_yspan = lightfusion_ymax - lightfusion_ymin;
         lightfusion_X = width/6;
         lightfusion_Y = height;
-        lightfusion_speedX = width/24.0;
+        lightfusion_speedX = width/96.0;
         lightfusion_speedY = height/128.0;
         lightfusion_moveUp = true;
         lightfusion_moveRight = true;
@@ -4166,13 +4174,15 @@ void specificActions() {
           //arrange lengths so frequency difference between HypnoWheelPendulums is constant
           hypnopendulum_lengths[n] = hypnopendulum_lengths[n-1] - 2;
         }
-        hypnopendulum_fadein = 0;
+        hypnopendulum_fadein = 30;
          
          
         hypnopendulum_pends = new ArrayList();
         for(int n=0; n<pendulum_n; n++){
           //hypnopendulum_p = new HypnoWheelPendulum(hypnopendulum_lengths[n],color(150*(n%4),0,0));
-          hypnopendulum_p = new HypnoWheelPendulum(hypnopendulum_lengths[n],color(0,68*(n%4),150*(n%4)));
+          //hypnopendulum_p = new HypnoWheelPendulum(hypnopendulum_lengths[n],color(0,68*(n%4),150*(n%4)));
+          hypnopendulum_p = new HypnoWheelPendulum(hypnopendulum_lengths[n],color(0,34*(n%4),75*(n%4)));
+          //hypnopendulum_p = new HypnoWheelPendulum(hypnopendulum_lengths[n],color(0,20*(n%10),60*(n%10)));
           hypnopendulum_pends.add(hypnopendulum_p);
         }
         smooth();
@@ -5212,12 +5222,18 @@ void specificActions() {
         }
         break;
 
-      case 494:    //SunStripStyle - Type 3 - All - Fast - Sync
+      case 494:    //SunStripStyle - Type 3 - Single - Fast - Random
         frameRate(50);
         init_sunstripstyle();
-        for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
-            sunStripStyle_elements.add(new SunStripStyle(3, i, 0, 20, 10, 5));
+        int element_i = int (random(height/(DISPLAY_SCALING_FACTOR*3)));
+        while (sunStripStyle_currenti == element_i) {
+          element_i = int (random(height/(DISPLAY_SCALING_FACTOR*3)));
         }
+        sunStripStyle_currenti = element_i;
+        sunStripStyle_elements.add(new SunStripStyle(3, element_i, 0, 20, 20, 5));
+        // for (int i = 0; i<=height/(DISPLAY_SCALING_FACTOR*3); i++) {
+        //     sunStripStyle_elements.add(new SunStripStyle(3, i, 0, 20, 10, 5));
+        // }
         break;
 
       case 495:    //SunStripStyle - Type 3 - All - Slow - Sync
@@ -5723,7 +5739,7 @@ void specificActions() {
         frameRate(50);
         init_sunstripstyle();
         for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
-            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, 0.5, 0.1, 1.5));
+            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, 0.5, 0.1, 5));
         }
         break;
 
@@ -5731,7 +5747,7 @@ void specificActions() {
         frameRate(50);
         init_sunstripstyle();
         for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
-            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, 0.5, 0.05, 1));
+            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, 0.5, 0.05, 3));
         }
         break;
 
@@ -5739,7 +5755,7 @@ void specificActions() {
         frameRate(50);
         init_sunstripstyle();
         for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
-            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, 0.5, 0.025, 0.2));
+            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, 0.5, 0.025, 1.2));
         }
         break;
 
@@ -5747,7 +5763,7 @@ void specificActions() {
         frameRate(50);
         init_sunstripstyle();
         for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
-            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, -0.5, -0.1, 1.5));
+            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, -0.5, -0.1, 5));
         }
         break;
 
@@ -5755,7 +5771,7 @@ void specificActions() {
         frameRate(50);
         init_sunstripstyle();
         for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
-            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, -0.5, -0.05, 1));
+            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, -0.5, -0.05, 3));
         }
         break;
 
@@ -5763,10 +5779,161 @@ void specificActions() {
         frameRate(50);
         init_sunstripstyle();
         for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
-            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, -0.5, -0.025, 0.2));
+            sunStripStyle_elements.add(new SunStripStyle(8, i, 0, -0.5, -0.025, 1.2));
         }
         break;
 
+      case 561:    //HypnoTriangle - White
+
+        frameRate(40);
+        if (hypnotriangle_init == true) {
+          hypnotriangle_init = false;
+          hypnotriangle_list = new ArrayList<HypnoTriangle>();
+        }
+        hypnotriangle_list.add(new HypnoTriangle(hypnotriangle_instancecounter, true, true));
+        hypnotriangle_instancecounter += 1;
+        break;
+
+      case 562:    //HypnoNormalTriangle - White
+
+        frameRate(40);
+        if (hypnotriangle_init == true) {
+          hypnotriangle_init = false;
+          hypnotriangle_list = new ArrayList<HypnoTriangle>();
+        }
+        hypnotriangle_list.add(new HypnoTriangle(hypnotriangle_instancecounter, false, true));
+        hypnotriangle_instancecounter += 1;
+        break;
+
+      case 563:    //CTO Out
+        frameRate(50);
+        rectMode(CORNER);
+        noStroke();
+        break;
+
+      case 564:    //CTO Flash
+        break;
+
+      case 565:    //BouncingColorBalls - mode 0
+        frameRate(40);
+        if (!bouncingColorBall_init) {
+          bouncingColorBall_array = new ArrayList();
+          for (int i = 0; i < bouncingColorBall_nb; i++)  {
+            bouncingColorBall_array.add(new BouncingColorBall());
+          }
+          bouncingColorBall_init = true;
+        }
+        noStroke();
+        bouncingColorBall_mode = 0;
+        break;
+
+      case 566:    //BouncingColorBalls - mode 1
+        frameRate(40);
+        if (!bouncingColorBall_init) {
+          bouncingColorBall_array = new ArrayList();
+          for (int i = 0; i < bouncingColorBall_nb; i++)  {
+            bouncingColorBall_array.add(new BouncingColorBall());
+          }
+          bouncingColorBall_init = true;
+        }
+        noStroke();
+        bouncingColorBall_mode = 1;
+        break;
+        
+      case 567:    //BouncingColorBalls - mode 2
+        frameRate(40);
+        if (!bouncingColorBall_init) {
+          bouncingColorBall_array = new ArrayList();
+          for (int i = 0; i < bouncingColorBall_nb; i++)  {
+            bouncingColorBall_array.add(new BouncingColorBall());
+          }
+          bouncingColorBall_init = true;
+        }
+        noStroke();
+        bouncingColorBall_mode = 2;
+        break;
+      
+      case 568:    //BouncingColorBalls - mode 3
+        frameRate(40);
+        if (!bouncingColorBall_init) {
+          bouncingColorBall_array = new ArrayList();
+          for (int i = 0; i < bouncingColorBall_nb; i++)  {
+            bouncingColorBall_array.add(new BouncingColorBall());
+          }
+          bouncingColorBall_init = true;
+        }
+        noStroke();
+        bouncingColorBall_mode = 3;
+        break;
+        
+      case 569:    //BouncingColorBalls - mode 4
+        frameRate(40);
+        if (!bouncingColorBall_init) {
+          bouncingColorBall_array = new ArrayList();
+          for (int i = 0; i < bouncingColorBall_nb; i++)  {
+            bouncingColorBall_array.add(new BouncingColorBall());
+          }
+          bouncingColorBall_init = true;
+        }
+        noStroke();
+        bouncingColorBall_mode = 4;
+        break;
+
+      case 570:    //ColorfulSunStrip - Type 9 - Fast - Single
+        frameRate(50);
+        init_sunstripstyle();
+
+        int itemNb0 = int(random(1,NUMBER_OF_PANELS*2));
+        float itemHeight0 = int(random(8)) * 2 * sunStripStyle_lineWidth;
+        for (int i=0; i<4; i++) {
+          sunStripStyle_elements.add(new SunStripStyle(9, itemNb0, int(random(6)), 2, 400, i, itemHeight0 ));  
+        }        
+        sunStripStyle_fadeOut = 25;
+        break;
+
+      case 571:    //ColorfulSunStrip - Type 9 - Slow - Single
+        frameRate(50);
+        init_sunstripstyle();
+
+        int itemNb1 = int(random(1,NUMBER_OF_PANELS*2));
+        float itemHeight1 = int(random(8)) * 2 * sunStripStyle_lineWidth;
+        for (int i=0; i<4; i++) {
+          sunStripStyle_elements.add(new SunStripStyle(9, itemNb1, int(random(6)), 1, 400, i, itemHeight1 ));  
+        }        
+        sunStripStyle_fadeOut = 25;
+        break;
+
+      case 572:    //ColorfulSunStrip - Type 9 - Fast - Multi
+        frameRate(50);
+        init_sunstripstyle();
+
+        int itemNb2;
+        float itemHeight2;
+        for (int j=0; j<2; j++) {
+          itemNb2 = int(random(1,NUMBER_OF_PANELS*2));
+          itemHeight2 = int(random(8)) * 2 * sunStripStyle_lineWidth;
+          for (int i=0; i<4; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(9, itemNb2, int(random(6)), 2, 400, i, itemHeight2 ));  
+          }        
+        }
+        sunStripStyle_fadeOut = 25;
+        break;
+
+      case 573:    //ColorfulSunStrip - Type 9 - Fast - Multi
+        frameRate(50);
+        init_sunstripstyle();
+
+        int itemNb3;
+        float itemHeight3;
+        for (int j=0; j<2; j++) {
+          itemNb3 = int(random(1,NUMBER_OF_PANELS*2));
+          itemHeight3 = int(random(8)) * 2 * sunStripStyle_lineWidth;
+          for (int i=0; i<4; i++) {
+            sunStripStyle_elements.add(new SunStripStyle(9, itemNb3, int(random(6)), 1, 400, i, itemHeight3 ));  
+          }        
+        }
+        sunStripStyle_fadeOut = 25;
+        break;
 
       case 600:    //Audio Monitoring
 

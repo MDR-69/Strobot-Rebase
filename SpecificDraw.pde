@@ -46,6 +46,12 @@ int effectNumberToDeactivateEffects = -1;
 boolean effect2ToBeDrawn = false;
 int currentEffect2Number = -1;
 int effectNumber2ToDeactivateEffects = -1;
+boolean effect3ToBeDrawn = false;
+int currentEffect3Number = -1;
+int effectNumber3ToDeactivateEffects = -1;
+boolean effect4ToBeDrawn = false;
+int currentEffect4Number = -1;
+int effectNumber4ToDeactivateEffects = -1;
 
 void actionControlled_preSpecificDraw() {
   if (authorizeGeneralManualMode == true) {
@@ -243,7 +249,7 @@ void specific_draw() {
       case 106: draw_snake4();break;                               //Snake - 4
       case 107: draw_snake5();break;                               //Snake - 5
       case 108: draw_snake6();break;                               //Snake - 6  
-      case 109: draw_movingsine();break;                           //MovingSine
+      case 109: draw_carglass();break;                             //Carglass        
       case 110: draw_carglass();break;                             //Carglass        
       case 111: draw_va_et_vient_1();break;                        //Va et vient - Vertical
       case 112: draw_va_et_vient_2();break;                        //Va et vient - Horizontal
@@ -705,6 +711,24 @@ void specific_draw() {
       case 558: draw_sunstripstyle();break;                        //SunStripStyle
       case 559: draw_sunstripstyle();break;                        //SunStripStyle
       case 560: draw_sunstripstyle();break;                        //SunStripStyle
+
+
+      case 561: draw_hypnoflashtriangle();break;                   //HypnoFlashTriangle (white version)
+      case 562: draw_hypnoflashtriangle();break;                   //HypnoNormalTriangle (white version)
+
+      case 563: draw_ctoOut();break;                               //CTO Out
+      case 564: draw_ctoFlash();break;                             //CTO Flash
+
+      case 565: draw_bouncingColorBalls();break;                   //BouncingColorBalls - Mode 0
+      case 566: draw_bouncingColorBalls();break;                   //BouncingColorBalls - Mode 1
+      case 567: draw_bouncingColorBalls();break;                   //BouncingColorBalls - Mode 2
+      case 568: draw_bouncingColorBalls();break;                   //BouncingColorBalls - Mode 3
+      case 569: draw_bouncingColorBalls();break;                   //BouncingColorBalls - Mode 4
+
+      case 570: draw_sunstripstyle();break;                        //ColorfulSunStrip
+      case 571: draw_sunstripstyle();break;                        //ColorfulSunStrip
+      case 572: draw_sunstripstyle();break;                        //ColorfulSunStrip
+      case 573: draw_sunstripstyle();break;                        //ColorfulSunStrip
 
       case 600: draw_dirtyAudioProcessing();break;                 //Audio Monitoring
       case 601: draw_displayFFT_bass();break;                      //DisplayFFT - Bass

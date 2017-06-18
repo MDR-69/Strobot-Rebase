@@ -665,15 +665,15 @@ class DMX_PAR {
 
   void setColor_orange() {
     int   colorWheel = getFallbackColorIfInvalidColorVal(dmxVal_color_colorWheel_orange, dmxVal_color_colorWheel_red);
-    int[] colorRGB   = {253, 141, 28};
+    int[] colorRGB   = {253, 100, 28};
     int[] colorRGBW  = {255,   0,  0, 160};
     setColor_genericColor(colorWheel, colorRGB, colorRGBW);  
   }
 
   void setColor_cto() {
     int   colorWheel = getFallbackColorIfInvalidColorVal(dmxVal_color_colorWheel_cto);
-    int[] colorRGB   = {255, 200, 160};
-    int[] colorRGBW  = {200,   0,  0, 255};
+    int[] colorRGB   = {255, 180, 140};
+    int[] colorRGBW  = {180,   0,  0, 255};
     setColor_genericColor(colorWheel, colorRGB, colorRGBW);  
   }
 

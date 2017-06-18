@@ -273,8 +273,8 @@ void setLEDPanelAnimationAttributes() {
   animationAttributes = registerAttribute(animationAttributes, 106, "Snake - Four"                        , new String[] {"Geometric", "Red", "Simple"}                                                         );
   animationAttributes = registerAttribute(animationAttributes, 107, "Snake - Five"                        , new String[] {"Geometric", "Red", "Simple"}                                                         );
   animationAttributes = registerAttribute(animationAttributes, 108, "Snake - Six"                         , new String[] {"Geometric", "Red", "Simple"}                                                         );
-  animationAttributes = registerAttribute(animationAttributes, 109, "Moving Sine"                         , new String[] {"Geometric", "B&W", "Fast", "Simple"}                                                 );
-  animationAttributes = registerAttribute(animationAttributes, 110, "Carglass"                            , new String[] {"Geometric", "Slow", "B&W"}                                                           );
+  animationAttributes = registerAttribute(animationAttributes, 109, "Carglass Slow"                       , new String[] {"Geometric", "Slow", "B&W"}                                                           );
+  animationAttributes = registerAttribute(animationAttributes, 110, "Carglass Fast"                       , new String[] {"Geometric", "Slow", "B&W"}                                                           );
   animationAttributes = registerAttribute(animationAttributes, 111, "Va-et-vient 1"                       , new String[] {"Geometric", "Fast", "B&W", "Rhythmic"}                                               );
   animationAttributes = registerAttribute(animationAttributes, 112, "Va-et-vient 2"                       , new String[] {"Geometric", "Fast", "B&W", "Rhythmic"}                                               );
   animationAttributes = registerAttribute(animationAttributes, 113, "Impulse White Rectangle - Horizontal", new String[] {"Geometric", "Squares", "B&W", "Fast", "Rhythmic"}                                    );
@@ -664,7 +664,7 @@ void setLEDPanelAnimationAttributes() {
   animationAttributes = registerAttribute(animationAttributes, 491, "SunStripStyle - Type2 - Slow - C-S"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
   animationAttributes = registerAttribute(animationAttributes, 492, "SunStripStyle - Type2 - Fast - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
   animationAttributes = registerAttribute(animationAttributes, 493, "SunStripStyle - Type2 - Slow - S-C"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
-  animationAttributes = registerAttribute(animationAttributes, 494, "SunStripStyle - Type3 - Fast - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+  animationAttributes = registerAttribute(animationAttributes, 494, "SunStripStyle - Type3 - Fast - Rand" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
   animationAttributes = registerAttribute(animationAttributes, 495, "SunStripStyle - Type3 - Slow - Sync" , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
   animationAttributes = registerAttribute(animationAttributes, 496, "SunStripStyle - Type3 - Fast - U-D"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
   animationAttributes = registerAttribute(animationAttributes, 497, "SunStripStyle - Type3 - Slow - U-D"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
@@ -736,6 +736,23 @@ void setLEDPanelAnimationAttributes() {
   animationAttributes = registerAttribute(animationAttributes, 558, "SunStripStyle - Type8 - Neg - Fast"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
   animationAttributes = registerAttribute(animationAttributes, 559, "SunStripStyle - Type8 - Neg - Med"   , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
   animationAttributes = registerAttribute(animationAttributes, 560, "SunStripStyle - Type8 - Neg - Slow"  , new String[] {"Geometric", "Simple", "Lines", "B&W"}                                                );
+
+  animationAttributes = registerAttribute(animationAttributes, 561, "Hypno Flash Triangle White"          , new String[] {"Geometric", "Triangles", "Rhythmic", "White", "Violent"}                             );
+  animationAttributes = registerAttribute(animationAttributes, 562, "Hypno Normal Triangle White"         , new String[] {"Geometric", "Triangles", "Rhythmic", "White", "Violent"}                             );
+
+  animationAttributes = registerAttribute(animationAttributes, 563, "CTO Out"                             , new String[] {"Atmospheric", "Simple", "White", "Calm"}                                             );
+  animationAttributes = registerAttribute(animationAttributes, 564, "CTO Flash"                           , new String[] {"Atmospheric", "Simple", "White", "Calm"}                                             );
+
+  animationAttributes = registerAttribute(animationAttributes, 565, "Bouncing Color Balls - Mode 0"       , new String[] {"Geometric", "Atmospheric", "Circles", "Colorful"}                                    );
+  animationAttributes = registerAttribute(animationAttributes, 566, "Bouncing Color Balls - Mode 1"       , new String[] {"Geometric", "Atmospheric", "Circles", "Colorful"}                                    );
+  animationAttributes = registerAttribute(animationAttributes, 567, "Bouncing Color Balls - Mode 2"       , new String[] {"Geometric", "Atmospheric", "Circles", "Colorful"}                                    );
+  animationAttributes = registerAttribute(animationAttributes, 568, "Bouncing Color Balls - Mode 3"       , new String[] {"Geometric", "Atmospheric", "Circles", "Colorful"}                                    );
+  animationAttributes = registerAttribute(animationAttributes, 569, "Bouncing Color Balls - Mode 4"       , new String[] {"Geometric", "Atmospheric", "Circles", "Colorful"}                                    );
+
+  animationAttributes = registerAttribute(animationAttributes, 570, "SunStripStyle - Type9 - Single - Fast",new String[] {"Geometric", "Simple", "Lines", "Colorful"}                                           );
+  animationAttributes = registerAttribute(animationAttributes, 571, "SunStripStyle - Type9 - Single - Slow",new String[] {"Geometric", "Simple", "Lines", "Colorful"}                                           );
+  animationAttributes = registerAttribute(animationAttributes, 572, "SunStripStyle - Type9 - Multi - Fast", new String[] {"Geometric", "Simple", "Lines", "Colorful"}                                           );
+  animationAttributes = registerAttribute(animationAttributes, 573, "SunStripStyle - Type9 - Multi - Slow", new String[] {"Geometric", "Simple", "Lines", "Colorful"}                                           );
 
 
   animationAttributes = registerAttribute(animationAttributes, 601, "Audio Monitoring"                    , new String[] {"Atmospheric", "Red", "Circles", "Rhythmic", "AudioInput"}                            );
@@ -1187,6 +1204,15 @@ void setCustomDevicesActionsAttributes() {
   customDevicesAttributes = registerAttribute(customDevicesAttributes, 438, "LED Tubes   - Single Tube Blue Upward Long Wave"     , new String[] { "LED Tubes",   "Random", "Blue", "Wave"                   } );
   customDevicesAttributes = registerAttribute(customDevicesAttributes, 439, "LED Tubes   - Single Tube Blue Downward Short Wave"  , new String[] { "LED Tubes",   "Random", "Blue", "Wave"                   } );
   customDevicesAttributes = registerAttribute(customDevicesAttributes, 440, "LED Tubes   - Single Tube Blue Downward Long Wave"   , new String[] { "LED Tubes",   "Random", "Blue", "Wave"                   } );
+
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 441, "LED Tubes   - Fast Left Red BuildUp"                  , new String[] { "LED Tubes",   "Fast", "Red", "BuildUp", "Left"        } );
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 442, "LED Tubes   - Medium Left Red BuildUp"                , new String[] { "LED Tubes",   "Medium", "Red", "BuildUp", "Left"    } );
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 443, "LED Tubes   - Slow Left Red BuildUp"                  , new String[] { "LED Tubes",   "Slow", "Red", "BuildUp", "Left"        } );
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 444, "LED Tubes   - VerySlow Left Red BuildUp"              , new String[] { "LED Tubes",   "Slow", "Red", "BuildUp", "Left"    } );
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 445, "LED Tubes   - Fast Right Red BuildUp"                 , new String[] { "LED Tubes",   "Fast", "Red", "BuildUp", "Right"        } );
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 446, "LED Tubes   - Medium Right Red BuildUp"               , new String[] { "LED Tubes",   "Medium", "Red", "BuildUp", "Right"    } );
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 447, "LED Tubes   - Slow Right Red BuildUp"                 , new String[] { "LED Tubes",   "Slow", "Red", "BuildUp", "Right"        } );
+  customDevicesAttributes = registerAttribute(customDevicesAttributes, 448, "LED Tubes   - VerySlow Right Red BuildUp"             , new String[] { "LED Tubes",   "Slow", "Red", "BuildUp", "Right"    } );
 
 }
 

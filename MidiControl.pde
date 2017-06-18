@@ -69,6 +69,8 @@ final int PITCH_CUSTOM_DEVICE_BANK3                       = 120;
 final int PITCH_CUSTOM_DEVICE_BANK4                       = 89;
 final int PITCH_DISPLAY_EFFECT_1                          = 121;
 final int PITCH_DISPLAY_EFFECT_2                          = 96;
+final int PITCH_DISPLAY_EFFECT_3                          = 97;
+final int PITCH_DISPLAY_EFFECT_4                          = 95;
 
 // Ext video proj commands
 final int PITCH_EXTVIDEO_PLAYVIDEOONCE_1                  = 28;
@@ -255,6 +257,8 @@ void processMidiInfo_semiAutoMode(int pitch, int velocity) {
     case PITCH_CUSTOM_DEVICE_BANK4:                         loadCustomDeviceAnimation4(velocity);break;                              // 
     case PITCH_DISPLAY_EFFECT_1:                            activateAdditionalEffect(velocity);break;                                // 
     case PITCH_DISPLAY_EFFECT_2:                            activateAdditionalEffect2(velocity);break;                               // 
+    case PITCH_DISPLAY_EFFECT_3:                            activateAdditionalEffect3(velocity);break;                               // 
+    case PITCH_DISPLAY_EFFECT_4:                            activateAdditionalEffect4(velocity);break;                               //     
     case PITCH_LOAD_ANIMATION_BANK1_TEMP:                   loadTempAnimation1(velocity);break;                                      // Load a temporary animation using the LED panels
     case PITCH_LOAD_ANIMATION_BANK2_TEMP:                   loadTempAnimation2(velocity);break;                                      // 
     case PITCH_LOAD_ANIMATION_BANK3_TEMP:                   loadTempAnimation3(velocity);break;                                      // 
@@ -639,6 +643,28 @@ void deactivateAdditionalEffect2(int velocity) {
   effect2ToBeDrawn = false;
 }
 
+void activateAdditionalEffect3(int velocity) {
+  effect3ToBeDrawn = true;
+  currentEffect3Number = velocity;
+  initSpecificEffectParams3();
+  effectNumber3ToDeactivateEffects = velocity;
+}
+
+void deactivateAdditionalEffect3(int velocity) {
+  effect3ToBeDrawn = false;
+}
+
+void activateAdditionalEffect4(int velocity) {
+  effect4ToBeDrawn = true;
+  currentEffect4Number = velocity;
+  initSpecificEffectParams4();
+  effectNumber4ToDeactivateEffects = velocity;
+}
+
+void deactivateAdditionalEffect4(int velocity) {
+  effect4ToBeDrawn = false;
+}
+
 void loadDMXAnimation_movingHead_initDirection(int velocity) {
   dmxAnimationNumber_movingHead_initDirection = velocity;
   setupDMXAnimation_movingHead_initDirection();
@@ -947,6 +973,8 @@ void noteOff(int channel, int pitch, int velocity, long timestamp, String bus_na
         
         case PITCH_DISPLAY_EFFECT_1:                            deactivateAdditionalEffect(velocity);break;                 //C9    - Reset the effect
         case PITCH_DISPLAY_EFFECT_2:                            deactivateAdditionalEffect2(velocity);break;                //
+        case PITCH_DISPLAY_EFFECT_3:                            deactivateAdditionalEffect3(velocity);break;                //C9
+        case PITCH_DISPLAY_EFFECT_4:                            deactivateAdditionalEffect4(velocity);break;                //
 
         case PITCH_EXTVIDEO_DISPLAYIMAGEFX_1:                   myExtVideoMappingController.extVideoProj_displayImageFx(1); break;
         case PITCH_EXTVIDEO_SETCUSTOMFX_1:                      myExtVideoMappingController.extVideoProj_setDynamicFX(1);   break;

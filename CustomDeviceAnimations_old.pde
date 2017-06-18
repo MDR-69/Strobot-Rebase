@@ -677,6 +677,15 @@ void customDeviceAnimation(int customDevAnimationNumber) {
     case 439: customDev_LEDTubeSingleShortBlueDownwardSingleWave(); break;
     case 440: customDev_LEDTubeSingleLongBlueDownwardSingleWave(); break;
 
+    case 441: customDev_LEDTubeLeftFastRedBuildUp(); break;
+    case 442: customDev_LEDTubeLeftMediumRedBuildUp(); break;
+    case 443: customDev_LEDTubeLeftSlowRedBuildUp(); break;
+    case 444: customDev_LEDTubeLeftVerySlowRedBuildUp(); break;
+    case 445: customDev_LEDTubeRightFastRedBuildUp(); break;
+    case 446: customDev_LEDTubeRightMediumRedBuildUp(); break;
+    case 447: customDev_LEDTubeRightSlowRedBuildUp(); break;
+    case 448: customDev_LEDTubeRightVerySlowRedBuildUp(); break;
+
     default: break;                                 //Don't do anything
   }
   
@@ -4249,6 +4258,67 @@ void customDev_LEDTubeRightVerySlowWhiteBuildUp() {
                                                            else { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_VERYSLOWWHITEBUILDUP_2);}
   if (CustomDeviceList_LEDTubes.get(3).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_VERYSLOWWHITEBUILDUP);}
                                                            else { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_VERYSLOWWHITEBUILDUP_2);}
+}
+
+
+
+////////////////////////////////////////
+
+
+void customDev_LEDTubeLeftFastRedBuildUp() {  
+  if (CustomDeviceList_LEDTubes.get(0).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_FASTREDBUILDUP); }
+                                                           else { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_FASTREDBUILDUP_2);}
+  if (CustomDeviceList_LEDTubes.get(1).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_FASTREDBUILDUP); }
+                                                           else { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_FASTREDBUILDUP_2);}
+}
+
+void customDev_LEDTubeLeftMediumRedBuildUp() {  
+  if (CustomDeviceList_LEDTubes.get(0).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_MEDIUMREDBUILDUP);}
+                                                           else { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_MEDIUMREDBUILDUP_2);}
+  if (CustomDeviceList_LEDTubes.get(1).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_MEDIUMREDBUILDUP);}
+                                                           else { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_MEDIUMREDBUILDUP_2);}
+}
+
+void customDev_LEDTubeLeftSlowRedBuildUp() {  
+  if (CustomDeviceList_LEDTubes.get(0).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDBUILDUP);}
+                                                           else { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDBUILDUP_2);}
+  if (CustomDeviceList_LEDTubes.get(1).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDBUILDUP);}
+                                                           else { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDBUILDUP_2);}
+}
+
+void customDev_LEDTubeLeftVerySlowRedBuildUp() {  
+  if (CustomDeviceList_LEDTubes.get(0).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_VERYSLOWREDBUILDUP);}
+                                                           else { CustomDeviceList_LEDTubes.get(0).setDeviceAnimation(CUSTOMDEV_ANIM_VERYSLOWREDBUILDUP_2);}
+  if (CustomDeviceList_LEDTubes.get(1).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_VERYSLOWREDBUILDUP);}
+                                                           else { CustomDeviceList_LEDTubes.get(1).setDeviceAnimation(CUSTOMDEV_ANIM_VERYSLOWREDBUILDUP_2);}
+}
+
+void customDev_LEDTubeRightFastRedBuildUp() {  
+  if (CustomDeviceList_LEDTubes.get(2).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_FASTREDBUILDUP); }
+                                                           else { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_FASTREDBUILDUP_2);}
+  if (CustomDeviceList_LEDTubes.get(3).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_FASTREDBUILDUP); }
+                                                           else { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_FASTREDBUILDUP_2);}
+}
+
+void customDev_LEDTubeRightMediumRedBuildUp() {  
+  if (CustomDeviceList_LEDTubes.get(2).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_MEDIUMREDBUILDUP);}
+                                                           else { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_MEDIUMREDBUILDUP_2);}
+  if (CustomDeviceList_LEDTubes.get(3).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_MEDIUMREDBUILDUP);}
+                                                           else { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_MEDIUMREDBUILDUP_2);}
+}
+
+void customDev_LEDTubeRightSlowRedBuildUp() {  
+  if (CustomDeviceList_LEDTubes.get(2).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDBUILDUP);}
+                                                           else { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDBUILDUP_2);}
+  if (CustomDeviceList_LEDTubes.get(3).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDBUILDUP);}
+                                                           else { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_SLOWREDBUILDUP_2);}
+}
+
+void customDev_LEDTubeRightVerySlowRedBuildUp() {  
+  if (CustomDeviceList_LEDTubes.get(2).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_VERYSLOWREDBUILDUP);}
+                                                           else { CustomDeviceList_LEDTubes.get(2).setDeviceAnimation(CUSTOMDEV_ANIM_VERYSLOWREDBUILDUP_2);}
+  if (CustomDeviceList_LEDTubes.get(3).executionCount % 2 == 0) { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_VERYSLOWREDBUILDUP);}
+                                                           else { CustomDeviceList_LEDTubes.get(3).setDeviceAnimation(CUSTOMDEV_ANIM_VERYSLOWREDBUILDUP_2);}
 }
 
 
