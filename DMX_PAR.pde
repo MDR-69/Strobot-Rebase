@@ -73,7 +73,7 @@ final int    DMX_PAR_STROBEMODE_STROBE                = 1;
 final int    DMX_PAR_DEFAULT_FALLBACK_VAL             = 0;          // Default value used at initialisation, and in case of error
 
 
-// // Constants used for the animations
+// Constants used for the animations
 final int    DMXANIM_PAR_BLACKOUT                     = 0;
 final int    DMXANIM_PAR_CONTINUOUS_LIGHT_MAX         = 1;
 final int    DMXANIM_PAR_CONTINUOUS_LIGHT_STRONG      = 2;
@@ -94,7 +94,6 @@ final int    DMXANIM_PAR_FAST_SINE_WAVE_ANTICLOCKWISE = 16;
 final int    DMXANIM_PAR_RANDOM_GLITCH                = 17;
 final int    DMXANIM_PAR_SINGLE_WEAK_LONG_FLASH       = 18;
 final int    DMXANIM_PAR_SINGLE_WEAK_SHORT_FLASH      = 19;
-
 
 // // Constants used for the light rhythms
 // final int    DMXANIM_MOVINGHEAD_LIGHTRHYTHM_NOSYNC                     = 0;
@@ -875,6 +874,7 @@ class DMX_PAR {
   void performLight_currentStyle() {
     boolean performEnabled = this.checkBPMSync();
     if (performEnabled) {
+      // Now, perform the appropriate light
       switch(currentLightStyle) {
         case DMXANIM_PAR_BLACKOUT                     : performLight_blackout();                    break;
         case DMXANIM_PAR_CONTINUOUS_LIGHT_MAX         : performLight_continuousLight_max();         break;
@@ -896,6 +896,7 @@ class DMX_PAR {
         case DMXANIM_PAR_RANDOM_GLITCH                : performLight_randomGlitch();                break;
         case DMXANIM_PAR_SINGLE_WEAK_LONG_FLASH       : performLight_singleWeakLongFlash();         break;
         case DMXANIM_PAR_SINGLE_WEAK_SHORT_FLASH      : performLight_singleWeakShortFlash();        break;
+        default: break;
       }
     }
     else {

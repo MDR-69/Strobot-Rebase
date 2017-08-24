@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Fixture>
+ 	<Name>MAC Aura (14 channels)</Name>
+ 	<Manufacturer>Martin</Manufacturer>
+ 	<Type>Moving Head</Type>
+	<Comment>Martin MAC Aura - 13 channels 2017/08/24 revision</Comment>
+
+	<NbChannels>14</NbChannels>
+	
+	<ChannelType index="0" attribute="SHUTTER">
+		<ChannelSet name="CLOSED" from_dmx="0" to_dmx="19" />
+		<ChannelSet name="OPEN" from_dmx="20" to_dmx="24" />
+		<ChannelSet name="STROBE" from_dmx="25" to_dmx="64" proportional="decreasing" /> 				<!-- FAST -> SLOW -->
+	</ChannelType>
+
+	<ChannelType index="1" attribute="DIMMER" ch_link="2">
+		<ChannelSet name="DIMMER" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>	
+	
+	<ChannelType index="2" attribute="ZOOM">
+		<ChannelSet name="ZOOM" from_dmx="0" to_dmx="255" proportional="decreasing" /> 					<!-- WIDE -> NARROW -->
+	</ChannelType>	
+
+	<ChannelType index="3" attribute="PAN" ch_link="4">
+		<ChannelSet name="PAN" from_dmx="0" to_dmx="255" range="540" proportional="increasing" />
+	</ChannelType>
+
+	<ChannelType index="4" attribute="PAN_FINE">
+		<ChannelSet name="PAN_FINE" from_dmx="0" to_dmx="255" />
+	</ChannelType>
+
+	<ChannelType index="5" attribute="TILT" ch_link="6">
+		<ChannelSet name="TILT" from_dmx="0" to_dmx="255" range="270" proportional="increasing" />
+	</ChannelType>
+
+	<ChannelType index="6" attribute="TILT_FINE">
+		<ChannelSet name="TILT_FINE" from_dmx="0" to_dmx="255" />
+	</ChannelType>
+
+	<ChannelType index="7" attribute="CONTROL_SETTINGS">
+		<ChannelSet name="NO_FUNCTION" from_dmx="0" to_dmx="9" recommended="true" />
+	</ChannelType>
+
+	<ChannelType index="8" attribute="UNUSED"> 															<!-- COLOR WHEEL, UNUSED BECAUSE OF THE REDUNDANT RGB COLOR MANAGEMENT -->
+		<ChannelSet name="OPEN" from_dmx="0" to_dmx="9" recommended="true" />
+	</ChannelType>
+
+	<ChannelType index="9" attribute="COLOR" option="RGB" option_argument="R">
+		<ChannelSet name="COLOR" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+	
+	<ChannelType index="10" attribute="COLOR" option="RGB" option_argument="G">
+		<ChannelSet name="COLOR" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+	
+	<ChannelType index="11" attribute="COLOR" option="RGB" option_argument="B">
+		<ChannelSet name="COLOR" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+
+	<ChannelType index="12" attribute="UNUSED" option="RGB" option_argument="W">						<!-- COLOR RGBW W CHANNEL, UNUSED WHEN COLOR CALIB IS SET TO ON, THE W CHANNEL IS AUTOMATICALLY ADJUSTED -->
+		<ChannelSet name="COLOR" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+
+	<ChannelType index="13" attribute="COLOR_TEMPERATURE">
+		<ChannelSet name="DISABLED" from_dmx="0" to_dmx="19" recommended="true" />
+		<ChannelSet name="COLOR_TEMPERATURE" from_dmx="20" to_dmx="255" proportional="increasing" />	<!-- COLOR TEMPERATURE, FROM 10 000K (BLUEISH) TO 2500K (ORANGE) -->
+	</ChannelType>
+
+
+
+	<ChannelType index="14" attribute="FX1">
+		<ChannelSet name="DISABLED" from_dmx="0" to_dmx="19" recommended="true" />
+	</ChannelType>
+
+	<ChannelType index="15" attribute="FX1_SPEED">
+		<ChannelSet name="DISABLED" from_dmx="0" to_dmx="19" recommended="true" />
+	</ChannelType>
+
+	<ChannelType index="16" attribute="FX2">
+		<ChannelSet name="DISABLED" from_dmx="0" to_dmx="19" recommended="true" />
+	</ChannelType>
+
+	<ChannelType index="17" attribute="FX2_ADJUST">
+		<ChannelSet name="DISABLED" from_dmx="0" to_dmx="19" recommended="true" />
+	</ChannelType>
+
+	<ChannelType index="18" attribute="FX_SYNC">
+		<ChannelSet name="DISABLED" from_dmx="0" to_dmx="49" recommended="true" />
+	</ChannelType>
+
+	<ChannelType index="19" attribute="AURA_SHUTTER"> 													<!-- AURA SUPPORT IS NOT IMPLEMENTED, THE MAC AURA WILL ONLY BEHAVE AS A REGULAR BEAM HEAD -->
+		<ChannelSet name="CLOSED" from_dmx="0" to_dmx="19" />
+		<ChannelSet name="OPEN" from_dmx="20" to_dmx="24" />
+		<ChannelSet name="STROBE" from_dmx="25" to_dmx="64" proportional="decreasing" /> 				<!-- FAST -> SLOW -->
+	</ChannelType>
+
+	<ChannelType index="20" attribute="AURA_DIMMER" ch_link="2">
+		<ChannelSet name="DIMMER" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>	
+
+	<ChannelType index="21" attribute="AURA_UNUSED"> 													<!-- COLOR WHEEL, UNUSED BECAUSE OF THE REDUNDANT RGB COLOR MANAGEMENT -->
+		<ChannelSet name="OPEN" from_dmx="0" to_dmx="9" recommended="true" />
+	</ChannelType>
+
+	<ChannelType index="22" attribute="AURA_COLOR" option="RGB" option_argument="R">
+		<ChannelSet name="COLOR" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+	
+	<ChannelType index="23" attribute="AURA_COLOR" option="RGB" option_argument="G">
+		<ChannelSet name="COLOR" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+	
+	<ChannelType index="24" attribute="AURA_COLOR" option="RGB" option_argument="B">
+		<ChannelSet name="COLOR" from_dmx="0" to_dmx="255" proportional="increasing" />
+	</ChannelType>
+
+</Fixture>

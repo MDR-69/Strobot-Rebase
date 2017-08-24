@@ -11,6 +11,7 @@ final String DMX_MOVINGHEAD_SPEEDMODE                        = "SPEEDMODE";
 final String DMX_MOVINGHEAD_SHUTTER                          = "SHUTTER";
 final String DMX_MOVINGHEAD_APERTURE                         = "APERTURE";
 final String DMX_MOVINGHEAD_GOBO                             = "GOBO";
+final String DMX_MOVINGHEAD_ZOOM                             = "ZOOM";
 
 final int    DMX_MOVINGHEAD_COLORMODE_UNDEFINED              = 0;
 final int    DMX_MOVINGHEAD_COLORMODE_WHEEL                  = 1;
@@ -94,6 +95,17 @@ final int    DMXANIM_MOVINGHEAD_SLOW_SINE_WAVE_ANTICLOCKWISE = 11;
 final int    DMXANIM_MOVINGHEAD_FAST_SINE_WAVE_ANTICLOCKWISE = 12;
 final int    DMXANIM_MOVINGHEAD_RANDOM_GLITCH                = 13;
 final int    DMXANIM_MOVINGHEAD_MIN_APERTURE_BEAM            = 14;
+
+final int    DMXANIM_MOVINGHEAD_ZOOM_ULTRANARROW             = 0;
+final int    DMXANIM_MOVINGHEAD_ZOOM_NARROW                  = 1;
+final int    DMXANIM_MOVINGHEAD_ZOOM_WIDE                    = 2;
+final int    DMXANIM_MOVINGHEAD_ZOOM_ULTRAWIDE               = 3;
+final int    DMXANIM_MOVINGHEAD_ZOOM_PROGRESSIVECLOSE_SLOW   = 4;
+final int    DMXANIM_MOVINGHEAD_ZOOM_PROGRESSIVECLOSE_MEDIUM = 5;
+final int    DMXANIM_MOVINGHEAD_ZOOM_PROGRESSIVECLOSE_FAST   = 6;
+final int    DMXANIM_MOVINGHEAD_ZOOM_PROGRESSIVEOPEN_SLOW    = 7;
+final int    DMXANIM_MOVINGHEAD_ZOOM_PROGRESSIVEOPEN_MEDIUM  = 8;
+final int    DMXANIM_MOVINGHEAD_ZOOM_PROGRESSIVEOPEN_FAST    = 9;
 
 // Constants used for the light rhythms
 final int    DMXANIM_MOVINGHEAD_LIGHTRHYTHM_NOSYNC                     = 0;
@@ -197,6 +209,11 @@ class DMX_MovingHead {
   int aperture_progressive_min             = -1;   // Small aperture / narrow beam
   ArrayList<int[]> aperture_steps;                 // List of the different aperture settings. Arranged from large to narrow - last values correspond to a narrow beam 
   
+  int chIndex_zoom                         = -1;
+  int chIndex_zoomFine                     = -1;
+  boolean fineZoomControl                  = false;
+  int zoom_minVal                          = -1;
+  int zoom_maxVal                          = -1;
 
   // Constants corresponding to specific values
   int dmxVal_color_colorWheel_white        = -1;
@@ -224,12 +241,14 @@ class DMX_MovingHead {
   //// - End of the physical moving head description - ////
 
   int currentLightStyle                   = DMXANIM_MOVINGHEAD_CONTINUOUS_LIGHT;         // Used by the global animations
+  int currentZoomStyle                    = DMXANIM_MOVINGHEAD_ZOOM_ULTRANARROW;
   int currentRhythmPattern                = DMXANIM_MOVINGHEAD_LIGHTRHYTHM_NOSYNC;       // Used by the global animations
   int animCpt1_performLight               = 0;                                           // Counters used for the global animations
   int animCpt2                            = 0;
   int animCpt3                            = 0;
-  int animCpt4                            = 0;
-  int animCpt5                            = 0;
+  int animCpt4                            = 0;                                           // Used for the pan/tilt objectives (movement)
+  int animCpt5                            = 0;                                           // Used for the pan/tilt objectives (movement)
+  int animCpt_zoom                        = 0;
 
   boolean exceptionRaisedDMX              = false;
   
@@ -288,6 +307,8 @@ class DMX_MovingHead {
     parseFixtureShutterModes();
 
     parseFixtureApertureModes();
+
+    parseFixtureZoomControl();
 
     // Check other functions this fixture may have - search for all channels with a recommended channel set - this will become the default value for these channels
     parseDefaultChannels();
@@ -694,7 +715,6 @@ class DMX_MovingHead {
         }
       }
     }
-    
   }
 
   void parseApertureStep(ChannelSet channelSet) {
@@ -709,6 +729,33 @@ class DMX_MovingHead {
     //TODO: reorder aperture_steps, just in case
     aperture_steps.add(dataStruct);
 
+  }
+
+  void parseFixtureZoomControl() {
+    chIndex_zoom   = movingHead.getChannelIndexCorrespondingToFunction(DMX_MOVINGHEAD_ZOOM);
+    if (movingHead.getLinkedChannelIndexCorrespondingToIndex(chIndex_zoom) != -1) {
+      fineZoomControl = true;
+      chIndex_zoomFine = movingHead.getLinkedChannelIndexCorrespondingToIndex(chIndex_zoom);
+    }
+
+    ChannelDesc channel = movingHead.getChannelCorrespondingToIndex(chIndex_zoom);
+    ArrayList<ChannelSet> channelSets = channel.getAllChannelSets();
+    for (ChannelSet channelSet: channelSets) {
+      if (channelSet.getSubfunction().equals(DMX_MOVINGHEAD_ZOOM)) {
+        if (channelSet.isProportional_Increasing()) {  // The zoom is always proportional - only need to check if it's increasing or decreasing (convention: increasing = narrow->wide)
+          zoom_minVal = channelSet.getFrom_dmx();
+          zoom_maxVal = channelSet.getTo_dmx();
+        }
+        else if (channelSet.isProportional() && (channelSet.isProportional_Increasing() == false)) {
+          zoom_minVal = channelSet.getTo_dmx();
+          zoom_maxVal = channelSet.getFrom_dmx();
+        }
+        else {    // Default : increasing proportional - the user may have forgotten to mark the channel set as proportional
+          zoom_minVal = channelSet.getFrom_dmx();
+          zoom_maxVal = channelSet.getTo_dmx();
+        }
+      }
+    }
   }
 
 
@@ -1131,11 +1178,13 @@ class DMX_MovingHead {
     this.animCpt1_performLight = 0;
     this.animCpt2 = 0;
     this.animCpt3 = 0;
+    this.animCpt_zoom = 0;
   }
 
 
   void reinitLightStyleCpt() {
     this.animCpt1_performLight = 0;
+    this.animCpt_zoom = 0;
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -1193,6 +1242,23 @@ class DMX_MovingHead {
   void performLight_currentStyle() {
     boolean performEnabled = this.checkBPMSync();
     if (performEnabled) {
+      // First, set the zoom level of the PAR (if defined)
+      switch(currentZoomStyle) {
+        case DMXANIM_MOVINGHEAD_ZOOM_ULTRANARROW:               this.performZoom_ultranarrow();                break;
+        case DMXANIM_MOVINGHEAD_ZOOM_NARROW:                    this.performZoom_narrow();                     break;
+        case DMXANIM_MOVINGHEAD_ZOOM_WIDE:                      this.performZoom_wide();                       break;
+        case DMXANIM_MOVINGHEAD_ZOOM_ULTRAWIDE:                 this.performZoom_ultrawide();                  break;
+        case DMXANIM_MOVINGHEAD_ZOOM_PROGRESSIVECLOSE_SLOW:     this.performZoom_progressiveclose_slow();      break;
+        case DMXANIM_MOVINGHEAD_ZOOM_PROGRESSIVECLOSE_MEDIUM:   this.performZoom_progressiveclose_medium();    break;
+        case DMXANIM_MOVINGHEAD_ZOOM_PROGRESSIVECLOSE_FAST:     this.performZoom_progressiveclose_fast();      break;
+        case DMXANIM_MOVINGHEAD_ZOOM_PROGRESSIVEOPEN_SLOW:      this.performZoom_progressiveopen_slow();       break;
+        case DMXANIM_MOVINGHEAD_ZOOM_PROGRESSIVEOPEN_MEDIUM:    this.performZoom_progressiveopen_medium();     break;
+        case DMXANIM_MOVINGHEAD_ZOOM_PROGRESSIVEOPEN_FAST:      this.performZoom_progressiveopen_fast();       break;
+        default: break;
+      }
+      //animCpt_zoom
+
+      // Now, perform all dimmer related actions      
       switch (this.currentLightStyle) {
         case DMXANIM_MOVINGHEAD_BLACKOUT:                       this.performLight_blackout();                  break;
         case DMXANIM_MOVINGHEAD_CONTINUOUS_LIGHT:               this.performLight_continuousLight();           break;
@@ -1209,13 +1275,63 @@ class DMX_MovingHead {
         case DMXANIM_MOVINGHEAD_FAST_SINE_WAVE_ANTICLOCKWISE:   this.performLight_fastAntiClockwiseSineWave(); break;
         case DMXANIM_MOVINGHEAD_RANDOM_GLITCH:                  this.performLight_randomGlitch();              break;
         case DMXANIM_MOVINGHEAD_MIN_APERTURE_BEAM:              this.performLight_minimalApertureBeam();       break;
-        default:                                     break;
+        default: break;
       }
     }
     else {
       this.performLight_standbyBlackout();
     }
   }
+
+
+  // Zoom related functions
+  // TODO
+  void performZoom_ultranarrow() {
+
+  }
+
+  void performZoom_narrow() {
+
+  }
+
+  void performZoom_wide() {
+
+  }
+
+  void performZoom_ultrawide() {
+
+  }
+
+  void performZoom_progressiveclose_slow() {
+
+  }
+
+  void performZoom_progressiveclose_medium() {
+
+  }
+
+  void performZoom_progressiveclose_fast() {
+
+  }
+
+  void performZoom_progressiveopen_slow() {
+
+  }
+
+  void performZoom_progressiveopen_medium() {
+
+  }
+
+  void performZoom_progressiveopen_fast() {
+
+  }
+
+
+
+
+
+
+
 
   void performLight_blackout() {
     this.setDimmer(0);
