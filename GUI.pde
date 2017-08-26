@@ -31,7 +31,7 @@ ArrayList<RackLight> gui_rackLightList;
 ArrayList<LEDTube> gui_LEDTubeList;
 
 final int gui_width                      = 900;
-final int gui_height                     = 840;
+final int gui_height                     = 850;
 
 int gui_backgroundBrightness             = 45;
 final int gui_simulatorPosX              = 10;
@@ -47,7 +47,7 @@ final int gui_simulatorTextSubY          = 210;
 
 final int gui_audioMonitoringGroupOffsetX = (gui_simulatorPosX + gui_simulatorWidth + gui_spacing);
 final int gui_audioMonitoringGroupWidth   = gui_width - (gui_simulatorPosX + gui_simulatorWidth + 2*gui_spacing);
-final int gui_audioMonitoringGroupHeight  = 210;
+final int gui_audioMonitoringGroupHeight  = 200;
 final int gui_audioMonitoringToggleWidth  = 140;
 final int gui_audioMonitoringToggleHeight = 20;    
 
@@ -194,6 +194,16 @@ final int GUI_ATTR_DMX_MOVINGHEAD_LIGHT_SINE         = 11;
 final int GUI_ATTR_DMX_MOVINGHEAD_LIGHT_GLITCH       = 12;
 final int GUI_ATTR_DMX_MOVINGHEAD_LIGHT_TIGHT        = 13;
 
+final int GUI_ATTR_DMX_MOVINGHEAD_ZOOM_ALL           = 0;
+final int GUI_ATTR_DMX_MOVINGHEAD_ZOOM_LEFT          = 1;
+final int GUI_ATTR_DMX_MOVINGHEAD_ZOOM_RIGHT         = 2;
+final int GUI_ATTR_DMX_MOVINGHEAD_ZOOM_SIDE          = 3;
+final int GUI_ATTR_DMX_MOVINGHEAD_ZOOM_CENTER        = 4;
+final int GUI_ATTR_DMX_MOVINGHEAD_ZOOM_BOTTOM        = 5;
+final int GUI_ATTR_DMX_MOVINGHEAD_ZOOM_TOP           = 6;
+final int GUI_ATTR_DMX_MOVINGHEAD_ZOOM_FIXED         = 7;
+final int GUI_ATTR_DMX_MOVINGHEAD_ZOOM_PROGRESSIVE   = 8;
+
 
 final int GUI_ATTR_DMX_MOVINGHEAD_ANIM_ALL           = 0;
 final int GUI_ATTR_DMX_MOVINGHEAD_ANIM_LEFT          = 1;
@@ -255,8 +265,8 @@ final float audioMonitoring_maxSignalLevel_Guitar  = 1.2;
 final int FRAMERATE_NOSIMU = 8;
 final int FRAMERATE_SIMU   = 30;
 
-final int gui_audioMonitoringGroupPosY           = 600;
-final int gui_generalInformationsHeight          = 530;
+final int gui_audioMonitoringGroupPosY           = 620;
+final int gui_generalInformationsHeight          = 560;
 final int gui_ledPanelAnimationGroupPosY         = 350;
 final int gui_ledPanelAnimationGroupHeight       = 165;
 final int gui_customDevAndDMXAnimationGroupPosY  = gui_ledPanelAnimationGroupPosY + gui_ledPanelAnimationGroupHeight + 6;
@@ -347,6 +357,7 @@ public class ControlFrame extends PApplet {
   controlP5.CheckBox DMXMovingHeadAnimations_Color_animationListCheckBox;
   controlP5.CheckBox DMXMovingHeadAnimations_Rhythm_animationListCheckBox;
   controlP5.CheckBox DMXMovingHeadAnimations_LightStyle_animationListCheckBox;
+  controlP5.CheckBox DMXMovingHeadAnimations_ZoomStyle_animationListCheckBox;
   controlP5.CheckBox DMXMovingHeadAnimations_Animations_animationListCheckBox;
   controlP5.CheckBox DMXParAnimations_Color_animationListCheckBox;
   controlP5.CheckBox DMXParAnimations_LightStyle_animationListCheckBox;
@@ -359,6 +370,7 @@ public class ControlFrame extends PApplet {
   controlP5.Button DMXMovingHeadAnimations_Color_reinitButton;
   controlP5.Button DMXMovingHeadAnimations_Rhythm_reinitButton;
   controlP5.Button DMXMovingHeadAnimations_LightStyle_reinitButton;
+  controlP5.Button DMXMovingHeadAnimations_ZoomStyle_reinitButton;
   controlP5.Button DMXMovingHeadAnimations_Animations_reinitButton;
   controlP5.Button DMXParAnimations_Color_reinitButton;
   controlP5.Button DMXParAnimations_LightStyle_reinitButton;
@@ -371,6 +383,7 @@ public class ControlFrame extends PApplet {
   controlP5.ScrollableList DMXMovingHeadAnimations_Movement_animationListBox;
   controlP5.ScrollableList DMXMovingHeadAnimations_Color_animationListBox;
   controlP5.ScrollableList DMXMovingHeadAnimations_Rhythm_animationListBox;
+  controlP5.ScrollableList DMXMovingHeadAnimations_ZoomStyle_animationListBox;
   controlP5.ScrollableList DMXMovingHeadAnimations_LightStyle_animationListBox;
   controlP5.ScrollableList DMXMovingHeadAnimations_Animations_animationListBox;
   controlP5.ScrollableList DMXParAnimations_Color_animationListBox;
@@ -388,6 +401,7 @@ public class ControlFrame extends PApplet {
   controlP5.Textarea DMXMovingHeadAnimations_Movement_currentAnimationDescription;
   controlP5.Textarea DMXMovingHeadAnimations_Color_currentAnimationDescription;
   controlP5.Textarea DMXMovingHeadAnimations_Rhythm_currentAnimationDescription;
+  controlP5.Textarea DMXMovingHeadAnimations_ZoomStyle_currentAnimationDescription;
   controlP5.Textarea DMXMovingHeadAnimations_LightStyle_currentAnimationDescription;
   controlP5.Textarea DMXMovingHeadAnimations_Animations_currentAnimationDescription;
   controlP5.Textarea DMXParAnimations_Color_currentAnimationDescription;
@@ -1138,6 +1152,7 @@ public class ControlFrame extends PApplet {
                                   "INPUT MIDI (VAL | NOTE) : " + PITCH_DMX_ANIMATION_MOVING_HEAD_INIT_DIRECTION  + " | " + getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_INIT_DIRECTION ) + "\n" +
                                   "INPUT MIDI (VAL | NOTE) : " + PITCH_DMX_ANIMATION_MOVING_HEAD_SET_COLOR       + " | " + getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_COLOR      ) + "\n" +
                                   "INPUT MIDI (VAL | NOTE) : " + PITCH_DMX_ANIMATION_MOVING_HEAD_SET_LIGHT_STYLE + " | " + getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_LIGHT_STYLE) + "\n" +
+                                  "INPUT MIDI (VAL | NOTE) : " + PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ZOOM_STYLE  + " | " + getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ZOOM_STYLE)  + "\n" +
                                   "INPUT MIDI (VAL | NOTE) : " + PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_1 + " | " + getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_1) + "\n" +
                                   "INPUT MIDI (VAL | NOTE) : " + PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_2 + " | " + getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_2) + "\n" +
                                   "INPUT MIDI (VAL | NOTE) : " + PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_3 + " | " + getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_3) + "\n" +
@@ -1752,6 +1767,13 @@ public class ControlFrame extends PApplet {
                                                     .setBackgroundHeight(groupHeight)
                                                     .setLabel("Animation list - DMX Moving Head devices - Set Rhythm")
                                                     ;
+    Group DMXAnimations_ZoomStyle_animListGroup = cp5.addGroup("Animation list - DMX Moving Head Devices - Set Zoom Style")
+                                                    .setWidth(groupWidth)
+                                                    .activateEvent(true) 
+                                                    .setBackgroundColor(color(255,80))
+                                                    .setBackgroundHeight(groupHeight)
+                                                    .setLabel("Animation list - DMX Moving Head devices - Set Zoom Style")
+                                                    ;
     Group DMXAnimations_LightStyle_animListGroup = cp5.addGroup("Animation list - DMX Moving Head Devices - Set Light Style")
                                                     .setWidth(groupWidth)
                                                     .activateEvent(true) 
@@ -1807,6 +1829,16 @@ public class ControlFrame extends PApplet {
                                              .setColorActive(color(255,0,0))
                                              .setGroup(DMXAnimations_LightStyle_animListGroup)
                                              ;
+    DMXMovingHeadAnimations_ZoomStyle_reinitButton = cp5.addButton("Reinit DMX Moving Head list - Set Zoom Style")
+                                             .setValue(0)
+                                             .setCaptionLabel("Reinit")
+                                             .setPosition(leftOffset + 6*spacingColumn + 6*toggleWidth, 4*toggleHeight + 3*spacingRow)
+                                             .setSize(40, toggleHeight)
+                                             .setColorBackground(color(110,0,0))
+                                             .setColorForeground(color(160,0,0))
+                                             .setColorActive(color(255,0,0))
+                                             .setGroup(DMXAnimations_ZoomStyle_animListGroup)
+                                             ;
     DMXMovingHeadAnimations_Animations_reinitButton = cp5.addButton("Reinit DMX Moving Head list - Perform Animations")
                                              .setValue(0)
                                              .setCaptionLabel("Reinit")
@@ -1822,6 +1854,7 @@ public class ControlFrame extends PApplet {
     DMXMovingHeadAnimations_Movement_reinitButton.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
     DMXMovingHeadAnimations_Color_reinitButton.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
     DMXMovingHeadAnimations_LightStyle_reinitButton.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
+    DMXMovingHeadAnimations_ZoomStyle_reinitButton.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
     DMXMovingHeadAnimations_Animations_reinitButton.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);
     
     DMXMovingHeadAnimations_Movement_animationListCheckBox = cp5.addCheckBox("Attributes - DMX Moving Head animations - Prepare Direction")
@@ -1932,6 +1965,26 @@ public class ControlFrame extends PApplet {
                                                                 .setGroup(DMXAnimations_LightStyle_animListGroup)
                                                                 ;
 
+    DMXMovingHeadAnimations_ZoomStyle_animationListCheckBox = cp5.addCheckBox("Attributes - DMX Moving Head animations - Set Zoom Style")
+                                                                .setPosition(leftOffset,toggleHeight)
+                                                                .setSize(toggleWidth,toggleHeight)
+                                                                .setItemsPerRow(7)
+                                                                .setSpacingColumn(spacingColumn)
+                                                                .setSpacingRow(spacingRow)
+                                                                .setColorForeground(color(120,0,0))
+                                                                .setColorActive(color(160,0,0))
+                                                                .setColorLabel(color(255))
+                                                                .addItem("aLl",          0)
+                                                                .addItem("lEFt",         1)
+                                                                .addItem("rIGHt",        2)
+                                                                .addItem("sIDe",         3)
+                                                                .addItem("cENTEr",       4)
+                                                                .addItem("bOTTOm",       5)
+                                                                .addItem("tOp",          6)
+                                                                .addItem("sTILl",        7)
+                                                                .setGroup(DMXAnimations_ZoomStyle_animListGroup)
+                                                                ;
+
 
 
     DMXMovingHeadAnimations_Animations_animationListCheckBox = cp5.addCheckBox("Attributes - DMX Moving Head animations - Perform Animations")
@@ -1970,6 +2023,7 @@ public class ControlFrame extends PApplet {
     List<String> filteredAnimationsStringList_Movement   = new ArrayList<String>();
     List<String> filteredAnimationsStringList_Color      = new ArrayList<String>();
     List<String> filteredAnimationsStringList_Rhythm     = new ArrayList<String>();
+    List<String> filteredAnimationsStringList_ZoomStyle  = new ArrayList<String>();
     List<String> filteredAnimationsStringList_LightStyle = new ArrayList<String>();
     List<String> filteredAnimationsStringList_Animations = new ArrayList<String>();
 
@@ -1984,6 +2038,9 @@ public class ControlFrame extends PApplet {
     }
     for (Attribute attr: DMXMovingHead_LightStyleAttributes) {
       filteredAnimationsStringList_LightStyle.add(attr.animationNbr + ": " + attr.name);
+    }
+    for (Attribute attr: DMXMovingHead_ZoomStyleAttributes) {
+      filteredAnimationsStringList_ZoomStyle.add(attr.animationNbr + ": " + attr.name);
     }
     for (Attribute attr: DMXMovingHead_AnimationAttributes) {
       filteredAnimationsStringList_Animations.add(attr.animationNbr + ": " + attr.name);
@@ -2026,6 +2083,15 @@ public class ControlFrame extends PApplet {
                                                            .setType(ScrollableList.LIST)
                                                            .moveTo(DMXAnimations_LightStyle_animListGroup)
                                                            ;
+    DMXMovingHeadAnimations_ZoomStyle_animationListBox = cp5.addScrollableList("Filtered DMX Moving Head Animation List - Set Zoom Style")
+                                                           .setPosition(leftOffset, 3*toggleHeight + 4*spacingRow - 2)
+                                                           .setSize(3*DMXAnimations_ZoomStyle_animListGroup.getWidth()/5 - 2*leftOffset, DMXAnimations_ZoomStyle_animListGroup.getBackgroundHeight() - (3*toggleHeight + 3*spacingRow) + 1)
+                                                           .addItems(filteredAnimationsStringList_ZoomStyle)
+                                                           .setBarVisible(false) 
+                                                           //.disableCollapse()
+                                                           .setType(ScrollableList.LIST)
+                                                           .moveTo(DMXAnimations_ZoomStyle_animListGroup)
+                                                           ;
     DMXMovingHeadAnimations_Animations_animationListBox = cp5.addScrollableList("Filtered DMX Moving Head Animation List - Perform Animations")
                                                            .setPosition(leftOffset, 4*toggleHeight + 4*spacingRow)
                                                            .setSize(3*DMXAnimations_Animations_animListGroup.getWidth()/5 - 2*leftOffset, DMXAnimations_Animations_animListGroup.getBackgroundHeight() - (4*toggleHeight + 4*spacingRow) + 1)
@@ -2066,6 +2132,16 @@ public class ControlFrame extends PApplet {
                                                             .setColorForeground(color(255,90))
                                                             .moveTo(DMXAnimations_Rhythm_animListGroup)
                                                             ;
+    DMXMovingHeadAnimations_ZoomStyle_currentAnimationDescription = cp5.addTextarea("Current DMX Moving Head Animation Description - Set Zoom Style")
+                                                            .setPosition(3*DMXAnimations_ZoomStyle_animListGroup.getWidth()/5, 5*toggleHeight + 5*spacingRow)
+                                                            .setSize(DMXAnimations_ZoomStyle_animListGroup.getWidth() - DMXMovingHeadAnimations_ZoomStyle_animationListBox.getWidth() - 3*leftOffset, DMXMovingHeadAnimations_ZoomStyle_animationListBox.getHeight() - 4*(toggleHeight - spacingRow))
+                                                            .setColor(color(255))
+                                                            .setFont(minimlFont)
+                                                            .hideScrollbar()
+                                                            .setColorBackground(color(255,90))
+                                                            .setColorForeground(color(255,90))
+                                                            .moveTo(DMXAnimations_ZoomStyle_animListGroup)
+                                                            ;
     DMXMovingHeadAnimations_LightStyle_currentAnimationDescription = cp5.addTextarea("Current DMX Moving Head Animation Description - Set Light Style")
                                                             .setPosition(3*DMXAnimations_LightStyle_animListGroup.getWidth()/5, 5*toggleHeight + 5*spacingRow)
                                                             .setSize(DMXAnimations_LightStyle_animListGroup.getWidth() - DMXMovingHeadAnimations_LightStyle_animationListBox.getWidth() - 3*leftOffset, DMXMovingHeadAnimations_LightStyle_animationListBox.getHeight() - 4*(toggleHeight - spacingRow))
@@ -2097,6 +2173,7 @@ public class ControlFrame extends PApplet {
     DMXMovingHeadAnimations_Color_currentAnimationDescription.setText(textDescription.toUpperCase());
     DMXMovingHeadAnimations_Rhythm_currentAnimationDescription.setText(textDescription.toUpperCase());
     DMXMovingHeadAnimations_LightStyle_currentAnimationDescription.setText(textDescription.toUpperCase());
+    DMXMovingHeadAnimations_ZoomStyle_currentAnimationDescription.setText(textDescription.toUpperCase());
     DMXMovingHeadAnimations_Animations_currentAnimationDescription.setText(textDescription.toUpperCase());
     
     ArrayList<Group> groups = new ArrayList<Group>();
@@ -2104,6 +2181,7 @@ public class ControlFrame extends PApplet {
     groups.add(DMXAnimations_Color_animListGroup);
     groups.add(DMXAnimations_Rhythm_animListGroup);
     groups.add(DMXAnimations_LightStyle_animListGroup);
+    groups.add(DMXAnimations_ZoomStyle_animListGroup);
     groups.add(DMXAnimations_Animations_animListGroup);
     return groups;
   }
@@ -2739,6 +2817,14 @@ public class ControlFrame extends PApplet {
     DMXMovingHeadAnimations_LightStyle_animationListBox.addItems(filteredAnimationsStringList);
   }
 
+  void rebuildFilteredDMXMovingHead_ZoomStyle_AnimationList(float[] checkBoxArrayValue) {
+    String[] wantedAttributes = createDMXAnimationListFilter_MovingHead_Zoom(checkBoxArrayValue);
+    List<String> filteredAnimationsStringList = getFilteredAnimationsStringList_DMX(checkBoxArrayValue, DMXMovingHead_ZoomStyleAttributes, wantedAttributes);
+
+    DMXMovingHeadAnimations_ZoomStyle_animationListBox.clear();
+    DMXMovingHeadAnimations_ZoomStyle_animationListBox.addItems(filteredAnimationsStringList);
+  }
+
   void rebuildFilteredDMXMovingHead_Animations_AnimationList(float[] checkBoxArrayValue) {
     String[] wantedAttributes = createDMXAnimationListFilter_MovingHead_Animation(checkBoxArrayValue);
     List<String> filteredAnimationsStringList = getFilteredAnimationsStringList_DMX(checkBoxArrayValue, DMXMovingHead_AnimationAttributes, wantedAttributes);
@@ -2831,6 +2917,12 @@ public class ControlFrame extends PApplet {
     dmxAutomaticControl = true;
     dmxAnimationNumber_movingHead_setLightStyle = animNbr;
     setupDMXAnimation_movingHead_setLightStyle();
+  }
+
+  void gui_loadDMXAnimation_movingHead_ZoomStyle(int animNbr) {
+    dmxAutomaticControl = true;
+    dmxAnimationNumber_movingHead_setZoomStyle = animNbr;
+    setupDMXAnimation_movingHead_setZoomStyle();
   }
 
   void gui_loadDMXAnimation_movingHead(int animNbr) {
@@ -3247,50 +3339,7 @@ public class ControlFrame extends PApplet {
       noStroke();
       rect(offsetX + i*singleRectWidth, offsetY, singleRectWidth, singleRectHeight);
     }
-  }
-  
-
-
-  
-  // TBIL To delete
-  // //Parse strings like "(2,3,5)", to return {2,3,5}
-  // int[] gui_parseStringGenericDMX(String string, int numberOfChannels) {
-    
-  //   int[] result = new int[numberOfChannels];
-  //   for (int i=0; i<numberOfChannels; i++) {result[i] = -1;}
-    
-  //   try {
-  //     boolean rejectLine = false;
-  //     if (string.indexOf("(") != 0) {
-  //       rejectLine = true;
-  //       outputLog.println("Bad string formatting for new DMX device declaration : " + string);
-  //     }
-  //     if (string.indexOf(")") != string.length() - 1) {
-  //       rejectLine = true;
-  //       outputLog.println("Bad string formatting for new DMX device declaration : " + string);
-  //     }
-      
-  //     String[] subStringSplit = split(string.substring(1, string.length() - 1), ",");
-      
-  //     if (subStringSplit.length != numberOfChannels) {
-  //       rejectLine = true;
-  //       outputLog.println("Bad string formatting for new DMX device declaration : " + string);
-  //     }
-  //     if (rejectLine == false) {
-  //       for (int i=0; i<numberOfChannels; i++) {
-  //         result[i] = Integer.parseInt(subStringSplit[i]);
-  //       }
-  //     }
-  //     return result;
-  //   }
-  //   catch (Exception e) {
-  //     outputLog.println("Caught an exception while trying to parse the following string : " + string + " (in order to create a new DMX device) : " + e);
-  //     return result;
-  //   }
-  // }
-
-
-    
+  }  
 
   void controlEvent(ControlEvent theEvent) {
     if (gui_initComplete) {
@@ -3610,6 +3659,9 @@ public class ControlFrame extends PApplet {
       else if (theEvent.getName() == "Attributes - DMX Moving Head animations - Set Light Style") {
         rebuildFilteredDMXMovingHead_LightStyle_AnimationList(DMXMovingHeadAnimations_LightStyle_animationListCheckBox.getArrayValue());
       }
+      else if (theEvent.getName() == "Attributes - DMX Moving Head animations - Set Zoom Style") {
+        rebuildFilteredDMXMovingHead_ZoomStyle_AnimationList(DMXMovingHeadAnimations_ZoomStyle_animationListCheckBox.getArrayValue());
+      }
       else if (theEvent.getName() == "Attributes - DMX Moving Head animations - Perform Animations") {
         rebuildFilteredDMXMovingHead_Animations_AnimationList(DMXMovingHeadAnimations_Animations_animationListCheckBox.getArrayValue());
       }
@@ -3770,6 +3822,27 @@ public class ControlFrame extends PApplet {
         
         //Load the animation
         gui_loadDMXAnimation_movingHead_LightStyle(animNbr);
+
+      }
+      else if (theEvent.getName() == "Filtered DMX Moving Head Animation List - Set Zoom Style") {
+        int selectedVal = int(DMXMovingHeadAnimations_ZoomStyle_animationListBox.getValue());
+        String selectedItem =  (String)DMXMovingHeadAnimations_ZoomStyle_animationListBox.getItem(selectedVal).get("text");
+        String[] selectedItemSplit = split(selectedItem, ":");
+        int animNbr = Integer.parseInt(selectedItemSplit[0]);
+
+        //Update the description
+        //Note : get animNbr - 1, because unlike for the LED Panel animations, there is no 0
+        String textDescription = "Current moving head zoom style description \n"
+                                      + DMXMovingHead_ZoomStyleAttributes.get(animNbr - 1).name + "\n"
+                                      + "\n"
+                                      + "Animation number : " + DMXMovingHead_ZoomStyleAttributes.get(animNbr - 1).animationNbr + "\n"
+                                      + "Corresponding note/velocity : " + getStringFromDMXAnimationNumber_movingHead_ZoomStyle(DMXMovingHead_ZoomStyleAttributes.get(animNbr - 1).animationNbr) + "\n"
+                                      + "Attributes:\n"
+                                      + DMXMovingHead_ZoomStyleAttributes.get(animNbr - 1).attributes;
+        DMXMovingHeadAnimations_ZoomStyle_currentAnimationDescription.setText(textDescription.toUpperCase());
+        
+        //Load the animation
+        gui_loadDMXAnimation_movingHead_ZoomStyle(animNbr);
 
       }
       else if (theEvent.getName() == "Filtered DMX Moving Head Animation List - Perform Animations") {
@@ -4480,6 +4553,33 @@ String[] createDMXAnimationListFilter_MovingHead_Light(float[] checkBoxArrayvalu
         case GUI_ATTR_DMX_MOVINGHEAD_LIGHT_SINE      : temp.append("MovingHead-Sine");break;
         case GUI_ATTR_DMX_MOVINGHEAD_LIGHT_GLITCH    : temp.append("MovingHead-Glitch");break;
         case GUI_ATTR_DMX_MOVINGHEAD_LIGHT_TIGHT     : temp.append("MovingHead-Tight");break;
+        default: break;
+      }
+    }
+  }
+  
+  String[] filter = new String[temp.size()];
+  for (int i = 0; i<temp.size(); i++) {
+    filter[i] = temp.get(i);
+  }
+  return filter;
+
+}
+
+String[] createDMXAnimationListFilter_MovingHead_Zoom(float[] checkBoxArrayvalue) {
+  StringList temp = new StringList();
+  for (int i = 0; i<checkBoxArrayvalue.length; i++) {
+    if (checkBoxArrayvalue[i] == 1.0) {
+      switch(i) {
+        case GUI_ATTR_DMX_MOVINGHEAD_ZOOM_ALL         : temp.append("MovingHead-SetZoom-All");break;
+        case GUI_ATTR_DMX_MOVINGHEAD_ZOOM_LEFT        : temp.append("MovingHead-SetZoom-Left");break;
+        case GUI_ATTR_DMX_MOVINGHEAD_ZOOM_RIGHT       : temp.append("MovingHead-SetZoom-Right");break;
+        case GUI_ATTR_DMX_MOVINGHEAD_ZOOM_SIDE        : temp.append("MovingHead-SetZoom-Side");break;
+        case GUI_ATTR_DMX_MOVINGHEAD_ZOOM_CENTER      : temp.append("MovingHead-SetZoom-Center");break;
+        case GUI_ATTR_DMX_MOVINGHEAD_ZOOM_BOTTOM      : temp.append("MovingHead-SetZoom-Bottom");break;
+        case GUI_ATTR_DMX_MOVINGHEAD_ZOOM_TOP         : temp.append("MovingHead-SetZoom-Top");break;
+        case GUI_ATTR_DMX_MOVINGHEAD_ZOOM_FIXED       : temp.append("MovingHead-SetZoom-Fixed");break;
+        case GUI_ATTR_DMX_MOVINGHEAD_ZOOM_PROGRESSIVE : temp.append("MovingHead-SetZoom-Progressive");break;
         default: break;
       }
     }

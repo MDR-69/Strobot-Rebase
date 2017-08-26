@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Fixture>
- 	<Name>MAC Aura (14 channels)</Name>
+ 	<Name>MAC Aura (25 channels)</Name>
  	<Manufacturer>Martin</Manufacturer>
  	<Type>Moving Head</Type>
-	<Comment>Martin MAC Aura - 13 channels 2017/08/24 revision</Comment>
+	<Comment>Martin MAC Aura - 25 channels 2017/08/24 revision</Comment>
 
-	<NbChannels>14</NbChannels>
+	<NbChannels>25</NbChannels>
 	
 	<ChannelType index="0" attribute="SHUTTER">
 		<ChannelSet name="CLOSED" from_dmx="0" to_dmx="19" />

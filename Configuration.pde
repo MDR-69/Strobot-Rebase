@@ -513,18 +513,18 @@ String getStringFromNoteInt(int note) {
     String octave = str(baseValue - 2);;
     String noteName = "";
     switch(noteValue) {
-      case 0: noteName = "C";break;
-      case 1: noteName = "C#";break;
-      case 2: noteName = "D";break;
-      case 3: noteName = "D#";break;
-      case 4: noteName = "E";break;
-      case 5: noteName = "F";break;
-      case 6: noteName = "F#";break;
-      case 7: noteName = "G";break;
-      case 8: noteName = "G#";break;
-      case 9: noteName = "A";break;
-      case 10: noteName = "A#";break;
-      case 11: noteName = "B";break;
+      case 0: noteName  = "C";  break;
+      case 1: noteName  = "C#"; break;
+      case 2: noteName  = "D";  break;
+      case 3: noteName  = "D#"; break;
+      case 4: noteName  = "E";  break;
+      case 5: noteName  = "F";  break;
+      case 6: noteName  = "F#"; break;
+      case 7: noteName  = "G";  break;
+      case 8: noteName  = "G#"; break;
+      case 9: noteName  = "A";  break;
+      case 10: noteName = "A#"; break;
+      case 11: noteName = "B";  break;
       default: break;
     }
     return noteName + octave;
@@ -627,6 +627,14 @@ String getStringFromDMXAnimationNumber_movingHead_Rhythm(int animNbr) {
   String temp = "Undefined";
   if (animNbr <= 127) {                                                                   
     temp = getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_RHYTHM) + "  |  " + str(animNbr);
+  }
+  return temp;
+}
+
+String getStringFromDMXAnimationNumber_movingHead_ZoomStyle(int animNbr) {
+  String temp = "Undefined";
+  if (animNbr <= 127) {                                                                   
+    temp = getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ZOOM_STYLE) + "  |  " + str(animNbr);
   }
   return temp;
 }

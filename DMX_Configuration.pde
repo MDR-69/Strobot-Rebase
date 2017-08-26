@@ -47,15 +47,14 @@ public class DMXConfiguration {
         dmxInit_buildSubObjects();
       }
       catch (Exception e) {
-        println("that's already bad");
         exceptionRaised = true;
         outputLog.println("Exception while trying to parse the DMX configuration (and build the internal Strobot objects: " + e);
       }
    
       WritableWorkbook workbook = Workbook.createWorkbook(new File(sketchPath("") + "/" + "DMX_Configuration_temp.xls"), readWorkbook);
       // Print the DMX library in all the used Sheets
-      //updateFixtureDefinitionInExcel(workbook.getSheet(0));
-      //updateFixtureDefinitionInExcel(workbook.getSheet(1));
+      // updateFixtureDefinitionInExcel(workbook.getSheet(0));
+      // updateFixtureDefinitionInExcel(workbook.getSheet(1));
 
       workbook.write();
       workbook.close();

@@ -14,6 +14,7 @@ int dmxAnimationNumber_movingHead_initDirection     = 0;
 int dmxAnimationNumber_movingHead_setColor          = 0;
 int dmxAnimationNumber_movingHead_setRhythm         = 0;
 int dmxAnimationNumber_movingHead_setLightStyle     = 0;
+int dmxAnimationNumber_movingHead_setZoomStyle     = 0;
 int dmxAnimationNumber_movingHead_setAnimation      = 1;
 int dmxAnimationNumber_par_setColor                 = 0;
 int dmxAnimationNumber_par_setLightStyle            = 0;
@@ -351,84 +352,97 @@ void setupDMXAnimation_movingHead_setColor() {
   switch(dmxAnimationNumber_movingHead_setColor) {
     // For the more complex animations: set the color for the different devices (all/center/side/left/right)
 
-    case 1:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_white();                                         break;
-    case 2:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_red();                                           break;
-    case 3:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_deepRed();                                       break;
-    case 4:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_blue();                                          break;
-    case 5:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_deepBlue();                                      break;
-    case 6:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_yellow();                                        break;
-    case 7:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_green();                                         break;
-    case 8:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_ultraviolet();                                   break;
-    case 9:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_orange();                                        break;
-    case 10:  dmxAnim_movingHead_setColorForCompositeAnimations_allDev_CTO();                                           break;
-
-    case 11:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_white();                                      break;
-    case 12:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_red();                                        break;
-    case 13:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_deepRed();                                    break;
-    case 14:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_blue();                                       break;
-    case 15:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_deepBlue();                                   break;
-    case 16:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_yellow();                                     break;
-    case 17:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_green();                                      break;
-    case 18:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_ultraviolet();                                break;
-    case 19:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_orange();                                     break;
-    case 20:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_CTO();                                        break;
-
-    case 21:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_white();                                      break;
-    case 22:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_red();                                        break;
-    case 23:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_deepRed();                                    break;
-    case 24:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_blue();                                       break;
-    case 25:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_deepBlue();                                   break;
-    case 26:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_yellow();                                     break;
-    case 27:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_green();                                      break;
-    case 28:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_ultraviolet();                                break;
-    case 29:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_orange();                                     break;
-    case 30:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_CTO();                                        break;
-
-    case 31:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_white();                                        break;
-    case 32:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_red();                                          break;
-    case 33:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_deepRed();                                      break;
-    case 34:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_blue();                                         break;
-    case 35:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_deepBlue();                                     break;
-    case 36:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_yellow();                                       break;
-    case 37:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_green();                                        break;
-    case 38:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_ultraviolet();                                  break;
-    case 39:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_orange();                                       break;
-    case 40:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_CTO();                                          break;
-
-    case 41:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_white();                                        break;
-    case 42:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_red();                                          break;
-    case 43:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_deepRed();                                      break;
-    case 44:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_blue();                                         break;
-    case 45:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_deepBlue();                                     break;
-    case 46:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_yellow();                                       break;
-    case 47:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_green();                                        break;
-    case 48:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_ultraviolet();                                  break;
-    case 49:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_orange();                                       break;
-    case 50:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_CTO();                                          break;
-
-    case 51:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_white();                                       break;
-    case 52:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_red();                                         break;
-    case 53:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_deepRed();                                     break;
-    case 54:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_blue();                                        break;
-    case 55:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_deepBlue();                                    break;
-    case 56:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_yellow();                                      break;
-    case 57:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_green();                                       break;
-    case 58:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_ultraviolet();                                 break;
-    case 59:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_orange();                                      break;
-    case 60:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_CTO();                                         break;
-
-    case 61:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_white();                                         break;
-    case 62:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_red();                                           break;
-    case 63:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_deepRed();                                       break;
-    case 64:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_blue();                                          break;
-    case 65:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_deepBlue();                                      break;
-    case 66:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_yellow();                                        break;
-    case 67:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_green();                                         break;
-    case 68:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_ultraviolet();                                   break;
-    case 69:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_orange();                                        break;
-    case 70:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_CTO();                                           break;
-
-
+    case 1:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_white();                                              break;
+    case 2:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_red();                                                break;
+    case 3:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_deepRed();                                            break;
+    case 4:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_blue();                                               break;
+    case 5:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_deepBlue();                                           break;
+    case 6:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_turquoise();                                          break;
+    case 7:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_yellow();                                             break;
+    case 8:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_lime();                                               break;
+    case 9:   dmxAnim_movingHead_setColorForCompositeAnimations_allDev_green();                                              break;
+    case 10:  dmxAnim_movingHead_setColorForCompositeAnimations_allDev_ultraviolet();                                        break;
+    case 11:  dmxAnim_movingHead_setColorForCompositeAnimations_allDev_pink();                                               break;
+    case 12:  dmxAnim_movingHead_setColorForCompositeAnimations_allDev_orange();                                             break;
+    case 13:  dmxAnim_movingHead_setColorForCompositeAnimations_allDev_CTO();                                                break;
+    case 14:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_white();                                           break;
+    case 15:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_red();                                             break;
+    case 16:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_deepRed();                                         break;
+    case 17:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_blue();                                            break;
+    case 18:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_deepBlue();                                        break;
+    case 19:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_turquoise();                                       break;
+    case 20:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_yellow();                                          break;
+    case 21:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_lime();                                            break;
+    case 22:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_green();                                           break;
+    case 23:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_ultraviolet();                                     break;
+    case 24:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_pink();                                            break;
+    case 25:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_orange();                                          break;
+    case 26:  dmxAnim_movingHead_setColorForCompositeAnimations_bottomDev_CTO();                                             break;
+    case 27:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_white();                                           break;
+    case 28:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_red();                                             break;
+    case 29:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_deepRed();                                         break;
+    case 30:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_blue();                                            break;
+    case 31:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_deepBlue();                                        break;
+    case 32:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_turquoise();                                       break;
+    case 33:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_yellow();                                          break;
+    case 34:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_lime();                                            break;
+    case 35:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_green();                                           break;
+    case 36:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_ultraviolet();                                     break;
+    case 37:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_pink();                                            break;
+    case 38:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_orange();                                          break;
+    case 39:  dmxAnim_movingHead_setColorForCompositeAnimations_centerDev_CTO();                                             break;
+    case 40:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_white();                                             break;
+    case 41:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_red();                                               break;
+    case 42:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_deepRed();                                           break;
+    case 43:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_blue();                                              break;
+    case 44:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_deepBlue();                                          break;
+    case 45:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_turquoise();                                         break;
+    case 46:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_yellow();                                            break;
+    case 47:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_lime();                                              break;
+    case 48:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_green();                                             break;
+    case 49:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_ultraviolet();                                       break;
+    case 50:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_pink();                                              break;
+    case 51:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_orange();                                            break;
+    case 52:  dmxAnim_movingHead_setColorForCompositeAnimations_sideDev_CTO();                                               break;
+    case 53:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_white();                                             break;
+    case 54:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_red();                                               break;
+    case 55:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_deepRed();                                           break;
+    case 56:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_blue();                                              break;
+    case 57:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_deepBlue();                                          break;
+    case 58:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_turquoise();                                         break;
+    case 59:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_yellow();                                            break;
+    case 60:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_lime();                                              break;
+    case 61:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_green();                                             break;
+    case 62:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_ultraviolet();                                       break;
+    case 63:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_pink();                                              break;
+    case 64:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_orange();                                            break;
+    case 65:  dmxAnim_movingHead_setColorForCompositeAnimations_leftDev_CTO();                                               break;
+    case 66:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_white();                                            break;
+    case 67:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_red();                                              break;
+    case 68:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_deepRed();                                          break;
+    case 69:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_blue();                                             break;
+    case 70:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_deepBlue();                                         break;
+    case 71:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_turquoise();                                        break;
+    case 72:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_yellow();                                           break;
+    case 73:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_lime();                                             break;
+    case 74:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_green();                                            break;
+    case 75:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_ultraviolet();                                      break;
+    case 76:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_pink();                                             break;
+    case 77:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_orange();                                           break;
+    case 78:  dmxAnim_movingHead_setColorForCompositeAnimations_rightDev_CTO();                                              break;
+    case 79:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_white();                                              break;
+    case 80:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_red();                                                break;
+    case 81:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_deepRed();                                            break;
+    case 82:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_blue();                                               break;
+    case 83:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_deepBlue();                                           break;
+    case 84:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_turquoise();                                          break;
+    case 85:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_yellow();                                             break;
+    case 86:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_lime();                                               break;
+    case 87:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_green();                                              break;
+    case 88:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_ultraviolet();                                        break;
+    case 89:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_pink();                                               break;
+    case 90:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_orange();                                             break;
+    case 91:  dmxAnim_movingHead_setColorForCompositeAnimations_topDev_CTO();                                                break;
     default: break;
   }
 }
@@ -666,6 +680,103 @@ void setupDMXAnimation_movingHead_setLightStyle() {
     case 97: dmxAnim_movingHead_setLightStyle_topDev_randomGlitch();                                                    break;
     case 98: dmxAnim_movingHead_setLightStyle_topDev_minimalApertureBeam();                                             break;
 
+    default: break;
+  }
+}
+
+void setupDMXAnimation_movingHead_setZoomStyle() {
+  switch(dmxAnimationNumber_movingHead_setZoomStyle) {
+    case 1:   dmxAnim_movingHead_setZoomStyle_allDev_ultraNarrow();                                                     break;
+    case 2:   dmxAnim_movingHead_setZoomStyle_allDev_narrow();                                                          break;
+    case 3:   dmxAnim_movingHead_setZoomStyle_allDev_wide();                                                            break;
+    case 4:   dmxAnim_movingHead_setZoomStyle_allDev_ultraWide();                                                       break;
+    case 5:   dmxAnim_movingHead_setZoomStyle_allDev_progressiveClose_verySlow();                                       break;
+    case 6:   dmxAnim_movingHead_setZoomStyle_allDev_progressiveClose_slow();                                           break;
+    case 7:   dmxAnim_movingHead_setZoomStyle_allDev_progressiveClose_medium();                                         break;
+    case 8:   dmxAnim_movingHead_setZoomStyle_allDev_progressiveClose_fast();                                           break;
+    case 9:   dmxAnim_movingHead_setZoomStyle_allDev_progressiveOpen_verySlow();                                        break;
+    case 10:  dmxAnim_movingHead_setZoomStyle_allDev_progressiveOpen_slow();                                            break;
+    case 11:  dmxAnim_movingHead_setZoomStyle_allDev_progressiveOpen_medium();                                          break;
+    case 12:  dmxAnim_movingHead_setZoomStyle_allDev_progressiveOpen_fast();                                            break;
+
+    case 13:  dmxAnim_movingHead_setZoomStyle_bottomDev_ultraNarrow();                                                  break;
+    case 14:  dmxAnim_movingHead_setZoomStyle_bottomDev_narrow();                                                       break;
+    case 15:  dmxAnim_movingHead_setZoomStyle_bottomDev_wide();                                                         break;
+    case 16:  dmxAnim_movingHead_setZoomStyle_bottomDev_ultraWide();                                                    break;
+    case 17:  dmxAnim_movingHead_setZoomStyle_bottomDev_progressiveClose_verySlow();                                    break;
+    case 18:  dmxAnim_movingHead_setZoomStyle_bottomDev_progressiveClose_slow();                                        break;
+    case 19:  dmxAnim_movingHead_setZoomStyle_bottomDev_progressiveClose_medium();                                      break;
+    case 20:  dmxAnim_movingHead_setZoomStyle_bottomDev_progressiveClose_fast();                                        break;
+    case 21:  dmxAnim_movingHead_setZoomStyle_bottomDev_progressiveOpen_verySlow();                                     break;
+    case 22:  dmxAnim_movingHead_setZoomStyle_bottomDev_progressiveOpen_slow();                                         break;
+    case 23:  dmxAnim_movingHead_setZoomStyle_bottomDev_progressiveOpen_medium();                                       break;
+    case 24:  dmxAnim_movingHead_setZoomStyle_bottomDev_progressiveOpen_fast();                                         break;
+
+    case 25:  dmxAnim_movingHead_setZoomStyle_centerDev_ultraNarrow();                                                  break;
+    case 26:  dmxAnim_movingHead_setZoomStyle_centerDev_narrow();                                                       break;
+    case 27:  dmxAnim_movingHead_setZoomStyle_centerDev_wide();                                                         break;
+    case 28:  dmxAnim_movingHead_setZoomStyle_centerDev_ultraWide();                                                    break;
+    case 29:  dmxAnim_movingHead_setZoomStyle_centerDev_progressiveClose_verySlow();                                    break;
+    case 30:  dmxAnim_movingHead_setZoomStyle_centerDev_progressiveClose_slow();                                        break;
+    case 31:  dmxAnim_movingHead_setZoomStyle_centerDev_progressiveClose_medium();                                      break;
+    case 32:  dmxAnim_movingHead_setZoomStyle_centerDev_progressiveClose_fast();                                        break;
+    case 33:  dmxAnim_movingHead_setZoomStyle_centerDev_progressiveOpen_verySlow();                                     break;
+    case 34:  dmxAnim_movingHead_setZoomStyle_centerDev_progressiveOpen_slow();                                         break;
+    case 35:  dmxAnim_movingHead_setZoomStyle_centerDev_progressiveOpen_medium();                                       break;
+    case 36:  dmxAnim_movingHead_setZoomStyle_centerDev_progressiveOpen_fast();                                         break;
+
+    case 37:  dmxAnim_movingHead_setZoomStyle_sideDev_ultraNarrow();                                                    break;
+    case 38:  dmxAnim_movingHead_setZoomStyle_sideDev_narrow();                                                         break;
+    case 39:  dmxAnim_movingHead_setZoomStyle_sideDev_wide();                                                           break;
+    case 40:  dmxAnim_movingHead_setZoomStyle_sideDev_ultraWide();                                                      break;
+    case 41:  dmxAnim_movingHead_setZoomStyle_sideDev_progressiveClose_verySlow();                                      break;
+    case 42:  dmxAnim_movingHead_setZoomStyle_sideDev_progressiveClose_slow();                                          break;
+    case 43:  dmxAnim_movingHead_setZoomStyle_sideDev_progressiveClose_medium();                                        break;
+    case 44:  dmxAnim_movingHead_setZoomStyle_sideDev_progressiveClose_fast();                                          break;
+    case 45:  dmxAnim_movingHead_setZoomStyle_sideDev_progressiveOpen_verySlow();                                       break;
+    case 46:  dmxAnim_movingHead_setZoomStyle_sideDev_progressiveOpen_slow();                                           break;
+    case 47:  dmxAnim_movingHead_setZoomStyle_sideDev_progressiveOpen_medium();                                         break;
+    case 48:  dmxAnim_movingHead_setZoomStyle_sideDev_progressiveOpen_fast();                                           break;
+
+    case 49:  dmxAnim_movingHead_setZoomStyle_leftDev_ultraNarrow();                                                    break;
+    case 50:  dmxAnim_movingHead_setZoomStyle_leftDev_narrow();                                                         break;
+    case 51:  dmxAnim_movingHead_setZoomStyle_leftDev_wide();                                                           break;
+    case 52:  dmxAnim_movingHead_setZoomStyle_leftDev_ultraWide();                                                      break;
+    case 53:  dmxAnim_movingHead_setZoomStyle_leftDev_progressiveClose_verySlow();                                      break;
+    case 54:  dmxAnim_movingHead_setZoomStyle_leftDev_progressiveClose_slow();                                          break;
+    case 55:  dmxAnim_movingHead_setZoomStyle_leftDev_progressiveClose_medium();                                        break;
+    case 56:  dmxAnim_movingHead_setZoomStyle_leftDev_progressiveClose_fast();                                          break;
+    case 57:  dmxAnim_movingHead_setZoomStyle_leftDev_progressiveOpen_verySlow();                                       break;
+    case 58:  dmxAnim_movingHead_setZoomStyle_leftDev_progressiveOpen_slow();                                           break;
+    case 59:  dmxAnim_movingHead_setZoomStyle_leftDev_progressiveOpen_medium();                                         break;
+    case 60:  dmxAnim_movingHead_setZoomStyle_leftDev_progressiveOpen_fast();                                           break;
+
+    case 61:  dmxAnim_movingHead_setZoomStyle_rightDev_ultraNarrow();                                                   break;
+    case 62:  dmxAnim_movingHead_setZoomStyle_rightDev_narrow();                                                        break;
+    case 63:  dmxAnim_movingHead_setZoomStyle_rightDev_wide();                                                          break;
+    case 64:  dmxAnim_movingHead_setZoomStyle_rightDev_ultraWide();                                                     break;
+    case 65:  dmxAnim_movingHead_setZoomStyle_rightDev_progressiveClose_verySlow();                                     break;
+    case 66:  dmxAnim_movingHead_setZoomStyle_rightDev_progressiveClose_slow();                                         break;
+    case 67:  dmxAnim_movingHead_setZoomStyle_rightDev_progressiveClose_medium();                                       break;
+    case 68:  dmxAnim_movingHead_setZoomStyle_rightDev_progressiveClose_fast();                                         break;
+    case 69:  dmxAnim_movingHead_setZoomStyle_rightDev_progressiveOpen_verySlow();                                      break;
+    case 70:  dmxAnim_movingHead_setZoomStyle_rightDev_progressiveOpen_slow();                                          break;
+    case 71:  dmxAnim_movingHead_setZoomStyle_rightDev_progressiveOpen_medium();                                        break;
+    case 72:  dmxAnim_movingHead_setZoomStyle_rightDev_progressiveOpen_fast();                                          break;
+
+    case 73:  dmxAnim_movingHead_setZoomStyle_topDev_ultraNarrow();                                                     break;
+    case 74:  dmxAnim_movingHead_setZoomStyle_topDev_narrow();                                                          break;
+    case 75:  dmxAnim_movingHead_setZoomStyle_topDev_wide();                                                            break;
+    case 76:  dmxAnim_movingHead_setZoomStyle_topDev_ultraWide();                                                       break;
+    case 77:  dmxAnim_movingHead_setZoomStyle_topDev_progressiveClose_verySlow();                                       break;
+    case 78:  dmxAnim_movingHead_setZoomStyle_topDev_progressiveClose_slow();                                           break;
+    case 79:  dmxAnim_movingHead_setZoomStyle_topDev_progressiveClose_medium();                                         break;
+    case 80:  dmxAnim_movingHead_setZoomStyle_topDev_progressiveClose_fast();                                           break;
+    case 81:  dmxAnim_movingHead_setZoomStyle_topDev_progressiveOpen_verySlow();                                        break;
+    case 82:  dmxAnim_movingHead_setZoomStyle_topDev_progressiveOpen_slow();                                            break;
+    case 83:  dmxAnim_movingHead_setZoomStyle_topDev_progressiveOpen_medium();                                          break;
+    case 84:  dmxAnim_movingHead_setZoomStyle_topDev_progressiveOpen_fast();                                            break;
+    
     default: break;
   }
 }

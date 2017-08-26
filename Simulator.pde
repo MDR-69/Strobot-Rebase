@@ -468,7 +468,7 @@ void drawMovingHeads(int simulatorWidth, int positionY, ArrayList<DMX_MovingHead
       //External circle
       auxControlFrame.fill(0);
       auxControlFrame.stroke(255);
-      auxControlFrame.ellipse(0, 0, 18, 18);
+      auxControlFrame.ellipse(0, 0, 23, 23);
       auxControlFrame.noStroke();
 
       //Internal color light
@@ -483,7 +483,8 @@ void drawMovingHeads(int simulatorWidth, int positionY, ArrayList<DMX_MovingHead
       else {
         auxControlFrame.fill(movingHead.getSimulatorColor()[0], movingHead.getSimulatorColor()[1], movingHead.getSimulatorColor()[2], movingHead.getSimulatorDimmer());  
       }
-      auxControlFrame.ellipse(0, 0, 10,10);
+      // The simulator zoom is still in %, and the desired size variation is 10px -> 10*zoom/100
+      auxControlFrame.ellipse(0, 0, 5 + 0.1*movingHead.getSimulatorZoom(), 5 + 0.1*movingHead.getSimulatorZoom());
 
       //Tilt meter
       auxControlFrame.stroke(255);

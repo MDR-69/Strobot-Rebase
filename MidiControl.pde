@@ -48,14 +48,15 @@ final int PITCH_LOAD_ANIMATION_BANK2_TEMP                 = -11;
 final int PITCH_LOAD_ANIMATION_BANK3_TEMP                 = -12;
 final int PITCH_LOAD_ANIMATION_BANK4_TEMP                 = -13;
 
-final int PITCH_DMX_ANIMATION_MOVING_HEAD_INIT_DIRECTION  = 98;
-final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_COLOR       = 99;
-final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_RHYTHM      = 100;
-final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_LIGHT_STYLE = 101;
-final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_1 = 102;
-final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_2 = 103;
-final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_3 = 104;
-final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_4 = 105;
+final int PITCH_DMX_ANIMATION_MOVING_HEAD_INIT_DIRECTION  = 75;
+final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_COLOR       = 76;
+final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_RHYTHM      = 77;
+final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ZOOM_STYLE  = 78;
+final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_LIGHT_STYLE = 79;
+final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_1 = 80;
+final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_2 = 81;
+final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_3 = 82;
+final int PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_4 = 83;
 final int PITCH_DMX_ANIMATION_STROBE                      = 106;
 final int PITCH_DMX_ANIMATION_PAR_SET_COLOR               = 107;
 final int PITCH_DMX_ANIMATION_PAR_SET_LIGHT_STYLE         = 108;
@@ -237,6 +238,7 @@ void processMidiInfo_semiAutoMode(int pitch, int velocity) {
     case PITCH_DMX_ANIMATION_MOVING_HEAD_INIT_DIRECTION:    loadDMXAnimation_movingHead_initDirection(velocity); break;              // 
     case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_COLOR:         loadDMXAnimation_movingHead_setColor(velocity); break;                   // 
     case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_RHYTHM:        loadDMXAnimation_movingHead_setRhythm(velocity); break;                  // 
+    case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ZOOM_STYLE:    loadDMXAnimation_movingHead_setZoomStyle(velocity); break;               // 
     case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_LIGHT_STYLE:   loadDMXAnimation_movingHead_setLightStyle(velocity); break;              // 
     case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_1:   loadDMXAnimation_movingHead_setAnimation1(velocity); break;              // 
     case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_2:   loadDMXAnimation_movingHead_setAnimation2(velocity); break;              // 
@@ -678,6 +680,11 @@ void loadDMXAnimation_movingHead_setColor(int velocity) {
 void loadDMXAnimation_movingHead_setRhythm(int velocity) {
   dmxAnimationNumber_movingHead_setRhythm = velocity;
   setupDMXAnimation_movingHead_setRhythm();
+}
+
+void loadDMXAnimation_movingHead_setZoomStyle(int velocity) {
+  dmxAnimationNumber_movingHead_setZoomStyle = velocity;
+  setupDMXAnimation_movingHead_setZoomStyle();
 }
 
 void loadDMXAnimation_movingHead_setLightStyle(int velocity) {

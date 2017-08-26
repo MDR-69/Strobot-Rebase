@@ -261,6 +261,7 @@ class PlayMeSequencer {
         case PITCH_DMX_ANIMATION_MOVING_HEAD_INIT_DIRECTION:    loadDMXAnimation_movingHead_initDirection(actionValue); break;
         case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_COLOR:         loadDMXAnimation_movingHead_setColor(actionValue);      break;
         case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_LIGHT_STYLE:   loadDMXAnimation_movingHead_setLightStyle(actionValue); break;
+        case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ZOOM_STYLE:    loadDMXAnimation_movingHead_setZoomStyle(actionValue); break;
         case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_1:   loadDMXAnimation_movingHead_setAnimation1(actionValue); break;
         case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_2:   loadDMXAnimation_movingHead_setAnimation2(actionValue); break;
 
@@ -286,6 +287,7 @@ class PlayMeSequencer {
         case PITCH_DMX_ANIMATION_MOVING_HEAD_INIT_DIRECTION:    break;
         case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_COLOR:         break;
         case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_LIGHT_STYLE:   break;
+        case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ZOOM_STYLE:    break;
         case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_1:   unloadDMXAnimation_movingHead(); break;
         case PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_2:   unloadDMXAnimation_movingHead(); break;
         case PITCH_DISPLAY_EFFECT_1:                            deactivateAdditionalEffect(actionValue);break;
