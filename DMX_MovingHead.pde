@@ -90,17 +90,19 @@ final int    DMXANIM_MOVINGHEAD_BLACKOUT                     = 0;
 final int    DMXANIM_MOVINGHEAD_CONTINUOUS_LIGHT             = 1;
 final int    DMXANIM_MOVINGHEAD_SINGLE_LONG_FLASH            = 2;
 final int    DMXANIM_MOVINGHEAD_SINGLE_SHORT_FLASH           = 3;
-final int    DMXANIM_MOVINGHEAD_SLOW_CRESCENDO               = 4;
-final int    DMXANIM_MOVINGHEAD_FAST_CRESCENDO               = 5;
-final int    DMXANIM_MOVINGHEAD_SLOW_STROBE                  = 6;
-final int    DMXANIM_MOVINGHEAD_MEDIUM_STROBE                = 7;
-final int    DMXANIM_MOVINGHEAD_FAST_STROBE                  = 8;
-final int    DMXANIM_MOVINGHEAD_SLOW_SINE_WAVE_CLOCKWISE     = 9;
-final int    DMXANIM_MOVINGHEAD_FAST_SINE_WAVE_CLOCKWISE     = 10;
-final int    DMXANIM_MOVINGHEAD_SLOW_SINE_WAVE_ANTICLOCKWISE = 11;
-final int    DMXANIM_MOVINGHEAD_FAST_SINE_WAVE_ANTICLOCKWISE = 12;
-final int    DMXANIM_MOVINGHEAD_RANDOM_GLITCH                = 13;
-final int    DMXANIM_MOVINGHEAD_MIN_APERTURE_BEAM            = 14;
+final int    DMXANIM_MOVINGHEAD_VERYSLOW_CRESCENDO           = 4;
+final int    DMXANIM_MOVINGHEAD_SLOW_CRESCENDO               = 5;
+final int    DMXANIM_MOVINGHEAD_MEDIUM_CRESCENDO             = 6;
+final int    DMXANIM_MOVINGHEAD_FAST_CRESCENDO               = 7;
+final int    DMXANIM_MOVINGHEAD_SLOW_STROBE                  = 8;
+final int    DMXANIM_MOVINGHEAD_MEDIUM_STROBE                = 9;
+final int    DMXANIM_MOVINGHEAD_FAST_STROBE                  = 10;
+final int    DMXANIM_MOVINGHEAD_SLOW_SINE_WAVE_CLOCKWISE     = 11;
+final int    DMXANIM_MOVINGHEAD_FAST_SINE_WAVE_CLOCKWISE     = 12;
+final int    DMXANIM_MOVINGHEAD_SLOW_SINE_WAVE_ANTICLOCKWISE = 13;
+final int    DMXANIM_MOVINGHEAD_FAST_SINE_WAVE_ANTICLOCKWISE = 14;
+final int    DMXANIM_MOVINGHEAD_RANDOM_GLITCH                = 15;
+final int    DMXANIM_MOVINGHEAD_MIN_APERTURE_BEAM            = 16;
 
 final int    DMXANIM_MOVINGHEAD_ZOOM_ULTRANARROW               = 0;
 final int    DMXANIM_MOVINGHEAD_ZOOM_NARROW                    = 1;
@@ -1343,7 +1345,9 @@ class DMX_MovingHead {
         case DMXANIM_MOVINGHEAD_CONTINUOUS_LIGHT:               this.performLight_continuousLight();           break;
         case DMXANIM_MOVINGHEAD_SINGLE_LONG_FLASH:              this.performLight_singleLongFlash();           break;
         case DMXANIM_MOVINGHEAD_SINGLE_SHORT_FLASH:             this.performLight_singleShortFlash();          break;
-        case DMXANIM_MOVINGHEAD_SLOW_CRESCENDO:                 this.performLight_slowCrescendo();             break;
+        case DMXANIM_MOVINGHEAD_VERYSLOW_CRESCENDO:             this.performLight_verySlowCrescendo();         break;
+        case DMXANIM_MOVINGHEAD_MEDIUM_CRESCENDO:               this.performLight_slowCrescendo();             break;
+        case DMXANIM_MOVINGHEAD_SLOW_CRESCENDO:                 this.performLight_mediumCrescendo();           break;
         case DMXANIM_MOVINGHEAD_FAST_CRESCENDO:                 this.performLight_fastCrescendo();             break;
         case DMXANIM_MOVINGHEAD_SLOW_STROBE:                    this.performLight_slowStrobe();                break;
         case DMXANIM_MOVINGHEAD_MEDIUM_STROBE:                  this.performLight_mediumStrobe();              break;
@@ -1448,17 +1452,25 @@ class DMX_MovingHead {
     this.animCpt1_performLight += 1;
   }
 
+  void performLight_verySlowCrescendo() {
+    performLight_crescendo(0.2);
+  }
+
   void performLight_slowCrescendo() {
-    this.setShutterMode(DMX_MOVINGHEAD_SHUTTERMODE_DEFAULT);
-    this.setDimmer(min(100,this.animCpt1_performLight));
-    this.setShutter(100);
-    this.setApertureReduction(0);
-    this.animCpt1_performLight += 1;
+    performLight_crescendo(0.5);
+  }
+
+  void performLight_mediumCrescendo() {
+    performLight_crescendo(1);
   }
 
   void performLight_fastCrescendo() {
+    performLight_crescendo(2);
+  }
+
+  void performLight_crescendo(float speedFactor) {
     this.setShutterMode(DMX_MOVINGHEAD_SHUTTERMODE_DEFAULT);
-    this.setDimmer(min(100,4*this.animCpt1_performLight));
+    this.setDimmer(min(100,speedFactor*this.animCpt1_performLight));
     this.setShutter(100);
     this.setApertureReduction(0);
     this.animCpt1_performLight += 1;
@@ -3700,6 +3712,54 @@ void dmxAnim_movingHead_setLightRhythm_rightDev_together_barSync() {
   dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_right, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_TOGETHER_BARSYNC);
 }
 
+void dmxAnim_movingHead_setLightRhythm_bottomDev_clockwise_32ndSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_CLOCKWISE_32NDSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_bottomDev_clockwise_16thSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_CLOCKWISE_16THSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_bottomDev_clockwise_8thSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_CLOCKWISE_8THSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_bottomDev_clockwise_4thSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_CLOCKWISE_4THSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_bottomDev_clockwise_2ndSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_CLOCKWISE_2NDSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_bottomDev_clockwise_barSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_CLOCKWISE_BARSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_bottomDev_antiClockwise_32ndSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_ANTICLOCKWISE_32NDSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_bottomDev_antiClockwise_16thSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_ANTICLOCKWISE_16THSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_bottomDev_antiClockwise_8thSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_ANTICLOCKWISE_8THSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_bottomDev_antiClockwise_4thSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_ANTICLOCKWISE_4THSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_bottomDev_antiClockwise_2ndSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_ANTICLOCKWISE_2NDSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_bottomDev_antiClockwise_barSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_ANTICLOCKWISE_BARSYNC);
+}
+
 void dmxAnim_movingHead_setLightRhythm_bottomDev_random_32ndSync() {
   dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_bottom, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_RANDOM_32NDSYNC);
 }
@@ -3770,6 +3830,54 @@ void dmxAnim_movingHead_setLightRhythm_topDev_random_2ndSync() {
 
 void dmxAnim_movingHead_setLightRhythm_topDev_random_barSync() {
   dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_RANDOM_BARSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_topDev_clockwise_32ndSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_CLOCKWISE_32NDSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_topDev_clockwise_16thSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_CLOCKWISE_16THSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_topDev_clockwise_8thSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_CLOCKWISE_8THSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_topDev_clockwise_4thSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_CLOCKWISE_4THSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_topDev_clockwise_2ndSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_CLOCKWISE_2NDSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_topDev_clockwise_barSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_CLOCKWISE_BARSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_topDev_antiClockwise_32ndSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_ANTICLOCKWISE_32NDSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_topDev_antiClockwise_16thSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_ANTICLOCKWISE_16THSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_topDev_antiClockwise_8thSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_ANTICLOCKWISE_8THSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_topDev_antiClockwise_4thSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_ANTICLOCKWISE_4THSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_topDev_antiClockwise_2ndSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_ANTICLOCKWISE_2NDSYNC);
+}
+
+void dmxAnim_movingHead_setLightRhythm_topDev_antiClockwise_barSync() {
+  dmxAnim_movingHead_setLightRhythm(DMXList_MovingHeads_top, DMXANIM_MOVINGHEAD_LIGHTRHYTHM_ANTICLOCKWISE_BARSYNC);
 }
 
 void dmxAnim_movingHead_setLightRhythm_topDev_together_32ndSync() {
@@ -4235,8 +4343,20 @@ void dmxAnim_movingHead_setLightStyle_allDev_continuousLight() {
   dmxAnim_movingHead_setLightStyle_allDev_specificLightStyle(DMXANIM_MOVINGHEAD_CONTINUOUS_LIGHT);
 }
 
+void dmxAnim_movingHead_setLightStyle_allDev_blackout() {
+  dmxAnim_movingHead_setLightStyle_allDev_specificLightStyle(DMXANIM_MOVINGHEAD_BLACKOUT);
+}
+
+void dmxAnim_movingHead_setLightStyle_allDev_verySlowCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_allDev_specificLightStyle(DMXANIM_MOVINGHEAD_VERYSLOW_CRESCENDO);
+}
+
 void dmxAnim_movingHead_setLightStyle_allDev_slowCrescendoLight() {
   dmxAnim_movingHead_setLightStyle_allDev_specificLightStyle(DMXANIM_MOVINGHEAD_SLOW_CRESCENDO);
+}
+
+void dmxAnim_movingHead_setLightStyle_allDev_mediumCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_allDev_specificLightStyle(DMXANIM_MOVINGHEAD_MEDIUM_CRESCENDO);
 }
 
 void dmxAnim_movingHead_setLightStyle_allDev_fastCrescendoLight() {
@@ -4293,8 +4413,20 @@ void dmxAnim_movingHead_setLightStyle_centerDev_continuousLight() {
   dmxAnim_movingHead_setLightStyle_centerDev_specificLightStyle(DMXANIM_MOVINGHEAD_CONTINUOUS_LIGHT);
 }
 
+void dmxAnim_movingHead_setLightStyle_centerDev_blackout() {
+  dmxAnim_movingHead_setLightStyle_centerDev_specificLightStyle(DMXANIM_MOVINGHEAD_BLACKOUT);
+}
+
+void dmxAnim_movingHead_setLightStyle_centerDev_verySlowCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_centerDev_specificLightStyle(DMXANIM_MOVINGHEAD_VERYSLOW_CRESCENDO);
+}
+
 void dmxAnim_movingHead_setLightStyle_centerDev_slowCrescendoLight() {
   dmxAnim_movingHead_setLightStyle_centerDev_specificLightStyle(DMXANIM_MOVINGHEAD_SLOW_CRESCENDO);
+}
+
+void dmxAnim_movingHead_setLightStyle_centerDev_mediumCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_centerDev_specificLightStyle(DMXANIM_MOVINGHEAD_MEDIUM_CRESCENDO);
 }
 
 void dmxAnim_movingHead_setLightStyle_centerDev_fastCrescendoLight() {
@@ -4351,8 +4483,20 @@ void dmxAnim_movingHead_setLightStyle_sideDev_continuousLight() {
   dmxAnim_movingHead_setLightStyle_sideDev_specificLightStyle(DMXANIM_MOVINGHEAD_CONTINUOUS_LIGHT);
 }
 
+void dmxAnim_movingHead_setLightStyle_sideDev_blackout() {
+  dmxAnim_movingHead_setLightStyle_sideDev_specificLightStyle(DMXANIM_MOVINGHEAD_BLACKOUT);
+}
+
+void dmxAnim_movingHead_setLightStyle_sideDev_verySlowCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_sideDev_specificLightStyle(DMXANIM_MOVINGHEAD_VERYSLOW_CRESCENDO);
+}
+
 void dmxAnim_movingHead_setLightStyle_sideDev_slowCrescendoLight() {
   dmxAnim_movingHead_setLightStyle_sideDev_specificLightStyle(DMXANIM_MOVINGHEAD_SLOW_CRESCENDO);
+}
+
+void dmxAnim_movingHead_setLightStyle_sideDev_mediumCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_sideDev_specificLightStyle(DMXANIM_MOVINGHEAD_MEDIUM_CRESCENDO);
 }
 
 void dmxAnim_movingHead_setLightStyle_sideDev_fastCrescendoLight() {
@@ -4410,8 +4554,20 @@ void dmxAnim_movingHead_setLightStyle_leftDev_continuousLight() {
   dmxAnim_movingHead_setLightStyle_leftDev_specificLightStyle(DMXANIM_MOVINGHEAD_CONTINUOUS_LIGHT);
 }
 
+void dmxAnim_movingHead_setLightStyle_leftDev_blackout() {
+  dmxAnim_movingHead_setLightStyle_leftDev_specificLightStyle(DMXANIM_MOVINGHEAD_BLACKOUT);
+}
+
+void dmxAnim_movingHead_setLightStyle_leftDev_verySlowCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_leftDev_specificLightStyle(DMXANIM_MOVINGHEAD_VERYSLOW_CRESCENDO);
+}
+
 void dmxAnim_movingHead_setLightStyle_leftDev_slowCrescendoLight() {
   dmxAnim_movingHead_setLightStyle_leftDev_specificLightStyle(DMXANIM_MOVINGHEAD_SLOW_CRESCENDO);
+}
+
+void dmxAnim_movingHead_setLightStyle_leftDev_mediumCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_leftDev_specificLightStyle(DMXANIM_MOVINGHEAD_MEDIUM_CRESCENDO);
 }
 
 void dmxAnim_movingHead_setLightStyle_leftDev_fastCrescendoLight() {
@@ -4468,8 +4624,20 @@ void dmxAnim_movingHead_setLightStyle_rightDev_continuousLight() {
   dmxAnim_movingHead_setLightStyle_rightDev_specificLightStyle(DMXANIM_MOVINGHEAD_CONTINUOUS_LIGHT);
 }
 
+void dmxAnim_movingHead_setLightStyle_rightDev_blackout() {
+  dmxAnim_movingHead_setLightStyle_rightDev_specificLightStyle(DMXANIM_MOVINGHEAD_BLACKOUT);
+}
+
+void dmxAnim_movingHead_setLightStyle_rightDev_verySlowCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_rightDev_specificLightStyle(DMXANIM_MOVINGHEAD_VERYSLOW_CRESCENDO);
+}
+
 void dmxAnim_movingHead_setLightStyle_rightDev_slowCrescendoLight() {
   dmxAnim_movingHead_setLightStyle_rightDev_specificLightStyle(DMXANIM_MOVINGHEAD_SLOW_CRESCENDO);
+}
+
+void dmxAnim_movingHead_setLightStyle_rightDev_mediumCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_rightDev_specificLightStyle(DMXANIM_MOVINGHEAD_MEDIUM_CRESCENDO);
 }
 
 void dmxAnim_movingHead_setLightStyle_rightDev_fastCrescendoLight() {
@@ -4526,8 +4694,20 @@ void dmxAnim_movingHead_setLightStyle_bottomDev_continuousLight() {
   dmxAnim_movingHead_setLightStyle_bottomDev_specificLightStyle(DMXANIM_MOVINGHEAD_CONTINUOUS_LIGHT);
 }
 
+void dmxAnim_movingHead_setLightStyle_bottomDev_blackout() {
+  dmxAnim_movingHead_setLightStyle_bottomDev_specificLightStyle(DMXANIM_MOVINGHEAD_BLACKOUT);
+}
+
+void dmxAnim_movingHead_setLightStyle_bottomDev_verySlowCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_bottomDev_specificLightStyle(DMXANIM_MOVINGHEAD_VERYSLOW_CRESCENDO);
+}
+
 void dmxAnim_movingHead_setLightStyle_bottomDev_slowCrescendoLight() {
   dmxAnim_movingHead_setLightStyle_bottomDev_specificLightStyle(DMXANIM_MOVINGHEAD_SLOW_CRESCENDO);
+}
+
+void dmxAnim_movingHead_setLightStyle_bottomDev_mediumCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_bottomDev_specificLightStyle(DMXANIM_MOVINGHEAD_MEDIUM_CRESCENDO);
 }
 
 void dmxAnim_movingHead_setLightStyle_bottomDev_fastCrescendoLight() {
@@ -4584,8 +4764,20 @@ void dmxAnim_movingHead_setLightStyle_topDev_continuousLight() {
   dmxAnim_movingHead_setLightStyle_topDev_specificLightStyle(DMXANIM_MOVINGHEAD_CONTINUOUS_LIGHT);
 }
 
+void dmxAnim_movingHead_setLightStyle_topDev_blackout() {
+  dmxAnim_movingHead_setLightStyle_topDev_specificLightStyle(DMXANIM_MOVINGHEAD_BLACKOUT);
+}
+
+void dmxAnim_movingHead_setLightStyle_topDev_verySlowCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_topDev_specificLightStyle(DMXANIM_MOVINGHEAD_VERYSLOW_CRESCENDO);
+}
+
 void dmxAnim_movingHead_setLightStyle_topDev_slowCrescendoLight() {
   dmxAnim_movingHead_setLightStyle_topDev_specificLightStyle(DMXANIM_MOVINGHEAD_SLOW_CRESCENDO);
+}
+
+void dmxAnim_movingHead_setLightStyle_topDev_mediumCrescendoLight() {
+  dmxAnim_movingHead_setLightStyle_topDev_specificLightStyle(DMXANIM_MOVINGHEAD_MEDIUM_CRESCENDO);
 }
 
 void dmxAnim_movingHead_setLightStyle_topDev_fastCrescendoLight() {
@@ -5361,17 +5553,17 @@ void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Fast_RightToLeft()
 /////////////////////////////////
 
 void dmxAnim_movingHead_lightOn_continuousSweep_Vertical_Slow_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = 0;
+  float offset = PI/2;
   dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_SLOW, true, offset, false, dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_continuousSweep_Vertical_Regular_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = 0;
+  float offset = PI/2;
   dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_REGULAR, true, offset, false, dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_continuousSweep_Vertical_Fast_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = 0;
+  float offset = PI/2;
   dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_FAST, true, offset, false, dmxList_movingHead_subset);
 }
 
@@ -5392,17 +5584,17 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Vertical_Fast_RightToLeft(ArrayL
 
 
 void dmxAnim_movingHead_lightOn_singleSweep_Vertical_Slow_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = 0;
+  float offset = PI/2;
   dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_SLOW, true, offset, true, dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_singleSweep_Vertical_Regular_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = 0;
+  float offset = PI/2;
   dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_REGULAR, true, offset, true, dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_singleSweep_Vertical_Fast_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = 0;
+  float offset = PI/2;
   dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_FAST, true, offset, true, dmxList_movingHead_subset);
 }
 
@@ -5446,10 +5638,12 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Vertical(float factor, boolean l
           movingHead.animCpt2 = 1;    //Set the "was lit once" flag
         }
         else {
+          movingHead.animCpt_zoom = 0;
           movingHead.performLight_blackout();
         }
       }
       else {
+        movingHead.animCpt_zoom = 0;
         movingHead.performLight_blackout();
         if (movingHead.animCpt2 == 1) {
           movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
@@ -5458,8 +5652,8 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Vertical(float factor, boolean l
     }
     else {
       if (tiltDiff > 0) {
+        movingHead.animCpt_zoom = 0;
         movingHead.performLight_blackout();
-        movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
       }
       else {
         if (oneShot == false || (oneShot == true && !(movingHead.animCpt2 == 1 && movingHead.animCpt3 == 1))) {
@@ -5467,7 +5661,9 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Vertical(float factor, boolean l
           movingHead.animCpt2 = 1;    //Set the "was lit once" flag
         }
         else {
+          movingHead.animCpt_zoom = 0;
           movingHead.performLight_blackout();
+          movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
         }
       }
     }
@@ -5480,17 +5676,17 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Vertical(float factor, boolean l
 ///////////////////////////
 
 void dmxAnim_movingHead_lightOn_continuousSweep_Circular_Slow_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = 0;
+  float offset = PI/2;
   dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_SLOW, true, offset, false, dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_continuousSweep_Circular_Regular_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = 0;
+  float offset = PI/2;
   dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_REGULAR, true, offset, false, dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_continuousSweep_Circular_Fast_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = 0;
+  float offset = PI/2;
   dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_FAST, true, offset, false, dmxList_movingHead_subset);
 }
 
@@ -5513,17 +5709,17 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Circular_Fast_RightToLeft(ArrayL
 
 
 void dmxAnim_movingHead_lightOn_singleSweep_Circular_Slow_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = 0;
+  float offset = PI/2;
   dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_SLOW, true, offset, true, dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_singleSweep_Circular_Regular_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = 0;
+  float offset = PI/2;
   dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_REGULAR, true, offset, true, dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_singleSweep_Circular_Fast_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = 0;
+  float offset = PI/2;
   dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_FAST, true, offset, true, dmxList_movingHead_subset);
 }
 
@@ -5741,7 +5937,7 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Circular(float factor, boolean l
     else {
       if (tiltDiff > 0) {
         movingHead.performLight_blackout();
-        movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
+        // movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
       }
       else {
         if (oneShot == false || (oneShot == true && !(movingHead.animCpt2 == 1 && movingHead.animCpt3 == 1))) {
@@ -5749,7 +5945,9 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Circular(float factor, boolean l
           movingHead.animCpt2 = 1;    //Set the "was lit once" flag
         }
         else {
+          movingHead.animCpt_zoom = 0;
           movingHead.performLight_blackout();
+          movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
         }
       }
     }
