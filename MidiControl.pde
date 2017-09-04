@@ -73,6 +73,32 @@ final int PITCH_DISPLAY_EFFECT_2                          = 96;
 final int PITCH_DISPLAY_EFFECT_3                          = 97;
 final int PITCH_DISPLAY_EFFECT_4                          = 95;
 
+final int CC_CONTROL_LEDPANELS_ANIMPROGRESS               = 1;
+final int CC_CONTROL_LEDPANELS_PARAM1                     = 2;
+final int CC_CONTROL_LEDPANELS_PARAM2                     = 3;
+final int CC_CONTROL_LEDPANELS_PARAM3                     = 4;
+final int CC_CONTROL_LEDPANELS_PARAM4                     = 5;
+final int CC_CONTROL_LEDTUBES_ANIMPROGRESS                = 10;
+final int CC_CONTROL_LEDTUBES_PARAM1                      = 11;
+final int CC_CONTROL_LEDTUBES_PARAM2                      = 12;
+final int CC_CONTROL_LEDTUBES_PARAM3                      = 13;
+final int CC_CONTROL_LEDTUBES_PARAM4                      = 14;
+final int CC_CONTROL_DMX_STROBE_ANIMPROGRESS              = 20;
+final int CC_CONTROL_DMX_STROBE_PARAM1                    = 21;
+final int CC_CONTROL_DMX_STROBE_PARAM2                    = 22;
+final int CC_CONTROL_DMX_STROBE_PARAM3                    = 23;
+final int CC_CONTROL_DMX_STROBE_PARAM4                    = 24;
+final int CC_CONTROL_DMX_PAR_ANIMPROGRESS                 = 30;
+final int CC_CONTROL_DMX_PAR_PARAM1                       = 31;
+final int CC_CONTROL_DMX_PAR_PARAM2                       = 32;
+final int CC_CONTROL_DMX_PAR_PARAM3                       = 33;
+final int CC_CONTROL_DMX_PAR_PARAM4                       = 34;
+final int CC_CONTROL_DMX_MOVINGHEAD_ANIMPROGRESS          = 40;
+final int CC_CONTROL_DMX_MOVINGHEAD_PARAM1                = 41;
+final int CC_CONTROL_DMX_MOVINGHEAD_PARAM2                = 42;
+final int CC_CONTROL_DMX_MOVINGHEAD_PARAM3                = 43;
+final int CC_CONTROL_DMX_MOVINGHEAD_PARAM4                = 44;
+
 // Ext video proj commands
 final int PITCH_EXTVIDEO_PLAYVIDEOONCE_1                  = 28;
 final int PITCH_EXTVIDEO_PLAYVIDEOONCE_2                  = 29;
@@ -222,14 +248,15 @@ void noteOn(int channel, int pitch, int velocity, long timestamp, String bus_nam
       //Release automatic mode in case of explicit input
       //This mode corresponds to a DAW sending MIDI commands, for example through the use of clips (Ableton Live), scenes (Maschine), or plain old MIDI tracks (Logic)
       AUTOMATIC_MODE = false;
-      processMidiInfo_semiAutoMode(pitch, velocity);
+      processMidiInfo_semiAutoMode_noteOn(pitch, velocity);
     }
     
   }
 }
 
 
-void processMidiInfo_semiAutoMode(int pitch, int velocity) {
+void processMidiInfo_semiAutoMode_noteOn(int pitch, int velocity) {
+  println("Got message : " + velocity);
   switch (pitch) {
     //Standard mode, MIDI incoming from Ableton
     case PITCH_SET_AUTOMODE_OFF:                            setAutomaticModeOff();break;                                             // Disable the automatic mode
@@ -1284,12 +1311,11 @@ void deactivatePadStrobe64th(int channel, int pitch, int velocity) {
 
 // Filter CC messages : do not take in more than 1 message every 40 ms
 final int DELTA_FILTER_MS = 40;
-long lastMillisecond_cc_in = 0;
+long lastMillisecond_cc_in[] = new long[127];
 
 // Receive a controllerChange  
 // TODO: redo this section properly, it's becoming a mess !
 void controllerChange(int channel, int number, int value, long timestamp, String bus_name) {  
-
   //Special case: a Pong game is currently going on, ignore the time filter, we need to be fast here
   //Also, do not use any effects for this animation
   if (animationnumber == 394) {
@@ -1303,11 +1329,15 @@ void controllerChange(int channel, int number, int value, long timestamp, String
   } 
   
   // Filter the maximum number of messages going in per second. However, always allow ext video proj related messages
-  else if (filterTimeElapsed(lastMillisecond_cc_in) || value == 0 || value == 127 || channel == CHANNEL_EXTVIDEOPROJ_CTRL) {
+  else if (filterTimeElapsed(lastMillisecond_cc_in[number]) || value == 0 || value == 127 || channel == CHANNEL_EXTVIDEOPROJ_CTRL) {
     
-    lastMillisecond_cc_in = System.currentTimeMillis();
+    lastMillisecond_cc_in[number] = System.currentTimeMillis();
+
+    if (bus_name == STROBOTREMOTE_MIDIBUS_NAME) {
+      processMidiInfo_semiAutoMode_cc(channel, number, value);
+    }
     
-    if (channel == CHANNEL_PIONEER_RMX_CTRL) {
+    else if (channel == CHANNEL_PIONEER_RMX_CTRL) {
       processCCInfo_RMX500(channel, number, value);
     }
 
@@ -1321,6 +1351,39 @@ void controllerChange(int channel, int number, int value, long timestamp, String
   }
   
 }
+
+
+void processMidiInfo_semiAutoMode_cc(int channel, int number, int value) {
+  switch(number) {
+    case CC_CONTROL_LEDPANELS_ANIMPROGRESS:        control_ledPanels_animProgress = value; break;
+    case CC_CONTROL_LEDPANELS_PARAM1:              control_ledPanels_param1 = value; break;
+    case CC_CONTROL_LEDPANELS_PARAM2:              control_ledPanels_param2 = value; break;
+    case CC_CONTROL_LEDPANELS_PARAM3:              control_ledPanels_param3 = value; break;
+    case CC_CONTROL_LEDPANELS_PARAM4:              control_ledPanels_param4 = value; break;
+    case CC_CONTROL_LEDTUBES_ANIMPROGRESS:         control_ledTubes_animProgress = value; break;
+    case CC_CONTROL_LEDTUBES_PARAM1:               control_ledTubes_param1 = value; break;
+    case CC_CONTROL_LEDTUBES_PARAM2:               control_ledTubes_param2 = value; break;
+    case CC_CONTROL_LEDTUBES_PARAM3:               control_ledTubes_param3 = value; break;
+    case CC_CONTROL_LEDTUBES_PARAM4:               control_ledTubes_param4 = value; break;
+    case CC_CONTROL_DMX_STROBE_ANIMPROGRESS:       control_DMX_strobe_animProgress = value; break;
+    case CC_CONTROL_DMX_STROBE_PARAM1:             control_DMX_strobe_param1 = value; break;
+    case CC_CONTROL_DMX_STROBE_PARAM2:             control_DMX_strobe_param2 = value; break;
+    case CC_CONTROL_DMX_STROBE_PARAM3:             control_DMX_strobe_param3 = value; break;
+    case CC_CONTROL_DMX_STROBE_PARAM4:             control_DMX_strobe_param4 = value; break;
+    case CC_CONTROL_DMX_PAR_ANIMPROGRESS:          control_DMX_par_animProgress = value; break;
+    case CC_CONTROL_DMX_PAR_PARAM1:                control_DMX_par_param1 = value; break;
+    case CC_CONTROL_DMX_PAR_PARAM2:                control_DMX_par_param2 = value; break;
+    case CC_CONTROL_DMX_PAR_PARAM3:                control_DMX_par_param3 = value; break;
+    case CC_CONTROL_DMX_PAR_PARAM4:                control_DMX_par_param4 = value; break;
+    case CC_CONTROL_DMX_MOVINGHEAD_ANIMPROGRESS:   control_DMX_movingHead_animProgress = value; break;
+    case CC_CONTROL_DMX_MOVINGHEAD_PARAM1:         control_DMX_movingHead_param1_lightControl = value; break;
+    case CC_CONTROL_DMX_MOVINGHEAD_PARAM2:         control_DMX_movingHead_param2 = value; break;
+    case CC_CONTROL_DMX_MOVINGHEAD_PARAM3:         control_DMX_movingHead_param3 = value; break;
+    case CC_CONTROL_DMX_MOVINGHEAD_PARAM4:         control_DMX_movingHead_param4 = value; break;
+    default:                                       break;
+  }
+}
+
 
 void processCCInfo_RMX500(int channel, int number, int value) {
   switch(number) {

@@ -149,10 +149,10 @@ final int    DMXANIM_MOVINGHEAD_LIGHTRHYTHM_RANDOM_4THSYNC             = 22;
 final int    DMXANIM_MOVINGHEAD_LIGHTRHYTHM_RANDOM_2NDSYNC             = 23;
 final int    DMXANIM_MOVINGHEAD_LIGHTRHYTHM_RANDOM_BARSYNC             = 24;
 
-final float  ANIMFACTOR_SPEED_VERYSLOW                                 = 0.250/16.0;
-final float  ANIMFACTOR_SPEED_SLOW                                     = 0.250/8.0;
-final float  ANIMFACTOR_SPEED_REGULAR                                  = 0.250/4.0;
-final float  ANIMFACTOR_SPEED_FAST                                     = 0.250/2.0;
+final float  ANIMFACTOR_SPEED_VERYSLOW                                 = 0.5/16.0;
+final float  ANIMFACTOR_SPEED_SLOW                                     = 0.5/8.0;
+final float  ANIMFACTOR_SPEED_REGULAR                                  = 0.5/4.0;
+final float  ANIMFACTOR_SPEED_FAST                                     = 0.5/2.0;
 
 class DMX_MovingHead {
 
@@ -7541,6 +7541,25 @@ void dmxAnim_movingHead_lightOn_topDev_randomNoiseDirection_strong_regular() {
 void dmxAnim_movingHead_lightOn_topDev_randomNoiseDirection_strong_fast() {
   dmxAnim_movingHead_lightOn_randomNoiseDirection_strong_fast(DMXList_MovingHeads_top);
 }
+
+
+void dmxAnim_movingHead_lightOn_topDev_randomStaticDirection() {
+  dmxAnim_movingHead_lightOn_randomStaticDirection(DMXList_MovingHeads_top);
+}
+
+void dmxAnim_movingHead_lightOn_bottomDev_randomStaticDirection() {
+  dmxAnim_movingHead_lightOn_randomStaticDirection(DMXList_MovingHeads_bottom);
+}
+
+void dmxAnim_movingHead_lightOn_allDev_randomStaticDirection() {
+  dmxAnim_movingHead_lightOn_randomStaticDirection(DMXList_MovingHeads_top);  
+  dmxAnim_movingHead_lightOn_randomStaticDirection(DMXList_MovingHeads_bottom);
+}
+
+void dmxAnim_movingHead_lightOn_randomStaticDirection(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_randomNoiseDirection(0,0,dmxList_movingHead_subset);
+}
+
 
 
 

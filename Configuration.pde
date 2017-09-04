@@ -656,10 +656,10 @@ String getStringFromDMXAnimationNumber_movingHead_Animation(int animNbr) {
     temp = getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_2) + "  |  " + str(animNbr - 127);
   }
   else if (animNbr <= 381) {
-    temp = getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_3) + "  |  " + str(animNbr - 381);
+    temp = getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_3) + "  |  " + str(animNbr - 254);
   }
   else if (animNbr <= 508) {
-    temp = getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_4) + "  |  " + str(animNbr - 508);
+    temp = getStringFromNoteInt(PITCH_DMX_ANIMATION_MOVING_HEAD_SET_ANIMATION_4) + "  |  " + str(animNbr - 381);
   }
 
   return temp;

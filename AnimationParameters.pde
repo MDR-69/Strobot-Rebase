@@ -4,6 +4,18 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 
+//Global control parameters, set by incoming MIDI messages
+int control_ledPanels_animProgress = 0;
+int control_ledPanels_param1 = 0;
+int control_ledPanels_param2 = 0;
+int control_ledPanels_param3 = 0;
+int control_ledPanels_param4 = 0;
+int control_ledTubes_animProgress = 0;
+int control_ledTubes_param1 = 0;
+int control_ledTubes_param2 = 0;
+int control_ledTubes_param3 = 0;
+int control_ledTubes_param4 = 0;
+
 //Carglass parameters
 float carglass_progress = 0;
 float carglass_speed = 0.1;

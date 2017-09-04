@@ -101,6 +101,8 @@ final float INTENSITY_THRESHOLD_GUITAR  = 0.010 * AUDIO_BUFFER_SIZE;    //About 
 // Initial value of the signal's band intensities, when no other value has been received
 final float FFT_DUMMY_VALUE = -1.0;
 
+final String STROBOTREMOTE_MIDIBUS_NAME = "MidiRemote";
+
 void initializeCircularBuffers() {
   // Initialize the ring buffers used to store the incoming signal data
   // Set the size of these buffers to be equal to the largest value between the screen width and the screen height
@@ -329,13 +331,13 @@ void createFFTServer() {
 
 void processMidiDataMessage(SignalMessages.MidiData midiData) {
   if (midiData.getMsgType() == MIDIDATA_NOTE_OFF) {
-    noteOff(midiData.getChannel(), midiData.getData1(), midiData.getData2(), System.nanoTime(), myMainBus.getBusName());
+    noteOff(midiData.getChannel(), midiData.getData1(), midiData.getData2(), System.nanoTime(), STROBOTREMOTE_MIDIBUS_NAME);
   }
   else if (midiData.getMsgType() == MIDIDATA_NOTE_ON) {
-    noteOn(midiData.getChannel(), midiData.getData1(), midiData.getData2(), System.nanoTime(), myMainBus.getBusName());
+    noteOn(midiData.getChannel(), midiData.getData1(), midiData.getData2(), System.nanoTime(), STROBOTREMOTE_MIDIBUS_NAME);
   }
   else if (midiData.getMsgType() == MIDIDATA_CC_CHANGE) {
-    controllerChange(midiData.getChannel(), midiData.getData1(), midiData.getData2(), System.nanoTime(), myMainBus.getBusName());
+    controllerChange(midiData.getChannel(), midiData.getData1(), midiData.getData2(), System.nanoTime(), STROBOTREMOTE_MIDIBUS_NAME);
   }
 }
 
