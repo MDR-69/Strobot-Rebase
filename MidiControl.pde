@@ -256,7 +256,6 @@ void noteOn(int channel, int pitch, int velocity, long timestamp, String bus_nam
 
 
 void processMidiInfo_semiAutoMode_noteOn(int pitch, int velocity) {
-  println("Got message : " + velocity);
   switch (pitch) {
     //Standard mode, MIDI incoming from Ableton
     case PITCH_SET_AUTOMODE_OFF:                            setAutomaticModeOff();break;                                             // Disable the automatic mode
@@ -1375,7 +1374,7 @@ void processMidiInfo_semiAutoMode_cc(int channel, int number, int value) {
     case CC_CONTROL_DMX_PAR_PARAM2:                control_DMX_par_param2 = value; break;
     case CC_CONTROL_DMX_PAR_PARAM3:                control_DMX_par_param3 = value; break;
     case CC_CONTROL_DMX_PAR_PARAM4:                control_DMX_par_param4 = value; break;
-    case CC_CONTROL_DMX_MOVINGHEAD_ANIMPROGRESS:   control_DMX_movingHead_animProgress = value; break;
+    case CC_CONTROL_DMX_MOVINGHEAD_ANIMPROGRESS:   dmxAnim_movingHead_globalAnimCpt = map(value, 0, CONTROL_PARAM_MAXVAL, 0, 1); break;
     case CC_CONTROL_DMX_MOVINGHEAD_PARAM1:         control_DMX_movingHead_param1_lightControl = value; break;
     case CC_CONTROL_DMX_MOVINGHEAD_PARAM2:         control_DMX_movingHead_param2 = value; break;
     case CC_CONTROL_DMX_MOVINGHEAD_PARAM3:         control_DMX_movingHead_param3 = value; break;

@@ -153,6 +153,8 @@ final float  ANIMFACTOR_SPEED_VERYSLOW                                 = 0.5/16.
 final float  ANIMFACTOR_SPEED_SLOW                                     = 0.5/8.0;
 final float  ANIMFACTOR_SPEED_REGULAR                                  = 0.5/4.0;
 final float  ANIMFACTOR_SPEED_FAST                                     = 0.5/2.0;
+final float  ANIMFACTOR_SPEED_FREEMOVE                                 = 0;
+
 
 class DMX_MovingHead {
 
@@ -459,16 +461,16 @@ class DMX_MovingHead {
     for (ChannelSet channelSet: channelSets) {
       if (channelSet.getSubfunction().equals(DMX_MOVINGHEAD_TILT)) {
         if (channelSet.isProportional_Increasing()) {  // The tilt is always proportional - only need to check if it's increasing or decreasing
-          pan_minVal = channelSet.getFrom_dmx();
-          pan_maxVal = channelSet.getTo_dmx();
+          tilt_minVal = channelSet.getFrom_dmx();
+          tilt_maxVal = channelSet.getTo_dmx();
         }
         else if (channelSet.isProportional() && (channelSet.isProportional_Increasing() == false)) {
-          pan_minVal = channelSet.getTo_dmx();
-          pan_maxVal = channelSet.getFrom_dmx();
+          tilt_minVal = channelSet.getTo_dmx();
+          tilt_maxVal = channelSet.getFrom_dmx();
         }
         else {    // Default : increasing proportional - the user may have forgotten to mark the channel set as proportional
-          pan_minVal = channelSet.getFrom_dmx();
-          pan_maxVal = channelSet.getTo_dmx();
+          tilt_minVal = channelSet.getFrom_dmx();
+          tilt_maxVal = channelSet.getTo_dmx();
         }
       }
 
@@ -477,7 +479,7 @@ class DMX_MovingHead {
     }
     
     if (dmxVal_tilt_totalRange_degrees == -1) {
-      dmxVal_tilt_totalRange_degrees = DMX_MOVINGHEAD_DEFAULT_PAN_TOTALRANGE;   //Default value for the range - consider it to be equal to 540°
+      dmxVal_tilt_totalRange_degrees = DMX_MOVINGHEAD_DEFAULT_TILT_TOTALRANGE;   //Default value for the range - consider it to be equal to 540°
     }
     dmxVal_specificVal_tilt_low_perCent     = 100 * (dmxVal_tilt_totalRange_degrees/2.0 - 135) / dmxVal_tilt_totalRange_degrees;
     dmxVal_specificVal_tilt_front_perCent   = 100 * (dmxVal_tilt_totalRange_degrees/2.0 - 90)  / dmxVal_tilt_totalRange_degrees;
@@ -852,7 +854,6 @@ class DMX_MovingHead {
       else {
         val = int( map(val_percent, 0.0, 100.0, 65535, 0) );
       }
-
       setDMXVal(chIndex_tilt,     (val & 0xffff) >> 8);
       setDMXVal(chIndex_tiltFine, (val & 0xffff) &  0xFF);
     }
@@ -1271,8 +1272,13 @@ class DMX_MovingHead {
     return int( map(dmxVal[chIndex_dimmer], dimmer_minVal, dimmer_maxVal, 0.0, 255.0) );
   }
 
-  int getSimulatorTilt() {
-    return dmxVal[chIndex_tilt];
+  float getSimulatorTilt() {
+    if (chIndex_panFine != -1) {
+      return (255.0*dmxVal[chIndex_tilt] + dmxVal[chIndex_tiltFine]) / 255.0;
+    }
+    else {
+      return dmxVal[chIndex_tilt];
+    }
   }
 
   float getSimulatorPan() {
@@ -2393,6 +2399,7 @@ void dmxAnim_movingHead_prepareDirection_SymmetricalConvergentPan(float openingW
     float panHalfWidth = map(openingWidthAngle_perCent, 0, 100, movingHead.dmxVal_specificVal_pan_center_perCent, movingHead.dmxVal_specificVal_pan_left_perCent);
     float pan_perCent  = map(movingHead.getDeviceID(), 0, dmxList_movingHead_subset.size()-1, 100 - panHalfWidth, panHalfWidth);
     float tilt_perCent = map(tiltValue_perCent, 0, 100, movingHead.dmxVal_specificVal_tilt_low_perCent, movingHead.dmxVal_specificVal_tilt_upright_perCent);
+    println(movingHead.getDeviceID() + " -- " + movingHead.movingHead.Name + "  -> pan_perCent:" + pan_perCent + " tilt_perCent:" + tilt_perCent);
     movingHead.setPan(pan_perCent);
     movingHead.setTilt(tilt_perCent);
   }
@@ -5288,37 +5295,14 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Fast_RightToLeft(Arra
   dmxAnim_movingHead_lightOn_continuousSweep_Horizontal(ANIMFACTOR_SPEED_FAST, false, offset, false, dmxList_movingHead_subset);
 }
 
-
-
-
-void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
   float offset = -(PI*(dmxList_movingHead_subset.size()-1)/dmxList_movingHead_subset.size() + PI/2);
-  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal(ANIMFACTOR_SPEED_SLOW, true, offset, true, dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal(ANIMFACTOR_SPEED_FREEMOVE, true, offset, true, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = -(PI*(dmxList_movingHead_subset.size()-1)/dmxList_movingHead_subset.size() + PI/2);
-  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal(ANIMFACTOR_SPEED_REGULAR, true, offset, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = -(PI*(dmxList_movingHead_subset.size()-1)/dmxList_movingHead_subset.size() + PI/2);
-  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal(ANIMFACTOR_SPEED_FAST, true, offset, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_RightToLeft(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_RightToLeft(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
   float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal(ANIMFACTOR_SPEED_SLOW, false, offset, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_RightToLeft(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal(ANIMFACTOR_SPEED_REGULAR, false, offset, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_RightToLeft(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal(ANIMFACTOR_SPEED_FAST, false, offset, true, dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal(ANIMFACTOR_SPEED_FREEMOVE, false, offset, true, dmxList_movingHead_subset);
 }
 
 
@@ -5339,12 +5323,12 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Horizontal(float factor, boolean
     float pan     = 0;
     float panDiff = 0;
     if (leftToRight) {
-      pan     = 0.5+0.5*sin(offset + dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
-      panDiff = cos(offset + dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+      pan     = 0.5+0.5*sin(offset + 2*PI*dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+      panDiff = cos(offset + 2*PI*dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
     }
     else {
-      pan     = 0.5+0.5*sin(offset + dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
-      panDiff = cos(offset + dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+      pan     = 0.5+0.5*sin(offset + 2*PI*dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+      panDiff = cos(offset + 2*PI*dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
     }
 
     movingHead.setPan(map(pan,0,1, movingHead.dmxVal_specificVal_pan_left_perCent, movingHead.dmxVal_specificVal_pan_right_perCent));
@@ -5352,21 +5336,11 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Horizontal(float factor, boolean
     
     if (leftToRight) {
       if (panDiff > 0) {
-        if (oneShot == false || (oneShot == true && !(movingHead.animCpt2 == 1 && movingHead.animCpt3 == 1))) {
-          movingHead.performLight_currentStyle();
-          movingHead.animCpt2 = 1;    //Set the "was lit once" flag
-        }
-        else {
-          movingHead.animCpt_zoom = 0;
-          movingHead.performLight_blackout();
-        }
+        movingHead.performLight_currentStyle();
       }
       else {
         movingHead.animCpt_zoom = 0;
         movingHead.performLight_blackout();
-        if (movingHead.animCpt2 == 1) {
-          movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
-        }
       }
     }
     else {
@@ -5375,20 +5349,11 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Horizontal(float factor, boolean
         movingHead.performLight_blackout();
       }
       else {
-        if (oneShot == false || (oneShot == true && !(movingHead.animCpt2 == 1 && movingHead.animCpt3 == 1))) {
           movingHead.performLight_currentStyle();
-          movingHead.animCpt2 = 1;    //Set the "was lit once" flag
-        }
-        else {
-          movingHead.animCpt_zoom = 0;
-          movingHead.performLight_blackout();
-          movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
-        }
       }
     }
   }
-  float stepSize = factor * 2*PI / (frameRate*60.0/automaticSequencer.currentBPM);
-  dmxAnim_movingHead_globalAnimCpt += stepSize;
+  dmxAnim_movingHead_globalAnimCpt += factor / (frameRate*60.0/automaticSequencer.currentBPM);
 }
 
 void dmxAnim_movingHead_lightOn_allDev_continuousSweep_Horizontal_Slow_LeftToRight() {
@@ -5421,34 +5386,16 @@ void dmxAnim_movingHead_lightOn_allDev_continuousSweep_Horizontal_Fast_RightToLe
   dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Fast_RightToLeft(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_Slow_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_LeftToRight(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_LeftToRight(DMXList_MovingHeads_top);
+
+
+void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_FreeMove_LeftToRight() {
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_LeftToRight(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_LeftToRight(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_Regular_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_LeftToRight(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_LeftToRight(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_Fast_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_LeftToRight(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_LeftToRight(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_Slow_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_RightToLeft(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_RightToLeft(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_Regular_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_RightToLeft(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_RightToLeft(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_Fast_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_RightToLeft(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_RightToLeft(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_FreeMove_RightToLeft() {
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_RightToLeft(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_RightToLeft(DMXList_MovingHeads_top);
 }
 
 
@@ -5476,28 +5423,12 @@ void dmxAnim_movingHead_lightOn_bottomDev_continuousSweep_Horizontal_Fast_RightT
   dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Fast_RightToLeft(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_Slow_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_LeftToRight(DMXList_MovingHeads_bottom);
+void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_FreeMove_LeftToRight() {
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_LeftToRight(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_Regular_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_LeftToRight(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_Fast_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_LeftToRight(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_Slow_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_RightToLeft(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_Regular_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_RightToLeft(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_Fast_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_RightToLeft(DMXList_MovingHeads_bottom);
+void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_FreeMove_RightToLeft() {
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_RightToLeft(DMXList_MovingHeads_bottom);
 }
 
 void dmxAnim_movingHead_lightOn_topDev_continuousSweep_Horizontal_Slow_LeftToRight() {
@@ -5524,30 +5455,13 @@ void dmxAnim_movingHead_lightOn_topDev_continuousSweep_Horizontal_Fast_RightToLe
   dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Fast_RightToLeft(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Slow_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_LeftToRight(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_FreeMove_LeftToRight() {
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_LeftToRight(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Regular_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_LeftToRight(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_FreeMove_RightToLeft() {
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_RightToLeft(DMXList_MovingHeads_top);
 }
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Fast_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_LeftToRight(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Slow_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_RightToLeft(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Regular_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_RightToLeft(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Fast_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_RightToLeft(DMXList_MovingHeads_top);
-}
-
 
 
 /////////////////////////////////
@@ -5583,34 +5497,14 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Vertical_Fast_RightToLeft(ArrayL
 }
 
 
-void dmxAnim_movingHead_lightOn_singleSweep_Vertical_Slow_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+void dmxAnim_movingHead_lightOn_singleSweep_Vertical_FreeMove_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
   float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_SLOW, true, offset, true, dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_FREEMOVE, true, offset, true, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleSweep_Vertical_Regular_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+void dmxAnim_movingHead_lightOn_singleSweep_Vertical_FreeMove_RightToLeft(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
   float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_REGULAR, true, offset, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Vertical_Fast_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_FAST, true, offset, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Vertical_Slow_RightToLeft(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_SLOW, false, offset, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Vertical_Regular_RightToLeft(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_REGULAR, false, offset, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Vertical_Fast_RightToLeft(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_FAST , false, offset, true, dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_continuousSweep_Vertical(ANIMFACTOR_SPEED_FREEMOVE, false, offset, true, dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_continuousSweep_Vertical(float factor, boolean leftToRight, float offset, boolean oneShot, ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
@@ -5620,12 +5514,12 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Vertical(float factor, boolean l
     float tilt     = 0;
     float tiltDiff = 0;
     if (leftToRight) {
-      tilt     = 0.5+0.5*sin(offset + dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
-      tiltDiff = cos(offset + dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+      tilt     = 0.5+0.5*sin(offset + 2*PI*dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+      tiltDiff = cos(offset + 2*PI*dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
     }
     else {
-      tilt     = 0.5+0.5*sin(offset + dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
-      tiltDiff = cos(offset + dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+      tilt     = 0.5+0.5*sin(offset + 2*PI*dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+      tiltDiff = cos(offset + 2*PI*dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
     }
 
     movingHead.setTilt(map(tilt,0,1, movingHead.dmxVal_specificVal_tilt_front_perCent, movingHead.dmxVal_specificVal_tilt_back_perCent));
@@ -5633,21 +5527,11 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Vertical(float factor, boolean l
     
     if (leftToRight) {
       if (tiltDiff > 0) {
-        if (oneShot == false || (oneShot == true && !(movingHead.animCpt2 == 1 && movingHead.animCpt3 == 1))) {
-          movingHead.performLight_currentStyle();
-          movingHead.animCpt2 = 1;    //Set the "was lit once" flag
-        }
-        else {
-          movingHead.animCpt_zoom = 0;
-          movingHead.performLight_blackout();
-        }
+        movingHead.performLight_currentStyle();
       }
       else {
         movingHead.animCpt_zoom = 0;
         movingHead.performLight_blackout();
-        if (movingHead.animCpt2 == 1) {
-          movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
-        }
       }
     }
     else {
@@ -5656,20 +5540,11 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Vertical(float factor, boolean l
         movingHead.performLight_blackout();
       }
       else {
-        if (oneShot == false || (oneShot == true && !(movingHead.animCpt2 == 1 && movingHead.animCpt3 == 1))) {
-          movingHead.performLight_currentStyle();
-          movingHead.animCpt2 = 1;    //Set the "was lit once" flag
-        }
-        else {
-          movingHead.animCpt_zoom = 0;
-          movingHead.performLight_blackout();
-          movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
-        }
+        movingHead.performLight_currentStyle();
       }
     }
   }
-  float stepSize = factor * 2*PI / (frameRate*60.0/automaticSequencer.currentBPM);
-  dmxAnim_movingHead_globalAnimCpt += stepSize;
+  dmxAnim_movingHead_globalAnimCpt += factor / (frameRate*60.0/automaticSequencer.currentBPM);
 }
 
 
@@ -5706,36 +5581,14 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Circular_Fast_RightToLeft(ArrayL
 }
 
 
-
-
-void dmxAnim_movingHead_lightOn_singleSweep_Circular_Slow_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+void dmxAnim_movingHead_lightOn_singleSweep_Circular_FreeMove_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
   float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_SLOW, true, offset, true, dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_FREEMOVE, true, offset, true, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleSweep_Circular_Regular_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+void dmxAnim_movingHead_lightOn_singleSweep_Circular_FreeMove_RightToLeft(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
   float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_REGULAR, true, offset, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Circular_Fast_LeftToRight(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_FAST, true, offset, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Circular_Slow_RightToLeft(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_SLOW, false, offset, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Circular_Regular_RightToLeft(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_REGULAR, false, offset, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Circular_Fast_RightToLeft(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset = PI/2;
-  dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_FAST , false, offset, true, dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_continuousSweep_Circular(ANIMFACTOR_SPEED_FREEMOVE, false, offset, true, dmxList_movingHead_subset);
 }
 
 
@@ -5770,34 +5623,14 @@ void dmxAnim_movingHead_lightOn_allDev_continuousSweep_Circular_Fast_RightToLeft
 }
 
 
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Circular_Slow_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Slow_LeftToRight(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Slow_LeftToRight(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleSweep_Circular_FreeMove_LeftToRight() {
+  dmxAnim_movingHead_lightOn_singleSweep_Circular_FreeMove_LeftToRight(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleSweep_Circular_FreeMove_LeftToRight(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Circular_Regular_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Regular_LeftToRight(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Regular_LeftToRight(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Circular_Fast_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Fast_LeftToRight(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Fast_LeftToRight(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Circular_Slow_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Slow_RightToLeft(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Slow_RightToLeft(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Circular_Regular_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Regular_RightToLeft(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Regular_RightToLeft(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Circular_Fast_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Fast_RightToLeft(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Fast_RightToLeft(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleSweep_Circular_FreeMove_RightToLeft() {
+  dmxAnim_movingHead_lightOn_singleSweep_Circular_FreeMove_RightToLeft(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleSweep_Circular_FreeMove_RightToLeft(DMXList_MovingHeads_top);
 }
 
 void dmxAnim_movingHead_lightOn_bottomDev_continuousSweep_Circular_Slow_LeftToRight() {
@@ -5825,28 +5658,12 @@ void dmxAnim_movingHead_lightOn_bottomDev_continuousSweep_Circular_Fast_RightToL
 }
 
 
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Circular_Slow_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Slow_LeftToRight(DMXList_MovingHeads_bottom);
+void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Circular_FreeMove_LeftToRight() {
+  dmxAnim_movingHead_lightOn_singleSweep_Circular_FreeMove_LeftToRight(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Circular_Regular_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Regular_LeftToRight(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Circular_Fast_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Fast_LeftToRight(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Circular_Slow_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Slow_RightToLeft(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Circular_Regular_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Regular_RightToLeft(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Circular_Fast_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Fast_RightToLeft(DMXList_MovingHeads_bottom);
+void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Circular_FreeMove_RightToLeft() {
+  dmxAnim_movingHead_lightOn_singleSweep_Circular_FreeMove_RightToLeft(DMXList_MovingHeads_bottom);
 }
 
 
@@ -5875,29 +5692,14 @@ void dmxAnim_movingHead_lightOn_topDev_continuousSweep_Circular_Fast_RightToLeft
 }
 
 
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Circular_Slow_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Slow_LeftToRight(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleSweep_Circular_FreeMove_LeftToRight() {
+  dmxAnim_movingHead_lightOn_singleSweep_Circular_FreeMove_LeftToRight(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Circular_Regular_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Regular_LeftToRight(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleSweep_Circular_FreeMove_RightToLeft() {
+  dmxAnim_movingHead_lightOn_singleSweep_Circular_FreeMove_RightToLeft(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Circular_Fast_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Fast_LeftToRight(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Circular_Slow_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Slow_RightToLeft(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Circular_Regular_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Regular_RightToLeft(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Circular_Fast_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Circular_Fast_RightToLeft(DMXList_MovingHeads_top);
-}
 
 void dmxAnim_movingHead_lightOn_continuousSweep_Circular(float factor, boolean leftToRight, float offset, boolean oneShot, ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
   for (DMX_MovingHead movingHead: dmxList_movingHead_subset) {
@@ -5906,12 +5708,12 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Circular(float factor, boolean l
     float tilt     = 0;
     float tiltDiff = 0;
     if (leftToRight) {
-      tilt     = 0.5+0.5*sin(offset + dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
-      tiltDiff = cos(offset + dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+      tilt     = 0.5+0.5*sin(offset + 2*PI*dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+      tiltDiff = cos(offset + 2*PI*dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
     }
     else {
-      tilt     = 0.5+0.5*sin(offset + dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
-      tiltDiff = cos(offset + dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+      tilt     = 0.5+0.5*sin(offset + 2*PI*dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+      tiltDiff = cos(offset + 2*PI*dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
     }
 
     movingHead.setTilt(map(tilt,0,1, movingHead.dmxVal_specificVal_tilt_front_perCent, movingHead.dmxVal_specificVal_tilt_back_perCent));
@@ -5919,41 +5721,22 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Circular(float factor, boolean l
     
     if (leftToRight) {
       if (tiltDiff > 0) {
-        if (oneShot == false || (oneShot == true && !(movingHead.animCpt2 == 1 && movingHead.animCpt3 == 1))) {
-          movingHead.performLight_currentStyle();
-          movingHead.animCpt2 = 1;    //Set the "was lit once" flag
-        }
-        else {
-          movingHead.performLight_blackout();
-        }
+        movingHead.performLight_currentStyle();
       }
       else {
         movingHead.performLight_blackout();
-        if (movingHead.animCpt2 == 1) {
-          movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
-        }
       }
     }
     else {
       if (tiltDiff > 0) {
         movingHead.performLight_blackout();
-        // movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
       }
       else {
-        if (oneShot == false || (oneShot == true && !(movingHead.animCpt2 == 1 && movingHead.animCpt3 == 1))) {
-          movingHead.performLight_currentStyle();
-          movingHead.animCpt2 = 1;    //Set the "was lit once" flag
-        }
-        else {
-          movingHead.animCpt_zoom = 0;
-          movingHead.performLight_blackout();
-          movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
-        }
+        movingHead.performLight_currentStyle();
       }
     }
   }
-  float stepSize = factor * 2*PI / (frameRate*60.0/automaticSequencer.currentBPM);
-  dmxAnim_movingHead_globalAnimCpt += stepSize;
+  dmxAnim_movingHead_globalAnimCpt += factor / (frameRate*60.0/automaticSequencer.currentBPM);
 }
 
 
@@ -5988,34 +5771,14 @@ void dmxAnim_movingHead_lightOn_allDev_continuousSweep_Vertical_Fast_RightToLeft
 }
 
 
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Vertical_Slow_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Slow_LeftToRight(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Slow_LeftToRight(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleSweep_Vertical_FreeMove_LeftToRight() {
+  dmxAnim_movingHead_lightOn_singleSweep_Vertical_FreeMove_LeftToRight(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleSweep_Vertical_FreeMove_LeftToRight(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Vertical_Regular_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Regular_LeftToRight(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Regular_LeftToRight(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Vertical_Fast_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Fast_LeftToRight(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Fast_LeftToRight(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Vertical_Slow_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Slow_RightToLeft(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Slow_RightToLeft(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Vertical_Regular_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Regular_RightToLeft(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Regular_RightToLeft(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Vertical_Fast_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Fast_RightToLeft(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Fast_RightToLeft(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleSweep_Vertical_FreeMove_RightToLeft() {
+  dmxAnim_movingHead_lightOn_singleSweep_Vertical_FreeMove_RightToLeft(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleSweep_Vertical_FreeMove_RightToLeft(DMXList_MovingHeads_top);
 }
 
 
@@ -6044,28 +5807,12 @@ void dmxAnim_movingHead_lightOn_bottomDev_continuousSweep_Vertical_Fast_RightToL
 }
 
 
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Vertical_Slow_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Slow_LeftToRight(DMXList_MovingHeads_bottom);
+void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Vertical_FreeMove_LeftToRight() {
+  dmxAnim_movingHead_lightOn_singleSweep_Vertical_FreeMove_LeftToRight(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Vertical_Regular_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Regular_LeftToRight(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Vertical_Fast_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Fast_LeftToRight(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Vertical_Slow_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Slow_RightToLeft(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Vertical_Regular_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Regular_RightToLeft(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Vertical_Fast_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Fast_RightToLeft(DMXList_MovingHeads_bottom);
+void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Vertical_FreeMove_RightToLeft() {
+  dmxAnim_movingHead_lightOn_singleSweep_Vertical_FreeMove_RightToLeft(DMXList_MovingHeads_bottom);
 }
 
 
@@ -6094,29 +5841,14 @@ void dmxAnim_movingHead_lightOn_topDev_continuousSweep_Vertical_Fast_RightToLeft
 }
 
 
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Vertical_Slow_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Slow_LeftToRight(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleSweep_Vertical_FreeMove_LeftToRight() {
+  dmxAnim_movingHead_lightOn_singleSweep_Vertical_FreeMove_LeftToRight(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Vertical_Regular_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Regular_LeftToRight(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleSweep_Vertical_FreeMove_RightToLeft() {
+  dmxAnim_movingHead_lightOn_singleSweep_Vertical_FreeMove_RightToLeft(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Vertical_Fast_LeftToRight() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Fast_LeftToRight(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Vertical_Slow_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Slow_RightToLeft(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Vertical_Regular_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Regular_RightToLeft(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Vertical_Fast_RightToLeft() {
-  dmxAnim_movingHead_lightOn_singleSweep_Vertical_Fast_RightToLeft(DMXList_MovingHeads_top);
-}
 
 /////////////////////////////////////
 
@@ -6158,41 +5890,18 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Fast_SymmetricalDiver
 }
 
 
-void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_SymmetricalConvergent(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_SymmetricalConvergent(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
   float offset1 = -PI/2 - PI*((dmxList_movingHead_subset.size()/2 - 1))/dmxList_movingHead_subset.size();
   float offset2 = PI/2 + PI*ceil((dmxList_movingHead_subset.size()/2))/dmxList_movingHead_subset.size();
-  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Symmetrical(ANIMFACTOR_SPEED_SLOW, true, offset1, offset2, true, dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Symmetrical(ANIMFACTOR_SPEED_FREEMOVE, true, offset1, offset2, true, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_SymmetricalConvergent(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset1 = -PI/2 - PI*((dmxList_movingHead_subset.size()/2 - 1))/dmxList_movingHead_subset.size();
-  float offset2 = PI/2 + PI*ceil((dmxList_movingHead_subset.size()/2))/dmxList_movingHead_subset.size();
-  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Symmetrical(ANIMFACTOR_SPEED_REGULAR, true, offset1, offset2, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_SymmetricalConvergent(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset1 = -PI/2 - PI*((dmxList_movingHead_subset.size()/2 - 1))/dmxList_movingHead_subset.size();
-  float offset2 = PI/2 + PI*ceil((dmxList_movingHead_subset.size()/2))/dmxList_movingHead_subset.size();
-  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Symmetrical(ANIMFACTOR_SPEED_FAST, true, offset1, offset2, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_SymmetricalDivergent(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_SymmetricalDivergent(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
   float offset1 = PI/2;
   float offset2 = -PI/2 - PI*(dmxList_movingHead_subset.size() - 1)/dmxList_movingHead_subset.size();
-  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Symmetrical(ANIMFACTOR_SPEED_SLOW, false, offset1, offset2, true, dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Symmetrical(ANIMFACTOR_SPEED_FREEMOVE, false, offset1, offset2, true, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_SymmetricalDivergent(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset1 = PI/2;
-  float offset2 = -PI/2 - PI*(dmxList_movingHead_subset.size() - 1)/dmxList_movingHead_subset.size();
-  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Symmetrical(ANIMFACTOR_SPEED_REGULAR, false, offset1, offset2, true, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_SymmetricalDivergent(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  float offset1 = PI/2;
-  float offset2 = -PI/2 - PI*(dmxList_movingHead_subset.size() - 1)/dmxList_movingHead_subset.size();
-  dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Symmetrical(ANIMFACTOR_SPEED_FAST, false, offset1, offset2, true, dmxList_movingHead_subset);
-}
 
 
 void dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Symmetrical(float factor, boolean convergent, float offset1, float offset2, boolean oneShot, ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
@@ -6203,31 +5912,31 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Symmetrical(float fac
     float panDiff = 0;
     if (convergent) {
       if (movingHead.getDeviceID() < dmxList_movingHead_subset.size()/2) {
-        pan     = 0.5+0.5*sin(offset1 + dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
-        panDiff = cos(offset1 + dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+        pan     = 0.5+0.5*sin(offset1 + 2*PI*dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+        panDiff = cos(offset1 + 2*PI*dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
       }
       else if (movingHead.getDeviceID() >= ceil((dmxList_movingHead_subset.size()/2))) {
-        pan     = 0.5+0.5*sin(offset2 + dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
-        panDiff = cos(offset2 + dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+        pan     = 0.5+0.5*sin(offset2 + 2*PI*dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+        panDiff = cos(offset2 + 2*PI*dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
       }
       else {
         // Center device in the case of an odd number of projectors
-        pan     = 0;
+        pan     = 0.5;
         panDiff = 0;
       }
     }
     else {  // Divergent
       if (movingHead.getDeviceID() < dmxList_movingHead_subset.size()/2) {
-        pan     = 0.5+0.5*sin(offset1 + dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
-        panDiff = cos(offset1 + dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+        pan     = 0.5+0.5*sin(offset1 + 2*PI*dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+        panDiff = cos(offset1 + 2*PI*dmxAnim_movingHead_globalAnimCpt - PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
       }
       else if (movingHead.getDeviceID() >= ceil((dmxList_movingHead_subset.size()/2))) {
-        pan     = 0.5+0.5*sin(offset2 + dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
-        panDiff = cos(offset2 + dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+        pan     = 0.5+0.5*sin(offset2 + 2*PI*dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
+        panDiff = cos(offset2 + 2*PI*dmxAnim_movingHead_globalAnimCpt + PI*movingHead.getDeviceID()/dmxList_movingHead_subset.size());
       }
       else {
         // Center device in the case of an odd number of projectors
-        pan     = 0;
+        pan     = 0.5;
         panDiff = 0;
       }
     }
@@ -6238,34 +5947,18 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Symmetrical(float fac
     if (convergent) {
       if (movingHead.getDeviceID() < dmxList_movingHead_subset.size()/2) {    // Left devices
         if (panDiff > 0) {
-          if (oneShot == false || (oneShot == true && !(movingHead.animCpt2 == 1 && movingHead.animCpt3 == 1))) {
-            movingHead.performLight_currentStyle();
-            movingHead.animCpt2 = 1;    //Set the "was lit once" flag
-          }
-          else {
-            movingHead.performLight_blackout();
-          }
+          movingHead.performLight_currentStyle();
         }
         else {
           movingHead.performLight_blackout();
-          if (movingHead.animCpt2 == 1) {
-            movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
-          }
         }
       }
       else if (movingHead.getDeviceID() >= ceil((dmxList_movingHead_subset.size()/2))) {    // Right devices
         if (panDiff > 0) {
           movingHead.performLight_blackout();
-          movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
         }
         else {
-          if (oneShot == false || (oneShot == true && !(movingHead.animCpt2 == 1 && movingHead.animCpt3 == 1))) {
-            movingHead.performLight_currentStyle();
-            movingHead.animCpt2 = 1;    //Set the "was lit once" flag
-          }
-          else {
-            movingHead.performLight_blackout();
-          }
+          movingHead.performLight_currentStyle();
         }
       }
       else {    // Center device in the case of an odd number of projectors
@@ -6278,46 +5971,26 @@ void dmxAnim_movingHead_lightOn_continuousSweep_Horizontal_Symmetrical(float fac
       
       if (movingHead.getDeviceID() < dmxList_movingHead_subset.size()/2) {    // Left devices
         if (panDiff < 0) {
-          if (oneShot == false || (oneShot == true && !(movingHead.animCpt2 == 1 && movingHead.animCpt3 == 1))) {
-            movingHead.performLight_currentStyle();
-            movingHead.animCpt2 = 1;    //Set the "was lit once" flag
-          }
-          else {
-            movingHead.performLight_blackout();
-          }
+          movingHead.performLight_currentStyle();
         }
         else {
           movingHead.performLight_blackout();
-          if (movingHead.animCpt2 == 1) {
-            movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
-          }
         }
       }
       else if (movingHead.getDeviceID() >= ceil((dmxList_movingHead_subset.size()/2))) {    // Right devices
         if (panDiff < 0) {
           movingHead.performLight_blackout();
-          movingHead.animCpt3 = 1;    //Set the "was turned off once" flag
         }
         else {
-          if (oneShot == false || (oneShot == true && !(movingHead.animCpt2 == 1 && movingHead.animCpt3 == 1))) {
-            movingHead.performLight_currentStyle();
-            movingHead.animCpt2 = 1;    //Set the "was lit once" flag
-          }
-          else {
-            movingHead.performLight_blackout();
-          }
+          movingHead.performLight_currentStyle();
         }
       }
       else {    // Center device in the case of an odd number of projectors
         movingHead.performLight_blackout();
       }
-
-
-
     }
   }
-  float stepSize = factor * 2*PI / (frameRate*60.0/automaticSequencer.currentBPM);
-  dmxAnim_movingHead_globalAnimCpt += stepSize;
+  dmxAnim_movingHead_globalAnimCpt += factor / (frameRate*60.0/automaticSequencer.currentBPM);
 }
 
 
@@ -6352,34 +6025,14 @@ void dmxAnim_movingHead_lightOn_allDev_continuousSweep_Horizontal_Fast_Symmetric
 }
 
 
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_Slow_SymmetricalConvergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_SymmetricalConvergent(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_SymmetricalConvergent(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_FreeMove_SymmetricalConvergent() {
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_SymmetricalConvergent(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_SymmetricalConvergent(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_Regular_SymmetricalConvergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_SymmetricalConvergent(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_SymmetricalConvergent(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_Fast_SymmetricalConvergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_SymmetricalConvergent(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_SymmetricalConvergent(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_Slow_SymmetricalDivergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_SymmetricalDivergent(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_SymmetricalDivergent(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_Regular_SymmetricalDivergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_SymmetricalDivergent(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_SymmetricalDivergent(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_Fast_SymmetricalDivergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_SymmetricalDivergent(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_SymmetricalDivergent(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleSweep_Horizontal_FreeMove_SymmetricalDivergent() {
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_SymmetricalDivergent(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_SymmetricalDivergent(DMXList_MovingHeads_top);
 }
 
 
@@ -6408,28 +6061,12 @@ void dmxAnim_movingHead_lightOn_bottomDev_continuousSweep_Horizontal_Fast_Symmet
 }
 
 
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_Slow_SymmetricalConvergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_SymmetricalConvergent(DMXList_MovingHeads_bottom);
+void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_FreeMove_SymmetricalConvergent() {
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_SymmetricalConvergent(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_Regular_SymmetricalConvergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_SymmetricalConvergent(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_Fast_SymmetricalConvergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_SymmetricalConvergent(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_Slow_SymmetricalDivergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_SymmetricalDivergent(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_Regular_SymmetricalDivergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_SymmetricalDivergent(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_Fast_SymmetricalDivergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_SymmetricalDivergent(DMXList_MovingHeads_bottom);
+void dmxAnim_movingHead_lightOn_bottomDev_singleSweep_Horizontal_FreeMove_SymmetricalDivergent() {
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_SymmetricalDivergent(DMXList_MovingHeads_bottom);
 }
 
 
@@ -6458,29 +6095,14 @@ void dmxAnim_movingHead_lightOn_topDev_continuousSweep_Horizontal_Fast_Symmetric
 }
 
 
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Slow_SymmetricalConvergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_SymmetricalConvergent(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_FreeMove_SymmetricalConvergent() {
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_SymmetricalConvergent(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Regular_SymmetricalConvergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_SymmetricalConvergent(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_FreeMove_SymmetricalDivergent() {
+  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_FreeMove_SymmetricalDivergent(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Fast_SymmetricalConvergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_SymmetricalConvergent(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Slow_SymmetricalDivergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Slow_SymmetricalDivergent(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Regular_SymmetricalDivergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Regular_SymmetricalDivergent(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleSweep_Horizontal_Fast_SymmetricalDivergent() {
-  dmxAnim_movingHead_lightOn_singleSweep_Horizontal_Fast_SymmetricalDivergent(DMXList_MovingHeads_top);
-}
 
 /////////////////////////////////////////////
 
@@ -6489,875 +6111,258 @@ void dmxAnim_movingHead_lightOn_singleMove_Vertical(boolean upDown, boolean oppo
   if (opposite == false) {
     if (upDown) {
       if (angleWidth < 0) {
-        dmxAnim_movingHead_prepareDirection_SymmetricalConvergentPan(-angleWidth, max(100 - dmxAnim_movingHead_globalAnimCpt, 0), dmxList_movingHead_subset);
+        dmxAnim_movingHead_prepareDirection_SymmetricalConvergentPan(-angleWidth, max(100*(1 - dmxAnim_movingHead_globalAnimCpt), 0), dmxList_movingHead_subset);
       }
       else {
-        dmxAnim_movingHead_prepareDirection_SymmetricalDivergentPan(angleWidth, max(100 - dmxAnim_movingHead_globalAnimCpt, 0), dmxList_movingHead_subset);
+        dmxAnim_movingHead_prepareDirection_SymmetricalDivergentPan(angleWidth, max(100*(1 - dmxAnim_movingHead_globalAnimCpt), 0), dmxList_movingHead_subset);
       }
       
     }
     else {
       if (angleWidth < 0) {
-        dmxAnim_movingHead_prepareDirection_SymmetricalConvergentPan(-angleWidth, min(dmxAnim_movingHead_globalAnimCpt, 100), dmxList_movingHead_subset);
+        dmxAnim_movingHead_prepareDirection_SymmetricalConvergentPan(-angleWidth, min(100*dmxAnim_movingHead_globalAnimCpt, 100), dmxList_movingHead_subset);
       }
       else {
-        dmxAnim_movingHead_prepareDirection_SymmetricalDivergentPan(angleWidth, min(dmxAnim_movingHead_globalAnimCpt, 100), dmxList_movingHead_subset);
+        dmxAnim_movingHead_prepareDirection_SymmetricalDivergentPan(angleWidth, min(100*dmxAnim_movingHead_globalAnimCpt, 100), dmxList_movingHead_subset);
       }
     }
   }
   else {
     if (upDown) {
-      dmxAnim_movingHead_prepareDirection_SymmetricalDivergentPan_OppositeTilt(angleWidth, max(100 - dmxAnim_movingHead_globalAnimCpt, 0), dmxList_movingHead_subset);
+      dmxAnim_movingHead_prepareDirection_SymmetricalDivergentPan_OppositeTilt(angleWidth, max(100*(1 - dmxAnim_movingHead_globalAnimCpt), 0), dmxList_movingHead_subset);
     }
     else {
-      dmxAnim_movingHead_prepareDirection_SymmetricalDivergentPan_OppositeTilt(angleWidth, min(dmxAnim_movingHead_globalAnimCpt, 100), dmxList_movingHead_subset);
+      dmxAnim_movingHead_prepareDirection_SymmetricalDivergentPan_OppositeTilt(angleWidth, min(100*dmxAnim_movingHead_globalAnimCpt, 100), dmxList_movingHead_subset);
     }
   }
   
-  if (dmxAnim_movingHead_globalAnimCpt < 100) {
+  if (dmxAnim_movingHead_globalAnimCpt < 1) {
     dmxAnim_movingHead_noMovement_performCurrentLightStyle(dmxList_movingHead_subset);
   }
   else {
     dmxAnim_movingHead_noMovement_performStandbyBlackout(dmxList_movingHead_subset);
   }
 
-  float stepSize = factor * 100 / (frameRate*60.0/automaticSequencer.currentBPM);
-  dmxAnim_movingHead_globalAnimCpt += stepSize;
+  dmxAnim_movingHead_globalAnimCpt += factor / (frameRate*60.0/automaticSequencer.currentBPM);
 }
 
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_VerySlow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, 0, ANIMFACTOR_SPEED_VERYSLOW, dmxList_movingHead_subset);
+void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_FreeMove(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, 0, ANIMFACTOR_SPEED_FREEMOVE, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, 0, ANIMFACTOR_SPEED_SLOW, dmxList_movingHead_subset);
+void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_FreeMove(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, 0, ANIMFACTOR_SPEED_FREEMOVE, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, 0, ANIMFACTOR_SPEED_REGULAR, dmxList_movingHead_subset);
+void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_FreeMove(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, 0, ANIMFACTOR_SPEED_FREEMOVE, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, 0, ANIMFACTOR_SPEED_FAST, dmxList_movingHead_subset);
+void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_FreeMove(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, 0, ANIMFACTOR_SPEED_FREEMOVE, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_VerySlow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, 0, ANIMFACTOR_SPEED_VERYSLOW, dmxList_movingHead_subset);
+void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_FreeMove(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, 60, ANIMFACTOR_SPEED_FREEMOVE, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, 0, ANIMFACTOR_SPEED_SLOW, dmxList_movingHead_subset);
+void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_FreeMove(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, 60, ANIMFACTOR_SPEED_FREEMOVE, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, 0, ANIMFACTOR_SPEED_REGULAR, dmxList_movingHead_subset);
+void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_FreeMove(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, 60, ANIMFACTOR_SPEED_FREEMOVE, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, 0, ANIMFACTOR_SPEED_FAST, dmxList_movingHead_subset);
+void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_FreeMove(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, 60, ANIMFACTOR_SPEED_FREEMOVE, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_VerySlow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, 0, ANIMFACTOR_SPEED_VERYSLOW, dmxList_movingHead_subset);
+void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_FreeMove(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, -60, ANIMFACTOR_SPEED_FREEMOVE, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, 0, ANIMFACTOR_SPEED_SLOW, dmxList_movingHead_subset);
+void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_FreeMove(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, -60, ANIMFACTOR_SPEED_FREEMOVE, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, 0, ANIMFACTOR_SPEED_REGULAR, dmxList_movingHead_subset);
+void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_FreeMove(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, -60, ANIMFACTOR_SPEED_FREEMOVE, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, 0, ANIMFACTOR_SPEED_FAST, dmxList_movingHead_subset);
+void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_FreeMove(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, -60, ANIMFACTOR_SPEED_FREEMOVE, dmxList_movingHead_subset);
 }
 
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_VerySlow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, 0, ANIMFACTOR_SPEED_VERYSLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, 0, ANIMFACTOR_SPEED_SLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, 0, ANIMFACTOR_SPEED_REGULAR, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, 0, ANIMFACTOR_SPEED_FAST, dmxList_movingHead_subset);
-}
-
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_VerySlow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, 60, ANIMFACTOR_SPEED_VERYSLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, 60, ANIMFACTOR_SPEED_SLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, 60, ANIMFACTOR_SPEED_REGULAR, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, 60, ANIMFACTOR_SPEED_FAST, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_VerySlow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, 60, ANIMFACTOR_SPEED_VERYSLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, 60, ANIMFACTOR_SPEED_SLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, 60, ANIMFACTOR_SPEED_REGULAR, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, 60, ANIMFACTOR_SPEED_FAST, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_VerySlow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, 60, ANIMFACTOR_SPEED_VERYSLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, 60, ANIMFACTOR_SPEED_SLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, 60, ANIMFACTOR_SPEED_REGULAR, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, 60, ANIMFACTOR_SPEED_FAST, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_VerySlow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, 60, ANIMFACTOR_SPEED_VERYSLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, 60, ANIMFACTOR_SPEED_SLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, 60, ANIMFACTOR_SPEED_REGULAR, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, 60, ANIMFACTOR_SPEED_FAST, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_VerySlow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, -60, ANIMFACTOR_SPEED_VERYSLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, -60, ANIMFACTOR_SPEED_SLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, -60, ANIMFACTOR_SPEED_REGULAR, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, false, -60, ANIMFACTOR_SPEED_FAST, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_VerySlow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, -60, ANIMFACTOR_SPEED_VERYSLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, -60, ANIMFACTOR_SPEED_SLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, -60, ANIMFACTOR_SPEED_REGULAR, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, false, -60, ANIMFACTOR_SPEED_FAST, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_VerySlow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, -60, ANIMFACTOR_SPEED_VERYSLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, -60, ANIMFACTOR_SPEED_SLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, -60, ANIMFACTOR_SPEED_REGULAR, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(true, true, -60, ANIMFACTOR_SPEED_FAST, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_VerySlow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, -60, ANIMFACTOR_SPEED_VERYSLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, -60, ANIMFACTOR_SPEED_SLOW, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, -60, ANIMFACTOR_SPEED_REGULAR, dmxList_movingHead_subset);
-}
-
-void dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical(false, true, -60, ANIMFACTOR_SPEED_FAST, dmxList_movingHead_subset);
-}
-
-
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_UpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_VerySlow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_UpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Slow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_UpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Regular(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Regular(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_UpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Fast(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Fast(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_DownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_VerySlow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_DownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Slow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_DownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Regular(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Regular(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_DownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Fast(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Fast(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_OppositeUpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_VerySlow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_OppositeUpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Slow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_OppositeUpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Regular(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Regular(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_OppositeUpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Fast(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Fast(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_OppositeDownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_VerySlow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_OppositeDownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Slow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_OppositeDownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Regular(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Regular(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_OppositeDownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Fast(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Fast(DMXList_MovingHeads_top);
-}
-
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_UpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_VerySlow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_UpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Slow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_UpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Regular(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Regular(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_UpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Fast(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Fast(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_DownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_VerySlow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_DownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Slow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_DownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Regular(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Regular(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_DownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Fast(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Fast(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_OppositeUpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_VerySlow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_OppositeUpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Slow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_OppositeUpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Regular(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Regular(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_OppositeUpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Fast(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Fast(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_OppositeDownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_VerySlow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_OppositeDownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Slow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_OppositeDownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Regular(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Regular(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_OppositeDownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Fast(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Fast(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_UpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_VerySlow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_UpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Slow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_UpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Regular(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Regular(DMXList_MovingHeads_top);
-}
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_UpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Fast(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Fast(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_UpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_FreeMove(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_DownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_VerySlow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_VerySlow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_DownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_FreeMove(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_DownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Slow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Slow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_OppositeUpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_FreeMove(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_DownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Regular(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Regular(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Parallel_OppositeDownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_FreeMove(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_DownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Fast(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Fast(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_UpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_FreeMove(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_OppositeUpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_VerySlow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_VerySlow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_DownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_FreeMove(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_OppositeUpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Slow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Slow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_OppositeUpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_FreeMove(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_OppositeUpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Regular(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Regular(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Divergent_OppositeDownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_FreeMove(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_OppositeUpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Fast(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Fast(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_UpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_FreeMove(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_OppositeDownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_VerySlow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_VerySlow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_DownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_FreeMove(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_OppositeDownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Slow(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Slow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_OppositeUpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_FreeMove(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_OppositeDownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Regular(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Regular(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_OppositeDownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_FreeMove(DMXList_MovingHeads_bottom);
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_allDev_singleMove_Vertical_Convergent_OppositeDownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Fast(DMXList_MovingHeads_bottom);
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Fast(DMXList_MovingHeads_top);
-}
-
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_UpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_VerySlow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_UpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Slow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_UpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Regular(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_UpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Fast(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_DownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_VerySlow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_DownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Slow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_DownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Regular(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_DownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Fast(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_OppositeUpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_VerySlow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_OppositeUpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Slow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_OppositeUpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Regular(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_OppositeUpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Fast(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_OppositeDownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_VerySlow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_OppositeDownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Slow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_OppositeDownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Regular(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_OppositeDownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Fast(DMXList_MovingHeads_bottom);
-}
-
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_UpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_VerySlow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_UpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Slow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_UpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Regular(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_UpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Fast(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_DownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_VerySlow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_DownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Slow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_DownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Regular(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_DownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Fast(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_OppositeUpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_VerySlow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_OppositeUpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Slow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_OppositeUpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Regular(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_OppositeUpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Fast(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_OppositeDownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_VerySlow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_OppositeDownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Slow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_OppositeDownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Regular(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_OppositeDownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Fast(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_UpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_VerySlow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_UpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Slow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_UpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Regular(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_UpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Fast(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_DownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_VerySlow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_DownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Slow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_DownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Regular(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_DownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Fast(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_OppositeUpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_VerySlow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_OppositeUpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Slow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_OppositeUpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Regular(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_OppositeUpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Fast(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_OppositeDownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_VerySlow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_OppositeDownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Slow(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_OppositeDownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Regular(DMXList_MovingHeads_bottom);
-}
-
-void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_OppositeDownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Fast(DMXList_MovingHeads_bottom);
-}
-
-
-
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_UpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_UpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_UpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Regular(DMXList_MovingHeads_top);
-}
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_UpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_Fast(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_DownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_DownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_DownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Regular(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_DownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_Fast(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_OppositeUpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_OppositeUpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_OppositeUpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Regular(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_OppositeUpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_Fast(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_OppositeDownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_OppositeDownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_OppositeDownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Regular(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_OppositeDownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_Fast(DMXList_MovingHeads_top);
-}
-
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_UpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_VerySlow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_UpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Slow(DMXList_MovingHeads_top);
-}
-
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_UpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Regular(DMXList_MovingHeads_top);
-}
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_UpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_Fast(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_UpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_FreeMove(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_DownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_VerySlow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_DownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_FreeMove(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_DownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Slow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_OppositeUpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_FreeMove(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_DownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Regular(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Parallel_OppositeDownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_FreeMove(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_DownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_Fast(DMXList_MovingHeads_top);
-}
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_OppositeUpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_VerySlow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_UpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_FreeMove(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_OppositeUpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Slow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_DownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_FreeMove(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_OppositeUpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Regular(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_OppositeUpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_FreeMove(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_OppositeUpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_Fast(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Divergent_OppositeDownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_FreeMove(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_OppositeDownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_VerySlow(DMXList_MovingHeads_top);
-}
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_OppositeDownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Slow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_UpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_FreeMove(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_OppositeDownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Regular(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_DownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_FreeMove(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_OppositeDownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_Fast(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_OppositeUpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_FreeMove(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_UpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_VerySlow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_bottomDev_singleMove_Vertical_Convergent_OppositeDownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_FreeMove(DMXList_MovingHeads_bottom);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_UpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Slow(DMXList_MovingHeads_top);
-}
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_UpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Regular(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_UpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_UpDown_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_UpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_Fast(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_DownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_DownUp_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_DownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_VerySlow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_OppositeUpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeUpDown_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_DownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Slow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Parallel_OppositeDownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Parallel_OppositeDownUp_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_DownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Regular(DMXList_MovingHeads_top);
-}
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_DownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_Fast(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_UpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_UpDown_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_OppositeUpDown_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_VerySlow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_DownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_DownUp_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_OppositeUpDown_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Slow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_OppositeUpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeUpDown_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_OppositeUpDown_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Regular(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Divergent_OppositeDownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Divergent_OppositeDownUp_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_OppositeUpDown_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_Fast(DMXList_MovingHeads_top);
-}
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_OppositeDownUp_VerySlow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_VerySlow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_UpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_UpDown_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_OppositeDownUp_Slow() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Slow(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_DownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_DownUp_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_OppositeDownUp_Regular() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Regular(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_OppositeUpDown_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeUpDown_FreeMove(DMXList_MovingHeads_top);
 }
 
-void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_OppositeDownUp_Fast() {
-  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_Fast(DMXList_MovingHeads_top);
+void dmxAnim_movingHead_lightOn_topDev_singleMove_Vertical_Convergent_OppositeDownUp_FreeMove() {
+  dmxAnim_movingHead_lightOn_singleMove_Vertical_Convergent_OppositeDownUp_FreeMove(DMXList_MovingHeads_top);
 }
 
 
 /////////////////////////////////////////////
 void dmxAnim_movingHead_lightOn_randomNoiseDirection(float speed, float intensity, ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
   for (DMX_MovingHead movingHead: dmxList_movingHead_subset) {
-    // movingHead.setPan(constrain(movingHead.animCpt2 + intensity*(noise((movingHead.animCpt2+frameCount)*speed) - 0.5), 0, 100));
-    // movingHead.setTilt(constrain(movingHead.animCpt3 + intensity*(noise((movingHead.animCpt3+frameCount)*speed) - 0.5), 0, 100));
     movingHead.setPan(constrain(movingHead.animCpt2 + intensity*(noise((frameCount)*speed) - 0.5), 0, 100));
     movingHead.setTilt(constrain(movingHead.animCpt3 + intensity*(noise((frameCount)*speed) - 0.5), 0, 100));
     movingHead.performLight_currentStyle();
@@ -7640,8 +6645,7 @@ void dmxAnim_movingHead_lightOn_randomStraightDirection_beatSync(float factor, A
     movingHead.setTilt(map(dmxAnim_movingHead_globalAnimCpt, 0, 1, movingHead.animCpt3, movingHead.animCpt5));
     movingHead.performLight_currentStyle();
   }
-  float stepSize = factor * 1 / (frameRate*60.0/automaticSequencer.currentBPM);
-  dmxAnim_movingHead_globalAnimCpt += stepSize;
+  dmxAnim_movingHead_globalAnimCpt += factor / (frameRate*60.0/automaticSequencer.currentBPM);
   if (dmxAnim_movingHead_globalAnimCpt > 1) {
     dmxAnim_movingHead_lightOn_randomStraightDirection_beatSync_setup(dmxList_movingHead_subset);
   }

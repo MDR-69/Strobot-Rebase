@@ -225,6 +225,7 @@ final int GUI_ATTR_DMX_MOVINGHEAD_ANIM_VERTICAL      = 16;
 final int GUI_ATTR_DMX_MOVINGHEAD_ANIM_SLOW          = 17;
 final int GUI_ATTR_DMX_MOVINGHEAD_ANIM_REGULAR       = 18;
 final int GUI_ATTR_DMX_MOVINGHEAD_ANIM_FAST          = 19;
+final int GUI_ATTR_DMX_MOVINGHEAD_ANIM_EXTSYNC       = 20;
 
 final int GUI_ATTR_DMX_PAR_LIGHT_ALL                 = 0;
 final int GUI_ATTR_DMX_PAR_LIGHT_LEFT                = 1;
@@ -2016,6 +2017,7 @@ public class ControlFrame extends PApplet {
                                                                 .addItem("SLow",         17)
                                                                 .addItem("REGULar",      18)
                                                                 .addItem("FAst",         19)
+                                                                .addItem("Ext-Sync",     20)
                                                                 .setGroup(DMXAnimations_Animations_animListGroup)
                                                                 ;
 
@@ -2332,7 +2334,6 @@ public class ControlFrame extends PApplet {
                                                                 .addItem(" FAst",         17)
                                                                 .setGroup(DMXAnimations_Animations_animListGroup)
                                                                 ;
-
 
     List<String> filteredAnimationsStringList_Color      = new ArrayList<String>();
     List<String> filteredAnimationsStringList_LightStyle = new ArrayList<String>();
@@ -4689,6 +4690,7 @@ String[] createDMXAnimationListFilter_MovingHead_Animation(float[] checkBoxArray
         case GUI_ATTR_DMX_MOVINGHEAD_ANIM_SLOW          : temp.append("MovingHead-Anim-Slow");break;
         case GUI_ATTR_DMX_MOVINGHEAD_ANIM_REGULAR       : temp.append("MovingHead-Anim-Regular");break;
         case GUI_ATTR_DMX_MOVINGHEAD_ANIM_FAST          : temp.append("MovingHead-Anim-Fast");break;
+        case GUI_ATTR_DMX_MOVINGHEAD_ANIM_EXTSYNC       : temp.append("MovingHead-Anim-FreeMove");break;
         default: break;
       }
     }

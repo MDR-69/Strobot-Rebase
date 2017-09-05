@@ -502,11 +502,9 @@ void drawMovingHeads(int simulatorWidth, int positionY, ArrayList<DMX_MovingHead
       auxControlFrame.line(0,20,0,23);  //Center position for the pan meter
 
       //Pan arrow
-      //auxControlFrame.rotate(frameCount / 50.0);
       auxControlFrame.rotate(PI/2 - int(map(movingHead.getSimulatorPan(),0,255,-3*PI/2,3*PI/2) * 1000)/1000.0);
       auxControlFrame.translate(10,0);
       auxControlFrame.stroke(255);
-      //auxControlFrame.fill(255,0,0);
       auxControlFrame.triangle(0,4,0,-4,7,0);
 
       auxControlFrame.popMatrix();
