@@ -55,6 +55,12 @@ float narrovView_speed = 0.2;
 int whiteFlashEffect_progress = 0;
 int whiteFlashEffect_speed = 10;
 
+float redTriangleFadeIn_valCenter = 0;
+float redTriangleFadeIn_valLeft = 0;
+float redTriangleFadeIn_valRight = 0;
+float redTriangleFadeIn_speed = 3;
+
+
 //General effect switcher
 void draw_effects1(){
   draw_effects(currentEffectNumber, effectToBeDrawn);
@@ -136,6 +142,11 @@ void draw_effects(int effectNb, boolean drawEnabled) {
       case 59:  draw_WhiteFlashEffect(); break;
       case 60:  draw_additionalLongfadein();break;
       case 61:  draw_ctoFilter(); break;
+      case 62:  draw_extControlDimmerEffect(); break;
+      case 63:  draw_centerPanelFadeInRedTriangleEffect(); break;
+      case 64:  draw_leftPanelFadeInRedTriangleEffect(); break;
+      case 65:  draw_rightPanelFadeInRedTriangleEffect(); break;
+
       default: break;
     }
   }
@@ -176,6 +187,9 @@ void initSpecificEffectParams(int effectNb) {
     case 58: narrovView_progress = 0;       break;
     case 59: whiteFlashEffect_progress = 0; break;
     case 60: fadein_counter          = 0; break;
+    case 63: redTriangleFadeIn_valCenter = 0; break;
+    case 64: redTriangleFadeIn_valLeft = 0; break;
+    case 65: redTriangleFadeIn_valRight = 0; break;
     default: break;
   }
 }
@@ -778,14 +792,23 @@ void draw_dimmer75Effect() {
   popStyle();
 }
 
+void draw_extControlDimmerEffect() {
+  pushStyle();
+  noStroke();
+  fill(0,control_ledPanels_fx*255);
+  rect(0,0,width,height);
+  popStyle();
+}
+
+
 void draw_centerPanelRedTriangleEffect() {
   pushStyle();
   noStroke();
   
   fill(180,0,0);
-  triangle(width/2 - (width/NUMBER_OF_PANELS)/2 + 1, 2*height/3 + 4,
-           width/2, height/3 - 4,
-           width/2 + (width/NUMBER_OF_PANELS)/2 - 1, 2*height/3 + 4);
+  triangle(width/2 - (width/NUMBER_OF_PANELS)/2 + 1, height/3 - 4,
+           width/2, 2*height/3 + 4,
+           width/2 + (width/NUMBER_OF_PANELS)/2 - 1, height/3 - 4);
 
   popStyle();
 }
@@ -794,10 +817,11 @@ void draw_centerPanelRedGlitchTriangleEffect() {
   pushStyle();
   noStroke();
 
-  fill(150 + 105*noise(frameCount), 0, 0);
-  triangle(width/2 - (width/NUMBER_OF_PANELS)/2 + 1, 2*height/3 + 4 + 8*(random(1) - 0.5),
-           width/2, height/3 - 4 + 8*(random(1) - 0.5),
-           width/2 + (width/NUMBER_OF_PANELS)/2 - 1, 2*height/3 + 4 + 8*(random(1) - 0.5) );
+  float randomVal = random(1);
+  fill(150 + random(105), 0, 0);
+  triangle(width/2 - (width/NUMBER_OF_PANELS)/2 + 1, height/3 - 4 + 8*(randomVal - 0.5),
+           width/2, 2*height/3 + 4 + 8*(randomVal - 0.5),
+           width/2 + (width/NUMBER_OF_PANELS)/2 - 1, height/3 - 4 + 8*(randomVal - 0.5) );
 
   popStyle();
 }
@@ -924,4 +948,43 @@ void draw_WhiteFlashEffect() {
   rect(0,0, width, height);
   popStyle();
   whiteFlashEffect_progress += whiteFlashEffect_speed;
+}
+
+void draw_centerPanelFadeInRedTriangleEffect(){
+  pushStyle();
+  noStroke();
+  
+  fill(min(180, redTriangleFadeIn_valCenter),0,0);
+  triangle(width/2 - (width/NUMBER_OF_PANELS)/2 + 1, height/3 - 4,
+           width/2, 2*height/3 + 4,
+           width/2 + (width/NUMBER_OF_PANELS)/2 - 1, height/3 - 4);
+
+  popStyle();
+  redTriangleFadeIn_valCenter += redTriangleFadeIn_speed;
+}
+
+void draw_leftPanelFadeInRedTriangleEffect(){
+  pushStyle();
+  noStroke();
+  
+  fill(min(180, redTriangleFadeIn_valLeft),0,0);
+  triangle((width/NUMBER_OF_PANELS)/2 - (width/NUMBER_OF_PANELS)/2 + 1, height/3 - 4,
+           (width/NUMBER_OF_PANELS)/2, 2*height/3 + 4,
+           (width/NUMBER_OF_PANELS)/2 + (width/NUMBER_OF_PANELS)/2 - 1, height/3 - 4);
+
+  popStyle();
+  redTriangleFadeIn_valLeft += redTriangleFadeIn_speed;
+}
+
+void draw_rightPanelFadeInRedTriangleEffect(){
+  pushStyle();
+  noStroke();
+  
+  fill(min(180, redTriangleFadeIn_valRight),0,0);
+  triangle(width - (width/NUMBER_OF_PANELS)/2 - (width/NUMBER_OF_PANELS)/2 + 1, height/3 - 4,
+           width - (width/NUMBER_OF_PANELS)/2, 2*height/3 + 4,
+           width - (width/NUMBER_OF_PANELS)/2 + (width/NUMBER_OF_PANELS)/2 - 1, height/3 - 4);
+
+  popStyle();
+  redTriangleFadeIn_valRight += redTriangleFadeIn_speed;
 }

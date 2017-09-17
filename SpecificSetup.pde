@@ -4875,6 +4875,7 @@ void specificActions() {
         // starSparkle_intensity = 0;
         init_starSparkle_static();
         starSparkle_init = true;
+        starSparkle_extControl = false;
         break;
 
       case 456:    //StarSparkleSlowMove
@@ -4887,6 +4888,7 @@ void specificActions() {
         //starSparkle_intensity = 0;
         init_starSparkle_slowMove();
         starSparkle_init = true;
+        starSparkle_extControl = false;
         break;
 
       case 457:    //StarSparkleFastMove
@@ -4899,6 +4901,7 @@ void specificActions() {
         //starSparkle_intensity = 0;
         init_starSparkle_fastMove();
         starSparkle_init = true;
+        starSparkle_extControl = false;
         break;
 
       case 458:    //OneLinePerPanel
@@ -5933,6 +5936,57 @@ void specificActions() {
           }        
         }
         sunStripStyle_fadeOut = 25;
+        break;
+
+      case 574:    //ExtControlWhiteOut
+
+        rectMode(CORNER);
+        frameRate(50);
+        noStroke();
+        fill(control_ledPanels_animProgress);
+        rect(0,0,width,height);
+        break;
+
+      case 575:    //ExtControlRedOut
+
+        rectMode(CORNER);
+        frameRate(50);
+        noStroke();
+        fill(control_ledPanels_animProgress,0,0);
+        rect(0,0,width,height);
+        break;
+
+      case 576:    //ExtControlBlueOut
+
+        rectMode(CORNER);
+        frameRate(50);
+        noStroke();
+        fill(0,0,control_ledPanels_animProgress);
+        rect(0,0,width,height);
+        break;
+
+      case 577:    //StarSparkle - ExtControl
+        frameRate(50);
+        noStroke();
+        noFill(); 
+        rectMode(CORNER);
+        colorMode(RGB);
+        starSparkle_extControl = true;
+        init_starSparkle_extControl();
+        starSparkle_init = true;
+        break;
+
+      case 578:    //Starfield - ExtControl
+        if (!starfield_init) {
+          starfield_stars = new ArrayList<Starfield_Star>();
+          for (int i = 0; i < starfield_numberStars; i++) {
+            starfield_stars.add(new Starfield_Star());
+          }
+          starfield_init = true;
+        }
+        background(0);
+        noStroke();
+        frameRate(50);
         break;
 
       case 600:    //Audio Monitoring

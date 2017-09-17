@@ -730,6 +730,13 @@ void specific_draw() {
       case 572: draw_sunstripstyle();break;                        //ColorfulSunStrip
       case 573: draw_sunstripstyle();break;                        //ColorfulSunStrip
 
+      case 574: draw_extControlWhiteout();break;                   //ExtControlWhiteout
+      case 575: draw_extControlRedout();break;                     //ExtControlRedout
+      case 576: draw_extControlBlueout();break;                    //ExtControlBlueout
+
+      case 577: draw_starSparkle();break;                          //StarSparkle - Ext Control
+      case 578: draw_extControlStarField();break;                  //StarField - Ext Control
+
       case 600: draw_dirtyAudioProcessing();break;                 //Audio Monitoring
       case 601: draw_displayFFT_bass();break;                      //DisplayFFT - Bass
       

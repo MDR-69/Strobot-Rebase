@@ -17899,6 +17899,15 @@ void init_starSparkle_fastMove() {
   }
 }
 
+void init_starSparkle_extControl() {
+  if (!starSparkle_init) {
+    starSparkle_elements = new ArrayList<StarSparkle>();
+  }
+  for (int i=0; i<starSparkle_number; i++) {
+    starSparkle_elements.add(new StarSparkle(int(random(40)), int(random(16)), int(random(0,255)), random(0.02, 0.3), control_ledPanels_animProgress*random(3, 12) ) );
+  }
+}
+
 class StarSparkle {
   
   float posX;
@@ -17932,9 +17941,16 @@ class StarSparkle {
   }
 
   void updateStar() {
-    posX += moveSpeed * (noise(100*posX*posY + 0.1*frameCount * moveSpeed) - map(posX, 0, width/DISPLAY_SCALING_FACTOR, 0.54, 0.46) );
-    posY += moveSpeed * (noise(300*posX*posY + 0.1*frameCount * moveSpeed) - map(posY, 0, height/DISPLAY_SCALING_FACTOR, 0.54, 0.46) );
-    starLifeSpan = starLifeSpan-1;
+    if (!starSparkle_extControl) {
+      posX += moveSpeed * (noise(100*posX*posY + 0.1*frameCount * moveSpeed) - map(posX, 0, width/DISPLAY_SCALING_FACTOR, 0.54, 0.46) );
+      posY += moveSpeed * (noise(300*posX*posY + 0.1*frameCount * moveSpeed) - map(posY, 0, height/DISPLAY_SCALING_FACTOR, 0.54, 0.46) );
+      starLifeSpan = starLifeSpan-1;
+    }
+    else {
+      posX += control_ledPanels_animProgress*moveSpeed * (noise(100*posX*posY + 0.1*frameCount * control_ledPanels_animProgress*moveSpeed) - map(posX, 0, width/DISPLAY_SCALING_FACTOR, 0.54, 0.46) );
+      posY += control_ledPanels_animProgress*moveSpeed * (noise(300*posX*posY + 0.1*frameCount * control_ledPanels_animProgress*moveSpeed) - map(posY, 0, height/DISPLAY_SCALING_FACTOR, 0.54, 0.46) );
+      starLifeSpan = starLifeSpan-1;
+    }
   }
 
 }
@@ -18766,5 +18782,72 @@ class BouncingColorBall
   noStroke();
     fill(c);
     ellipse(location.x, location.y, ellipseSize, ellipseSize);
+  }
+}
+
+
+/////////////////////////////
+// Ext control whiteout
+
+void draw_extControlWhiteout(){
+  fill(control_ledPanels_animProgress*255);
+  noStroke();
+  rect(0,0,width,height);
+}
+
+void draw_extControlRedout(){
+  fill(control_ledPanels_animProgress*255,0,0);
+  noStroke();
+  rect(0,0,width,height);
+}
+
+void draw_extControlBlueout(){
+  fill(0,0,control_ledPanels_animProgress*255);
+  noStroke();
+  rect(0,0,width,height);
+}
+
+// Ext control Starfield
+
+void draw_extControlStarField() {
+  pushMatrix();
+  fill(0, 100);
+  rect(0, 0, width, height);
+  translate(width / 2, height / 2);
+  fill(200);
+  for (Starfield_Star star: starfield_stars) {
+    star.update();
+    star.show();
+  }
+  popMatrix();
+
+  if (starfield_stars.size() < starfield_numberStars + map(control_ledPanels_param1, 0, 1, 0, starfield_numberStarsAdd) ) {
+    starfield_stars.add(new Starfield_Star());
+  }
+  else if (starfield_stars.size() > starfield_numberStars + map(control_ledPanels_param1, 0, 1, 0, starfield_numberStarsAdd) ) {
+    starfield_stars.remove(0);
+  }
+    
+}
+
+class Starfield_Star {
+  float x = random(-width / 2, width / 2);
+  float y = random(-height / 2, height / 2);
+  float z = random(width);
+
+  void update() {
+    this.z -= control_ledPanels_animProgress*starfield_speed;
+    if (this.z < 1) {
+      this.z = width;
+      this.x = random(-width / 2, width / 2);
+      this.y = random(-height / 2, height / 2);
+    }
+  }
+
+  void show() {
+    float sx = map(this.x / this.z, 0, 1, 0, width);
+    float sy = map(this.y / this.z, 0, 1, 0, height);
+    float r = map(this.z, 0, width, DISPLAY_SCALING_FACTOR*1.5, 0);
+    ellipse(sx, sy, r, r);
   }
 }

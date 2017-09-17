@@ -27,21 +27,21 @@ IntList dmxAnim_syncedMovingHeads;                                // IntList con
 
 //Global control parameters, set by incoming MIDI messages
 final int CONTROL_PARAM_MAXVAL                      = 127;
-int control_DMX_strobe_animProgress                 = 0;
-int control_DMX_strobe_param1                       = 0;
-int control_DMX_strobe_param2                       = 0;
-int control_DMX_strobe_param3                       = 0;
-int control_DMX_strobe_param4                       = 0;
-int control_DMX_par_animProgress                    = 0;
-int control_DMX_par_param1                          = 0;
-int control_DMX_par_param2                          = 0;
-int control_DMX_par_param3                          = 0;
-int control_DMX_par_param4                          = 0;
+float control_DMX_strobe_animProgress                 = 0;
+float control_DMX_strobe_param1                       = 0;
+float control_DMX_strobe_param2                       = 0;
+float control_DMX_strobe_param3                       = 0;
+float control_DMX_strobe_param4                       = 0;
+float control_DMX_par_animProgress                    = 0;
+float control_DMX_par_param1                          = 0;
+float control_DMX_par_param2                          = 0;
+float control_DMX_par_param3                          = 0;
+float control_DMX_par_param4                          = 0;
 // int control_DMX_movingHead_animProgress             = 0;       // No need for this one, this is already covered by another global parameter
-int control_DMX_movingHead_param1_lightControl      = 0;
-int control_DMX_movingHead_param2                   = 0;
-int control_DMX_movingHead_param3                   = 0;
-int control_DMX_movingHead_param4                   = 0;
+float control_DMX_movingHead_param1_lightControl      = 0;
+float control_DMX_movingHead_param2                   = 0;
+float control_DMX_movingHead_param3                   = 0;
+float control_DMX_movingHead_param4                   = 0;
 
 void playDMXAnimation() {
   playDMXAnimation_strobe();

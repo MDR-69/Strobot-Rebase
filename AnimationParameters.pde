@@ -5,16 +5,17 @@
 
 
 //Global control parameters, set by incoming MIDI messages
-int control_ledPanels_animProgress = 0;
-int control_ledPanels_param1 = 0;
-int control_ledPanels_param2 = 0;
-int control_ledPanels_param3 = 0;
-int control_ledPanels_param4 = 0;
-int control_ledTubes_animProgress = 0;
-int control_ledTubes_param1 = 0;
-int control_ledTubes_param2 = 0;
-int control_ledTubes_param3 = 0;
-int control_ledTubes_param4 = 0;
+float control_ledPanels_animProgress = 0;
+float control_ledPanels_param1 = 0;
+float control_ledPanels_param2 = 0;
+float control_ledPanels_param3 = 0;
+float control_ledPanels_param4 = 0;
+float control_ledPanels_fx = 0;
+float control_ledTubes_animProgress = 0;
+float control_ledTubes_param1 = 0;
+float control_ledTubes_param2 = 0;
+float control_ledTubes_param3 = 0;
+float control_ledTubes_param4 = 0;
 
 //Carglass parameters
 float carglass_progress = 0;
@@ -1529,6 +1530,7 @@ int starSparkle_number = 40;
 boolean starSparkle_init = false;
 int starSparkle_initLifeSpan = 240;
 int starSparkle_appearVal = 120;
+boolean starSparkle_extControl = true;
 
 // One Line Per Panel
 int oneLinePerPanel_progress = 0;
@@ -1549,3 +1551,10 @@ ArrayList <BouncingColorBall> bouncingColorBall_array;
 boolean bouncingColorBall_init = false;
 int bouncingColorBall_mode = 0;
 int bouncingColorBall_nb = 180;
+
+// ExtControl Starfield
+ArrayList<Starfield_Star> starfield_stars;
+float starfield_speed = 5;
+boolean starfield_init = false;
+int starfield_numberStars = 200;
+int starfield_numberStarsAdd = 200;

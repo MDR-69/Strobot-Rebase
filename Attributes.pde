@@ -756,6 +756,12 @@ void setLEDPanelAnimationAttributes() {
   animationAttributes = registerAttribute(animationAttributes, 572, "SunStripStyle - Type9 - Multi - Fast", new String[] {"Geometric", "Simple", "Lines", "Colorful"}                                           );
   animationAttributes = registerAttribute(animationAttributes, 573, "SunStripStyle - Type9 - Multi - Slow", new String[] {"Geometric", "Simple", "Lines", "Colorful"}                                           );
 
+  animationAttributes = registerAttribute(animationAttributes, 574, "ExtControl Whiteout"                 , new String[] {"Geometric", "Simple", "Still", "ExtControl", "B&W"}                                  );
+  animationAttributes = registerAttribute(animationAttributes, 575, "ExtControl Redout"                   , new String[] {"Geometric", "Simple", "Still", "ExtControl", "Red"}                                  );
+  animationAttributes = registerAttribute(animationAttributes, 576, "ExtControl Blueout"                  , new String[] {"Geometric", "Simple", "Still", "ExtControl", "Colorful"}                             );
+
+  animationAttributes = registerAttribute(animationAttributes, 577, "StarSparkle - ExtControl"            , new String[] {"Atmospheric", "Slow", "Smooth", "B&W", "ExtControl"}                                 );
+  animationAttributes = registerAttribute(animationAttributes, 578, "StarField - ExtControl"              , new String[] {"Atmospheric", "Slow", "Smooth", "B&W", "ExtControl"}                                 );
 
   animationAttributes = registerAttribute(animationAttributes, 601, "Audio Monitoring"                    , new String[] {"Atmospheric", "Red", "Circles", "Rhythmic", "AudioInput"}                            );
   animationAttributes = registerAttribute(animationAttributes, 602, "Display FFT - Bass"                  , new String[] {"Geometric", "Simple", "AudioInput"}                                                  );  

@@ -3070,6 +3070,11 @@ public class ControlFrame extends PApplet {
     addEffectBang("59 - White Flash FX", 59, 1, 43);
     addEffectBang("60 - Slow Fadein", 60, 1, 43);
     addEffectBang("61 - CTO Filter", 61, 1, 43);
+    addEffectBang("62 - ExtControl Dimmer", 62, 1, 43);
+    addEffectBang("63 - RedTriangle Fade Center", 63, 1, 43);
+    addEffectBang("64 - RedTriangle Fade Left", 64, 1, 43);
+    addEffectBang("65 - RedTriangle Fade Roght", 65, 1, 43);
+
   }
   
   void addEffectBang(String name, int i) {
