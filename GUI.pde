@@ -1223,7 +1223,8 @@ public class ControlFrame extends PApplet {
        .setPosition(leftOffset,leftOffset)
        .setFont(minimlFont)
        .setColor(color(220))
-       .setText("List of the available effects :")
+       .setText("Available effects :")
+       .setSize(150,20)
        .moveTo(effectsInfo)
        ;
        
@@ -3064,16 +3065,16 @@ public class ControlFrame extends PApplet {
     addEffectBang("53 - One panel - random", 53, 1, 43);
     addEffectBang("54 - One panel - L->R seq", 54, 1, 43);
     addEffectBang("55 - One panel - L->R seq", 55, 1, 43);
-    addEffectBang("56 - Extreme & Center panels", 56, 1, 43);
+    addEffectBang("56 - Extreme&Center panels", 56, 1, 43);
     addEffectBang("57 - Narrow View", 57, 1, 43);
     addEffectBang("58 - Narrow View - Open", 58, 1, 43);
     addEffectBang("59 - White Flash FX", 59, 1, 43);
     addEffectBang("60 - Slow Fadein", 60, 1, 43);
     addEffectBang("61 - CTO Filter", 61, 1, 43);
     addEffectBang("62 - ExtControl Dimmer", 62, 1, 43);
-    addEffectBang("63 - RedTriangle Fade Center", 63, 1, 43);
-    addEffectBang("64 - RedTriangle Fade Left", 64, 1, 43);
-    addEffectBang("65 - RedTriangle Fade Roght", 65, 1, 43);
+    addEffectBang("63 - RedTrngl Fade Center", 63, 1, 43);
+    addEffectBang("64 - RedTrngl Fade Left", 64, 1, 43);
+    addEffectBang("65 - RedTrngl Fade Right", 65, 1, 43);
 
   }
   

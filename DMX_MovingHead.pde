@@ -2399,7 +2399,6 @@ void dmxAnim_movingHead_prepareDirection_SymmetricalConvergentPan(float openingW
     float panHalfWidth = map(openingWidthAngle_perCent, 0, 100, movingHead.dmxVal_specificVal_pan_center_perCent, movingHead.dmxVal_specificVal_pan_left_perCent);
     float pan_perCent  = map(movingHead.getDeviceID(), 0, dmxList_movingHead_subset.size()-1, 100 - panHalfWidth, panHalfWidth);
     float tilt_perCent = map(tiltValue_perCent, 0, 100, movingHead.dmxVal_specificVal_tilt_low_perCent, movingHead.dmxVal_specificVal_tilt_upright_perCent);
-    println(movingHead.getDeviceID() + " -- " + movingHead.movingHead.Name + "  -> pan_perCent:" + pan_perCent + " tilt_perCent:" + tilt_perCent);
     movingHead.setPan(pan_perCent);
     movingHead.setTilt(tilt_perCent);
   }

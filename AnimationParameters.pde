@@ -301,7 +301,7 @@ int mixedlines_ellipsewidth;
 
 //DoubleGradientTransition parameters
 int doublegradient_a = 0;
-int doublegradient_b = NUMBER_OF_PANELS*32;
+int doublegradient_b = NUMBER_OF_PANELS*DISPLAY_SCALING_FACTOR*PANEL_RESOLUTION_X;
 boolean doublegradient_direction = true;
 
 //CarreMarshall parameters

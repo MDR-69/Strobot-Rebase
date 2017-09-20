@@ -2500,10 +2500,9 @@ void specificActions() {
       case 232:    //DoubleGradient
 
         rectMode(CORNER);
-        //No initialization of the variables, as for this particular animation it is easier to play live this way
-        //doublegradient_a = 0;
-        //doublegradient_b = width;
-        //doublegradient_direction = true;
+        doublegradient_a = 0;
+        doublegradient_b = width;
+        doublegradient_direction = true;
         frameRate(50);
         break;
       

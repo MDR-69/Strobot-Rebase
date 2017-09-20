@@ -123,7 +123,6 @@ void detectPanelOutputs() {
     outputLog.println("Exception while trying to check the /dev/ folder, in order to map the available microcontrollers : " + e);
   }
 
-
   // Now let's decide which microcontrollers will actually be used as output devices
   // The priority is put on the main USB connection, the backup USB comes second, and the RF comes last
   chosenMicrocontrollers = new ArrayList<String>();  
@@ -163,8 +162,6 @@ void detectPanelOutputs() {
     }
   }
 
-
-
   if (chosenMicrocontrollers.size() == 0) {
     outputLog.println("--- Found no microcontroller which can be used as an output device (as defined in the configuration) ---");
   }
@@ -199,8 +196,8 @@ void detectPanelOutputs() {
     outputDevices[i] = new Tpm2(i, serialPort);
   }
 
-  //Map the output objects to their respective panel
-  for (int i=0; i<outputDevices.length; i++) {
+  //Map the output objects to their respective panel - if there are more panels than what is specified by screen_order_configuration, no output will be mapped to these panels
+  for (int i=0; i<screen_order_configuration.length; i++) {
     outputDevices[i].panelNumber = screen_order_configuration[i];
     outputLog.println("Microcontroller init - device " + outputDevices[i].serialPort + " is affected to output #" + outputDevices[i].panelNumber);
   }

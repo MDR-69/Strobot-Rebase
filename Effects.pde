@@ -697,13 +697,18 @@ void draw_onlyExtremeLeftRightPanels(){
 }
 
 void draw_onlyCenterLeftRightPanels(){
-  pushStyle();
-  noStroke();
-  fill(0);
-  rect(0,0,width/NUMBER_OF_PANELS,height);
-  rect( (NUMBER_OF_PANELS/2) *width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
-  rect( (NUMBER_OF_PANELS - 1) *width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
-  popStyle();
+  if (NUMBER_OF_PANELS == 3) {
+    draw_onlyExtremeLeftRightPanels();
+  }
+  else {
+    pushStyle();
+    noStroke();
+    fill(0);
+    rect(0,0,width/NUMBER_OF_PANELS,height);
+    rect( (NUMBER_OF_PANELS/2) *width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
+    rect( (NUMBER_OF_PANELS - 1) *width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
+    popStyle();
+  }
 }
 
 void draw_onlyExtremeAndCenterPanels() {
@@ -726,30 +731,40 @@ void draw_onlyExtremeLeftPanel() {
 }
 
 void draw_onlyCenterLeftPanel() {
-  pushStyle();
-  noStroke();
-  fill(0);
-  rect(0,0,(NUMBER_OF_PANELS - 4)*width/NUMBER_OF_PANELS,height);
-  rect(2*width/NUMBER_OF_PANELS,0,(NUMBER_OF_PANELS - 2)*width/NUMBER_OF_PANELS,height);
-  popStyle();
+  if (NUMBER_OF_PANELS == 3) {
+    draw_onlyExtremeLeftPanel();
+  }
+  else {
+    pushStyle();
+    noStroke();
+    fill(0);
+    rect(0,0,(NUMBER_OF_PANELS - 4)*width/NUMBER_OF_PANELS,height);
+    rect(2*width/NUMBER_OF_PANELS,0,(NUMBER_OF_PANELS - 2)*width/NUMBER_OF_PANELS,height);
+    popStyle();    
+  }
 }
 
 void draw_onlyCenterPanel() {
   pushStyle();
   noStroke();
   fill(0);
-  rect(0,0,(NUMBER_OF_PANELS - 3)*width/NUMBER_OF_PANELS,height);
-  rect( (NUMBER_OF_PANELS/2 + 1) *width/NUMBER_OF_PANELS,0,(NUMBER_OF_PANELS - 3)*width/NUMBER_OF_PANELS,height);
+  rect(0,0,(NUMBER_OF_PANELS - 1)/2*width/NUMBER_OF_PANELS,height);
+  rect( (NUMBER_OF_PANELS/2 + 1) *width/NUMBER_OF_PANELS,0,(NUMBER_OF_PANELS - 1)/2*width/NUMBER_OF_PANELS,height);
   popStyle();
 }
 
 void draw_onlyCenterRightPanel() {
-  pushStyle();
-  noStroke();
-  fill(0);
-  rect(0,0,(NUMBER_OF_PANELS - 2)*width/NUMBER_OF_PANELS,height);
-  rect((NUMBER_OF_PANELS - 1)*width/NUMBER_OF_PANELS,0,(NUMBER_OF_PANELS - 4)*width/NUMBER_OF_PANELS,height);
-  popStyle();
+  if (NUMBER_OF_PANELS == 3) {
+    draw_onlyExtremeRightPanel();
+  }
+  else {
+    pushStyle();
+    noStroke();
+    fill(0);
+    rect(0,0,(NUMBER_OF_PANELS - 2)*width/NUMBER_OF_PANELS,height);
+    rect((NUMBER_OF_PANELS - 1)*width/NUMBER_OF_PANELS,0,(NUMBER_OF_PANELS - 4)*width/NUMBER_OF_PANELS,height);
+    popStyle();
+  }
 }
 
 void draw_onlyExtremeRightPanel() {
