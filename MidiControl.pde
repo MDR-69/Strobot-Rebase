@@ -340,8 +340,8 @@ void processMidiInfo_keyboardPanelRemapping(int pitch, int velocity) {
     }
     
     if (manualLEDPanelRemappingNoteCounter == NUMBER_OF_PANELS) {
-      finalizeLEDPanelRemappingProcedure();
       imagenumber = 0;
+      finalizeLEDPanelRemappingProcedure();
     }
     
   }
@@ -933,15 +933,19 @@ void finalizeLEDPanelRemappingProcedure() {
       
   // Most critical part : update the panelNumber directly inside the Output objects !
   for (int i=0; i<outputDevices.length; i++) {
-    outputDevices[i].panelNumber = sortedArray[i];
-    screen_order_configuration[i] = sortedArray[i];
+    if (i < NUMBER_OF_PANELS) {
+      outputDevices[i].panelNumber = sortedArray[i];
+      screen_order_configuration[i] = sortedArray[i];
+    }
   }
   
   manualLEDPanelRemappingNoteCounter = 0;
   authorizePanelRemappingUsingKeyboard = false;
   
   for (int i=0; i<outputDevices.length; i++) {
-    outputLog.println("Microcontroller reconfiguration - device " + outputDevices[i].serialPort + " is now affected to output #" + outputDevices[i].panelNumber);
+    if (i < NUMBER_OF_PANELS) {
+      outputLog.println("Microcontroller reconfiguration - device " + outputDevices[i].serialPort + " is now affected to output #" + outputDevices[i].panelNumber);
+    }
   }
   
   //Make the configuration change persistant
@@ -952,8 +956,14 @@ void finalizeLEDPanelRemappingProcedure() {
 void resetLEDPanelMapping() {
   //Reset the display in addition to this
   for (int i=0; i<outputDevices.length; i++) {
-    outputDevices[i].panelNumber = i;
-    screen_order_configuration[i] = i;
+    if (i < NUMBER_OF_PANELS) {
+      outputDevices[i].panelNumber = i;
+      screen_order_configuration[i] = i;
+    }
+    else {
+      // outputDevices[i].panelNumber = 0;
+      // screen_order_configuration[i] = 0;
+    }
   }
 }
 

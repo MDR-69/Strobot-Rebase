@@ -193,7 +193,15 @@ void detectPanelOutputs() {
       serialPort = chosenMicrocontrollers.get(i);
     }
 
-    outputDevices[i] = new Tpm2(i, serialPort);
+    // If the panel index is greater than the requested number of panels, we are in the following situation:
+    // for ex, 3 panels are requested, however the full 5 panels are connected (however, for whatever reason, there might be a problem with one of them -> downsize the output to 3 panels)
+    // -> for the "unnecessary panels", set their output buffer to be "Panel 0". 
+    if (i < NUMBER_OF_PANELS) {
+      outputDevices[i] = new Tpm2(i, serialPort);
+    }
+    else {
+      outputDevices[i] = new Tpm2(0, serialPort);
+    }
   }
 
   //Map the output objects to their respective panel - if there are more panels than what is specified by screen_order_configuration, no output will be mapped to these panels

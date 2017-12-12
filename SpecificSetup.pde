@@ -4,7 +4,6 @@
 //////////////////////////////////////////////////////////////
 
 
-
 void specificActions() {
     
   if (drawAnimation == 1)
@@ -363,7 +362,7 @@ void specificActions() {
         frameRate(50);
         background(0);
         stroke(255);
-        strokeWeight(8); 
+        strokeWeight(8);
         break;
       
       case 39:    //OpeningLinesReinit
@@ -4789,9 +4788,10 @@ void specificActions() {
         break;
 
       case 446:    //Random Panel Strobe
-        frameRate(30);
+        frameRate(50);
         colorMode(RGB);
         noStroke();
+        break;
 
       case 447:    //Steam Machine - Steam
         steamMachine_progress = 0;

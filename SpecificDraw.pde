@@ -178,8 +178,8 @@ void specific_draw() {
       case  35: draw_panelfillright();break;                       //PanelFillRight
       case  36: draw_panelfillline();break;                        //PanelFillLine
       case  37: draw_oppositelinesnobackground();break;            //OppositeLinesNoBackground
-      case  38: draw_openinglines();break;                         //OpeningLines
-      case  39: draw_openinglines();break;                         //OpeningLinesReinit
+      case  38: draw_openinglines();break;                         //OpeningLines - automatic
+      case  39: draw_openinglines();break;                         //OpeningLines - external command
       case  40: draw_linewideflash();break;                        //LineWideFlash
       case  41: draw_lineleftflash();break;                        //LineLeftFlash
       case  42: draw_linecenterflash();break;                      //LineCenterFlash

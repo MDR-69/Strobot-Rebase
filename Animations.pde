@@ -1260,7 +1260,7 @@ void draw_flashextremeright() {
     noStroke();
     fill(255);
     if (NUMBER_OF_PANELS == 3) {
-      rect(3*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+      rect(2*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
     } else {
       rect(4*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
     }
@@ -6193,7 +6193,7 @@ void draw_columns()
    if (NUMBER_OF_PANELS == 3) {
      for (int i=1; i<2;i++) {
        pushMatrix();
-       translate(2*i*width/NUMBER_OF_PANELS,0);
+       translate(i*width/NUMBER_OF_PANELS,0);
        if (!columns_shift)
        { 
          rect(columns_offsetx, columns_secondy - columns_secondheight2 - columns_offsety, width/NUMBER_OF_PANELS-columns_offsetx*2,columns_secondheight1);
@@ -9300,18 +9300,30 @@ class ThunderLine {
 //////////////////////////////////////////
 
 void draw_openingWhiteOut() {
-  if (openingWhiteout_verticalCpt <= height) {
-    fill(170);
-    rect(width/2,height - openingWhiteout_verticalCpt,4,height);
-    rect(width/2,height - openingWhiteout_verticalCpt,-4,height);
-    openingWhiteout_verticalCpt += openingWhiteout_verticalSpeed;
+  fill(0);
+  rect(0,0,width,height);
+  fill(min(170 + 70*(control_ledPanels_param2), 255));
+
+  rect(width/2,height*(1-control_ledPanels_param1),DISPLAY_SCALING_FACTOR,height);
+  rect(width/2,height*(1-control_ledPanels_param1),-DISPLAY_SCALING_FACTOR,height);
+
+  if (control_ledPanels_param2 > 0.01) {
+    rect(width/2,0, 0.5*width*control_ledPanels_param2,height);
+    rect(width/2,0, -0.5*width*control_ledPanels_param2,height);
   }
-  else {
-    fill(min(170 + openingWhiteout_cpt, 255));
-    rect(width/2,0,openingWhiteout_cpt,height);
-    rect(width/2,0,-openingWhiteout_cpt,height);
-    openingWhiteout_cpt += openingWhiteout_speed;
-  } 
+
+  // if (openingWhiteout_verticalCpt <= height) {
+  //   fill(170);
+  //   rect(width/2,height - openingWhiteout_verticalCpt,4,height);
+  //   rect(width/2,height - openingWhiteout_verticalCpt,-4,height);
+  //   openingWhiteout_verticalCpt += openingWhiteout_verticalSpeed;
+  // }
+  // else {
+  //   fill(min(170 + openingWhiteout_cpt, 255));
+  //   rect(width/2,0,openingWhiteout_cpt,height);
+  //   rect(width/2,0,-openingWhiteout_cpt,height);
+  //   openingWhiteout_cpt += openingWhiteout_speed;
+  // } 
 }
 
 //////////////////////////////////////////
@@ -17705,20 +17717,35 @@ void draw_stroboSinglePanel() {
   fill(0);
   rect(0, 0, width, height);
   fill(255);
-  if (proba < 0.2) {
-    rect(0*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
-  }
-  else if (proba < 0.4) {
-    rect((NUMBER_OF_PANELS/2 - 1)*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
-  }
-  else if (proba < 0.6) {
-    rect(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
-  }
-  else if (proba < 0.8) {
-    rect((NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+
+  if (NUMBER_OF_PANELS == 3) {
+    if (proba < 0.33) {
+      rect(0*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+    }
+    else if (proba < 0.66) {
+      rect(1*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+    }
+    else {
+      rect(2*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+    }
   }
   else {
-    rect((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+    if (proba < 0.2) {
+      rect(0*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+    }
+    else if (proba < 0.4) {
+      rect((NUMBER_OF_PANELS/2 - 1)*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+    }
+    else if (proba < 0.6) {
+      rect(((NUMBER_OF_PANELS-1)/2)*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+    }
+    else if (proba < 0.8) {
+      rect((NUMBER_OF_PANELS-2)*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+    }
+    else {
+      rect((NUMBER_OF_PANELS-1)*width/NUMBER_OF_PANELS, 0, width/NUMBER_OF_PANELS, height) ;
+    }
+
   }
 
 }

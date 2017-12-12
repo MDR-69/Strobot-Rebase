@@ -712,13 +712,17 @@ void draw_onlyCenterLeftRightPanels(){
 }
 
 void draw_onlyExtremeAndCenterPanels() {
-  pushStyle();
-  noStroke();
-  fill(0);  
-  rect(width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
-  rect((NUMBER_OF_PANELS/2 + 1) *width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
-  popStyle();
-
+  if (NUMBER_OF_PANELS == 3) {
+    draw_onlyCenterPanel();
+  }
+  else {
+    pushStyle();
+    noStroke();
+    fill(0);  
+    rect(width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
+    rect((NUMBER_OF_PANELS/2 + 1) *width/NUMBER_OF_PANELS,0,width/NUMBER_OF_PANELS,height);
+    popStyle();
+  }
 }
 
 
