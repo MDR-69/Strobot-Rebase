@@ -13,7 +13,7 @@
 		<ChannelSet name="STROBE" from_dmx="50" to_dmx="72" proportional="decreasing" /> 				<!-- FAST -> SLOW -->
 	</ChannelType>
 
-	<ChannelType index="1" attribute="DIMMER" ch_link="2">
+	<ChannelType index="1" attribute="DIMMER">
 		<ChannelSet name="DIMMER" from_dmx="0" to_dmx="255" proportional="increasing" />
 	</ChannelType>	
 

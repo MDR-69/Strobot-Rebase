@@ -149,10 +149,10 @@ final int    DMXANIM_MOVINGHEAD_LIGHTRHYTHM_RANDOM_4THSYNC             = 22;
 final int    DMXANIM_MOVINGHEAD_LIGHTRHYTHM_RANDOM_2NDSYNC             = 23;
 final int    DMXANIM_MOVINGHEAD_LIGHTRHYTHM_RANDOM_BARSYNC             = 24;
 
-final float  ANIMFACTOR_SPEED_VERYSLOW                                 = 0.5/16.0;
-final float  ANIMFACTOR_SPEED_SLOW                                     = 0.5/8.0;
-final float  ANIMFACTOR_SPEED_REGULAR                                  = 0.5/4.0;
-final float  ANIMFACTOR_SPEED_FAST                                     = 0.5/2.0;
+final float  ANIMFACTOR_SPEED_VERYSLOW                                 = 0.2/16.0;
+final float  ANIMFACTOR_SPEED_SLOW                                     = 0.2/8.0;
+final float  ANIMFACTOR_SPEED_REGULAR                                  = 0.2/4.0;
+final float  ANIMFACTOR_SPEED_FAST                                     = 0.2/2.0;
 final float  ANIMFACTOR_SPEED_FREEMOVE                                 = 0;
 
 
@@ -375,6 +375,7 @@ class DMX_MovingHead {
     if (chIndex_tiltFine != -1) {
       setDMXVal(chIndex_tiltFine, 127);
     }
+    setColor_white();
   }
 
   // Set the default values for non-dmx related variables
@@ -490,9 +491,11 @@ class DMX_MovingHead {
   }
 
   void parseFixtureColorModes() {
+
     // Define the available color modes
     available_chIndex_color = movingHead.getAllChannelIndexesCorrespondingToFunction(DMX_MOVINGHEAD_COLOR);
     for (int chIndex: available_chIndex_color) {
+
       ChannelDesc channel = movingHead.getChannelCorrespondingToIndex(chIndex);
       if (channel.getOption().equals(DMX_MOVINGHEAD_COLORMODE_WHEEL_TEXT)) {
         chIndex_color_WHEEL = channel.getIndex();
@@ -679,8 +682,8 @@ class DMX_MovingHead {
             shutter_strobe_maxSpeed = channelSet.getTo_dmx();
           }
           else {
-            shutter_strobe_minSpeed = channelSet.getFrom_dmx();
-            shutter_strobe_maxSpeed = channelSet.getTo_dmx();            
+            shutter_strobe_minSpeed = channelSet.getTo_dmx();
+            shutter_strobe_maxSpeed = channelSet.getFrom_dmx();
           }
         }
         else {
@@ -1002,6 +1005,7 @@ class DMX_MovingHead {
 
   void setColor_genericColor(int colorWheel_code, int[] colorRGB, int[] colorRGBW) {
     int[] colorCMY   = {255 - colorRGB[0], 255 - colorRGB[1], 255 - colorRGB[2]};
+
     switch (colorControlMode) {
       case DMX_MOVINGHEAD_COLORMODE_WHEEL    : setDMXVal(chIndex_color_WHEEL,  colorWheel_code); break; 
       case DMX_MOVINGHEAD_COLORMODE_RGB      : setDMXVal(chIndex_color_RGB_R,  colorRGB[0]);       setDMXVal(chIndex_color_RGB_G, colorRGB[1]);       setDMXVal(chIndex_color_RGB_B, colorRGB[2]);       break; 
@@ -1485,7 +1489,7 @@ class DMX_MovingHead {
   void performLight_strobe(float dimmer_perCent, float strobeSpeed_perCent) {
     this.setShutter(strobeSpeed_perCent);
     this.setShutterMode(DMX_MOVINGHEAD_SHUTTERMODE_STROBE);
-    this.setShutter(100);
+    //this.setShutter(100);
     this.setDimmer(dimmer_perCent);
     this.setApertureReduction(0);
   }
@@ -6393,39 +6397,39 @@ void dmxAnim_movingHead_lightOn_topDev_randomNoiseDirection_setup() {
 }
 
 void dmxAnim_movingHead_lightOn_randomNoiseDirection_weak_slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.05,15,dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.05/4.0,15,dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_randomNoiseDirection_weak_regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.1,15,dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.1/4.0,15,dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_randomNoiseDirection_weak_fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.2,15,dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.2/4.0,15,dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_randomNoiseDirection_regular_slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.05,30,dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.05/4.0,30,dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_randomNoiseDirection_regular_regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.1,30,dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.1/4.0,30,dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_randomNoiseDirection_regular_fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.2,30,dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.2/4.0,30,dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_randomNoiseDirection_strong_slow(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.05,50,dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.05/4.0,50,dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_randomNoiseDirection_strong_regular(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.1,50,dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.1/4.0,50,dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_randomNoiseDirection_strong_fast(ArrayList<DMX_MovingHead> dmxList_movingHead_subset) {
-  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.2,50,dmxList_movingHead_subset);
+  dmxAnim_movingHead_lightOn_randomNoiseDirection(0.2/4.0,50,dmxList_movingHead_subset);
 }
 
 void dmxAnim_movingHead_lightOn_allDev_randomNoiseDirection_weak_slow() {

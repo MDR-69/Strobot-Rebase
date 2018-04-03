@@ -374,7 +374,6 @@ class Fixture {
     for (ChannelDesc channel: this.Channels) {
       if (channel.getChannelDescription().equals(function)) {
         ret_val.append(channel.getIndex());
-        break;
       }
     }
     return ret_val;
