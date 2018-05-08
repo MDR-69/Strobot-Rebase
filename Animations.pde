@@ -1763,7 +1763,7 @@ noStroke();
 fill(0,80);
 //fill(0);
 rect(0,0,width,height);
-stroke(255);
+stroke(sine_fuckedup_color);
 
 if (sine_fuckedup_mode == 0) {
   beginShape();
@@ -18105,7 +18105,8 @@ void init_sunstripstyle() {
 }
 
 void draw_sunstripstyle() {
-  fill(0,sunStripStyle_fadeOut);
+  // fill(0,sunStripStyle_fadeOut);
+  fill(0,12);
   noStroke();
   rect(0,0,width,height);
   for (SunStripStyle sunStripElement: sunStripStyle_elements) {
@@ -18182,8 +18183,16 @@ class SunStripStyle {
   void drawType0() {
     noStroke();
     if (this.arg1 > 0) {
-      fill(255 - this.arg1);
-      rect(this.getXcoordForItem(this.itemId), 0, sunStripStyle_lineWidth, height);
+      fill(255 - this.arg1, 0, 0);
+      if (this.itemId % 2 == 0) {
+        rect(this.getXcoordForItem(this.itemId), 0, sunStripStyle_lineWidth, height);
+        rect(this.getXcoordForItem(this.itemId) + sunStripStyle_lineWidth, 0, sunStripStyle_lineWidth, height);
+      }
+      else {
+        rect(this.getXcoordForItem(this.itemId), 0, sunStripStyle_lineWidth, height);
+        rect(this.getXcoordForItem(this.itemId) - sunStripStyle_lineWidth, 0, sunStripStyle_lineWidth, height);
+      }
+      
     }
     this.arg1 += this.arg2;
     if (this.arg1 > 400) {
@@ -18195,7 +18204,7 @@ class SunStripStyle {
   void drawType1() {
     noStroke();
     if (this.arg1 > 0) {
-      fill(max(255,280 - this.arg1));
+      fill(max(255,280 - this.arg1), 0, 0);
       if (this.itemId % 2 == 0) {
         //rect(this.getXcoordForItem(this.itemId), max(height - var1, 0), sunStripStyle_lineWidth, height);
         rect(this.getXcoordForItem(this.itemId), height - var1, sunStripStyle_lineWidth, height*1.5);
@@ -18249,11 +18258,11 @@ class SunStripStyle {
     if (this.arg1 > 0) {
       
       if (this.itemId % 2 == 0) {
-        fill(min(255,255 - this.var2));
+        fill(min(255,255 - this.var2),0,0);
         rect(this.getXcoordForItem(this.itemId), height - var1, sunStripStyle_lineWidth, height/4);
       }
       else {
-        fill(min(255,320 - this.var2));
+        fill(min(255,320 - this.var2),0,0);
         rect(this.getXcoordForItem(this.itemId), var1 - height*1.5, sunStripStyle_lineWidth, height/4);
       }
       this.var1 += this.arg3;
@@ -18269,7 +18278,7 @@ class SunStripStyle {
   void drawType5() {
     noStroke();
     if (this.arg1 > 0) {
-      fill(min(255,280 - this.var2));
+      fill(min(255,280 - this.var2),0,0);
       if (this.var1 < height) {
         rect(this.getXcoordForItem(this.itemId), height/2, sunStripStyle_lineWidth, this.var1);
         rect(this.getXcoordForItem(this.itemId), height/2, sunStripStyle_lineWidth, -this.var1);

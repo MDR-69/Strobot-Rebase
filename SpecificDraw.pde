@@ -737,6 +737,13 @@ void specific_draw() {
       case 577: draw_starSparkle();break;                          //StarSparkle - Ext Control
       case 578: draw_extControlStarField();break;                  //StarField - Ext Control
 
+      case 579: draw_sinefuckedup(0);break;                        //FuckedUpSine1
+      case 580: draw_sinefuckedup(1);break;                        //FuckedUpSine2
+      case 581: draw_sinefuckedup(2);break;                        //FuckedUpSine3 - NO REINIT
+      case 582: draw_sinefuckedup(2);break;                        //FuckedUpSine3
+      case 583: draw_sinefuckedup(2);break;                        //FuckedUpSine4 - wave drop
+
+
       case 600: draw_dirtyAudioProcessing();break;                 //Audio Monitoring
       case 601: draw_displayFFT_bass();break;                      //DisplayFFT - Bass
       
