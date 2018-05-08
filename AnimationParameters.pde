@@ -217,6 +217,7 @@ float smoke_particles_movement = 0;
 int sine_fuckedup_counter = 0;
 float v = 0;
 float w = 0;
+color sine_fuckedup_color = color(255,255,255);
 
 //Manual/AutomaticCircle parameters
 ArrayList rings = new ArrayList();

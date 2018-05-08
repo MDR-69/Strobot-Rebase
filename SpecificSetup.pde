@@ -99,7 +99,7 @@ void specificActions() {
 
         rectMode(CORNER);
         resetMatrix();
-        frameRate(35);
+        frameRate(60);
         drawleft = flash_sustain;
         break;
 
@@ -107,7 +107,7 @@ void specificActions() {
 
         rectMode(CORNER);
         resetMatrix();
-        frameRate(35);
+        frameRate(60);
         drawleft = flash_sustain;
         break;
       
@@ -115,7 +115,7 @@ void specificActions() {
 
         rectMode(CORNER);
         resetMatrix();
-        frameRate(35);
+        frameRate(60);
         drawcenter = flash_sustain;
         break;
       
@@ -123,7 +123,7 @@ void specificActions() {
 
         rectMode(CORNER);
         resetMatrix();
-        frameRate(35);
+        frameRate(60);
         drawright = flash_sustain;
         break;
 
@@ -131,7 +131,7 @@ void specificActions() {
 
         rectMode(CORNER);
         resetMatrix();
-        frameRate(35);
+        frameRate(60);
         drawright = flash_sustain;
         break;
 
@@ -140,7 +140,7 @@ void specificActions() {
 
         rectMode(CORNER);
         colorMode(RGB, 255);
-        frameRate(35);
+        frameRate(60);
         break;
 
       case 17:   //FadeoutLeft
@@ -1943,7 +1943,8 @@ void specificActions() {
       case 183:   //FuckedUpSine1
 
         frameRate(50);
-        strokeWeight(4);
+        sine_fuckedup_color = color(255);
+        strokeWeight(8);
         noFill();
         smooth();
         break;
@@ -1951,9 +1952,10 @@ void specificActions() {
       case 184:   //FuckedUpSine2 - Fast
 
         frameRate(50);
+        sine_fuckedup_color = color(255);
         v = -4.632016;
         w = 9.649996;
-        strokeWeight(4);
+        strokeWeight(8);
         noFill();
         smooth();
         break;
@@ -1961,7 +1963,8 @@ void specificActions() {
       case 185:    //FuckedUpSine3 - no reinit
 
         frameRate(50);
-        strokeWeight(4);
+        sine_fuckedup_color = color(255);
+        strokeWeight(8);
         noFill();
         smooth();
         break;
@@ -1969,7 +1972,8 @@ void specificActions() {
       case 186:   //FuckedUpSine3
 
         frameRate(50);
-        strokeWeight(4);
+        sine_fuckedup_color = color(255);
+        strokeWeight(8);
         noFill();
         smooth();
         sine_fuckedup_counter = 250;
@@ -1980,7 +1984,8 @@ void specificActions() {
       case 187:   //FuckedUpSine4 - WaveDrop
 
         frameRate(50);
-        strokeWeight(4);
+        sine_fuckedup_color = color(255);
+        strokeWeight(8);
         noFill();
         smooth();
         sine_fuckedup_counter = 310;
@@ -5492,7 +5497,7 @@ void specificActions() {
         frameRate(50);
         init_sunstripstyle();
         for (int i = 0; i<NUMBER_OF_PANELS*2; i++) {
-            sunStripStyle_elements.add(new SunStripStyle(5, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 20, 6, 4));
+            sunStripStyle_elements.add(new SunStripStyle(5, i, 0 - (NUMBER_OF_PANELS*2-1-i)*40, 24, 6, 4));
         }
         break;
 
@@ -5987,6 +5992,60 @@ void specificActions() {
         noStroke();
         frameRate(50);
         break;
+
+      case 579:   //FuckedUpSine1 RED
+
+        frameRate(50);
+        strokeWeight(8);
+        sine_fuckedup_color = color(255,0,0);
+        noFill();
+        smooth();
+        break;
+      
+      case 580:   //FuckedUpSine2 - Fast RED
+
+        frameRate(50);
+        sine_fuckedup_color = color(255,0,0);
+        v = -4.632016;
+        w = 9.649996;
+        strokeWeight(8);
+        noFill();
+        smooth();
+        break;
+
+      case 581:    //FuckedUpSine3 - no reinit RED
+
+        frameRate(50);
+        sine_fuckedup_color = color(255,0,0);
+        strokeWeight(8);
+        noFill();
+        smooth();
+        break;
+
+      case 582:   //FuckedUpSine3 RED
+
+        frameRate(50);
+        sine_fuckedup_color = color(255,0,0);
+        strokeWeight(8);
+        noFill();
+        smooth();
+        sine_fuckedup_counter = 250;
+        v = -6.45;
+        w = 12.9;
+        break;
+
+      case 583:   //FuckedUpSine4 - WaveDrop
+
+        frameRate(50);
+        strokeWeight(8);
+        noFill();
+        smooth();
+        sine_fuckedup_counter = 310;
+        v = -7.9750056;
+        w = 15.950011;
+        break;
+
+
 
       case 600:    //Audio Monitoring
 

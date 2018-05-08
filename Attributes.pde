@@ -762,6 +762,11 @@ void setLEDPanelAnimationAttributes() {
 
   animationAttributes = registerAttribute(animationAttributes, 577, "StarSparkle - ExtControl"            , new String[] {"Atmospheric", "Slow", "Smooth", "B&W", "ExtControl"}                                 );
   animationAttributes = registerAttribute(animationAttributes, 578, "StarField - ExtControl"              , new String[] {"Atmospheric", "Slow", "Smooth", "B&W", "ExtControl"}                                 );
+  animationAttributes = registerAttribute(animationAttributes, 579, "Fucked Up Sine - 1 RED"              , new String[] {"Curves", "Red", "Complex", "Fast", "Evolving"}                                       );
+  animationAttributes = registerAttribute(animationAttributes, 580, "Fucked Up Sine - 2 RED"              , new String[] {"Curves", "Red", "Complex", "Fast", "Evolving"}                                       );
+  animationAttributes = registerAttribute(animationAttributes, 581, "Fucked Up Sine - 2 - No Reinit RED"  , new String[] {"Curves", "Red", "Complex", "Fast", "Evolving"}                                       );
+  animationAttributes = registerAttribute(animationAttributes, 582, "Fucked Up Sine - 3 RED"              , new String[] {"Curves", "Red", "Complex", "Fast", "Evolving"}                                       );
+  animationAttributes = registerAttribute(animationAttributes, 583, "Fucked Up Sine - 4 - Wave Drop RED"  , new String[] {"Curves", "Red", "Complex", "Fast", "Evolving"}                                       );
 
   animationAttributes = registerAttribute(animationAttributes, 601, "Audio Monitoring"                    , new String[] {"Atmospheric", "Red", "Circles", "Rhythmic", "AudioInput"}                            );
   animationAttributes = registerAttribute(animationAttributes, 602, "Display FFT - Bass"                  , new String[] {"Geometric", "Simple", "AudioInput"}                                                  );  

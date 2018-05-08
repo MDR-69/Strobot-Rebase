@@ -910,15 +910,15 @@ class DMX_PAR {
   }
 
   void performLight_continuousLight_max() {
-    this.setDimmer(100);
+    this.setDimmer(35);
   }
 
   void performLight_continuousLight_strong() {
-    this.setDimmer(60);
+    this.setDimmer(25);
   }
 
   void performLight_continuousLight_medium() {
-    this.setDimmer(35);
+    this.setDimmer(15);
   }
 
   void performLight_continuousLight_weak() {
