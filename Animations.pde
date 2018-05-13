@@ -7981,37 +7981,44 @@ void draw_shutter() {
 //////////////////////////////////////////
 
 void orbitingparticles_changefocus() {
-  orbitingparticles_state ++;
-  if (orbitingparticles_state % 5 == 0) {
-    orbitingparticles_globalx = width/2;
-    orbitingparticles_globaly = height/2;
-  }
-  else if (orbitingparticles_state % 5 == 1) {
-    orbitingparticles_globalx = width/6;
-    orbitingparticles_globaly = height/6;
-  }
-  else if (orbitingparticles_state % 5 == 2) {
-    orbitingparticles_globalx = 5*width/6;
-    orbitingparticles_globaly = height/6;
-  }
-  else if (orbitingparticles_state % 5 == 3) {
-    orbitingparticles_globalx = width/6;
-    orbitingparticles_globaly = 5*height/6;
-  }
-  else {
-    orbitingparticles_globalx = 5*width/6;
-    orbitingparticles_globaly = 5*height/6;
-  }
+  // orbitingparticles_state ++;
+  // if (orbitingparticles_state % 5 == 0) {
+  //   orbitingparticles_globalx = width/2;
+  //   orbitingparticles_globaly = height/2;
+  // }
+  // else if (orbitingparticles_state % 5 == 1) {
+  //   orbitingparticles_globalx = width/6;
+  //   orbitingparticles_globaly = height/6;
+  // }
+  // else if (orbitingparticles_state % 5 == 2) {
+  //   orbitingparticles_globalx = 5*width/6;
+  //   orbitingparticles_globaly = height/6;
+  // }
+  // else if (orbitingparticles_state % 5 == 3) {
+  //   orbitingparticles_globalx = width/6;
+  //   orbitingparticles_globaly = 5*height/6;
+  // }
+  // else {
+  //   orbitingparticles_globalx = 5*width/6;
+  //   orbitingparticles_globaly = 5*height/6;
+  // }
 
 }
 
 void draw_orbitingparticles() {
-  background(0);
+  orbitingparticles_globalx = map(control_ledPanels_param1, 0, 1, 0, width);
+  orbitingparticles_globaly = 7*height/6;
+
+  // background(0,5);
+  noStroke();
+  fill(0,70);
+  rect(0,0,width,height);
   for (int i = 0; i< orbitingparticles_number;i++) { 
     stroke(orbitingparticles_particlelist[i].particleColor);
     orbitingparticles_particlelist[i].draworbitingparticles();
     orbitingparticles_particlelist[i].moveorbitingparticles();
-  }  
+  }
+  filter(BLUR, 2);
 }
 
 
@@ -8019,6 +8026,7 @@ class OrbitingParticle {
  
  float x, y, dispersion, speed;
  float dx, dy;
+ float center_offsetx, center_offsety;
  color particleColor;
   
  OrbitingParticle(float x, float y, float dispersion, float speed, color col) {
@@ -8029,9 +8037,14 @@ class OrbitingParticle {
   this.dx = random(-this.dispersion,this.dispersion);
   this.dy = random(-this.dispersion,this.dispersion);
   this.particleColor = col;
+
+  this.center_offsetx = random(-30, 30);
+  this.center_offsety = random(-15, 15);
  } 
  
  void draworbitingparticles() {
+   noFill();
+   stroke(this.particleColor);
    point(this.x, this.y);
  }
  
@@ -8039,15 +8052,15 @@ class OrbitingParticle {
    this.x += dx;
    this.y += dy;
    
-   float distance = dist(this.x, this.y, orbitingparticles_globalx, orbitingparticles_globaly);
+   float distance = dist(this.x, this.y, (orbitingparticles_globalx + this.center_offsetx), (orbitingparticles_globaly + this.center_offsety));
 
-   if (dist(this.x + dx, this.y + dy, orbitingparticles_globalx, orbitingparticles_globaly) > distance) {
-     dx += orbitingparticles_pullback * this.speed * ((orbitingparticles_globalx-this.x)/distance);
-     dy += orbitingparticles_pullback * this.speed * ((orbitingparticles_globaly-this.y)/distance);
+   if (dist(this.x + dx, this.y + dy, (orbitingparticles_globalx + this.center_offsetx), (orbitingparticles_globaly + this.center_offsety)) > distance) {
+     dx += orbitingparticles_pullback * this.speed * (((orbitingparticles_globalx + this.center_offsetx)-this.x)/distance);
+     dy += orbitingparticles_pullback * this.speed * (((orbitingparticles_globaly + this.center_offsety)-this.y)/distance);
    }
    else {
-     dx += this.speed * ((orbitingparticles_globalx-this.x)/distance);
-     dy += this.speed * ((orbitingparticles_globaly-this.y)/distance);
+     dx += this.speed * (((orbitingparticles_globalx + this.center_offsetx)-this.x)/distance);
+     dy += this.speed * (((orbitingparticles_globaly + this.center_offsety)-this.y)/distance);
    }
  }
   

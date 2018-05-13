@@ -774,12 +774,12 @@ float shutter_distance = shutter_distanceInit;
 
 //OrbitingParticles parameters
 OrbitingParticle[] orbitingparticles_particlelist;
-int orbitingparticles_number = 20;
-float orbitingparticles_dispersion = 4;
+int orbitingparticles_number = 40;
+float orbitingparticles_dispersion = 0.9;
 float orbitingparticles_speedmin = 0.1;
 float orbitingparticles_speedmax = 0.3;
-float orbitingparticles_globalx;
-float orbitingparticles_globaly;
+float orbitingparticles_globalx = NUMBER_OF_PANELS*PANEL_RESOLUTION_X*DISPLAY_SCALING_FACTOR/2;
+float orbitingparticles_globaly = PANEL_RESOLUTION_X*DISPLAY_SCALING_FACTOR;
 float orbitingparticles_pullback = 1.6;
 boolean orbitingparticles_initialised = false;
 int orbitingparticles_state = 0;
