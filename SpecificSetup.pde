@@ -1516,7 +1516,7 @@ void specificActions() {
       case 143:    //OrbitingParticles
 
         frameRate(50);
-        background(0);
+        // background(0);
         strokeWeight(8);
         stroke(255);
         colorMode(RGB);
@@ -1526,9 +1526,10 @@ void specificActions() {
           orbitingparticles_particlelist = new OrbitingParticle[orbitingparticles_number];
           
           //The first particle shall be red
-          orbitingparticles_particlelist[0] = new OrbitingParticle(orbitingparticles_globalx,orbitingparticles_globaly,orbitingparticles_dispersion,random(orbitingparticles_speedmin, orbitingparticles_speedmax), color(255,0,0));
+          // orbitingparticles_particlelist[0] = new OrbitingParticle(orbitingparticles_globalx,orbitingparticles_globaly,orbitingparticles_dispersion,random(orbitingparticles_speedmin, orbitingparticles_speedmax), color(255,0,0));
           
-          for (int j = 1; j < orbitingparticles_number; j++) {
+          // for (int j = 1; j < orbitingparticles_number; j++) {
+          for (int j = 0; j < orbitingparticles_number; j++) {
             orbitingparticles_particlelist[j] = new OrbitingParticle(orbitingparticles_globalx,orbitingparticles_globaly,orbitingparticles_dispersion,random(orbitingparticles_speedmin, orbitingparticles_speedmax), color(255));
           }
         }
